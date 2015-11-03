@@ -1,9 +1,12 @@
 {
-   "env": {
-       "mocha": true
-   },
-   "extends": "airbnb/legacy",
-   "rules": {
-       "indent": [2, 4]
-   }
+    "ecmaFeatures": {
+        "generators": true
+    },
+    "env": {
+        "mocha": true
+    },
+    "extends": "airbnb/legacy",
+    "rules": {
+        "indent": [2, 4],
+    }
 }

@@ -1,36 +1,40 @@
 {
-    "name": "sedbot.js",
-    "description": "A github webhook which helps you to correct your commits",
-    "keywords": [
-        "sed",
+  "name": "sedbot.js",
+  "description": "A github webhook which helps you to correct your commits",
+  "keywords": [
+    "sed",
     "github",
     "bot"
-        ],
-    "bugs": {
-        "email": "kevin@marmelab.com"
-    },
-    "license": "MIT",
-    "author": {
-        "name": "Kévin Maschtaler",
-        "email": "kevin@marmelab.com",
-        "url": "http://kmaschta.me/"
-    },
-    "main": "server.js",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/marmelab/sedbot.js"
-    },
-    "engine": "node >= 4.2.1",
-    "devDependencies": {
-        "eslint": "~1.5.1",
-        "eslint-config-airbnb": "~0.1.0",
-        "mocha": "~2.3.3"
-    },
-    "dependencies": {
-        "koa": "~1.1.1",
-        "koa-body-parser": "~1.1.2"
-    },
-    "scripts": {
-        "test": "make test"
-    }
+  ],
+  "bugs": {
+    "email": "kevin@marmelab.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Kévin Maschtaler",
+    "email": "kevin@marmelab.com",
+    "url": "http://kmaschta.me/"
+  },
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marmelab/sedbot.js"
+  },
+  "engine": "node >= 4.2.1",
+  "devDependencies": {
+    "co-mocha": "~1.1.2",
+    "eslint": "~1.5.1",
+    "eslint-config-airbnb": "~0.1.0",
+    "mocha": "~2.3.3"
+  },
+  "dependencies": {
+    "config": "~1.16.0",
+    "koa": "~1.1.1",
+    "koa-body-parser": "~1.1.2",
+    "koa-json": "~1.1.1",
+    "sinon": "~1.17.2"
+  },
+  "scripts": {
+    "test": "make test"
+  }
 }
