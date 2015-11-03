@@ -37,7 +37,7 @@ describe('WebHook', function() {
         });
 
         it('should not be called if fixer\'s content is null', function *() {
-            fixer = sinon.stub().returns(null)
+            fixer = sinon.stub().returns(null);
             yield webhook(parser, fixer, commiter)(next);
             assert.equal(commiter.callCount, 0);
         });
