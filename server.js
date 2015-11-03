@@ -15,7 +15,6 @@ app.use(bodyParser());
 // Json Response renderer
 app.use(json({pretty: config.pretty, param: 'pretty'}));
 
-// Sedbot webhook
 app.use(webhook(parser, fixer, commiter));
 
 app.listen(config.port);
