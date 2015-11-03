@@ -1,17 +1,20 @@
 var koa = require('koa');
+var json = require('koa-json');
 var bodyParser = require('koa-body-parser');
+var webhook = require('./lib/webhook');
+var parser = require('./lib/parser');
+var fixer = require('./lib/fixer');
+var commiter = require('./lib/commiter');
 
 var app = koa();
+
+// Request parser
 app.use(bodyParser());
 
-app.use(function* () {
-	var request = this.request;
+// Json Response renderer
+app.use(json({pretty: false, param: 'pretty'}));
 
-	console.log(request.method + ' ' + request.href);
-	console.log(request.headers);
-	console.log(request.body);
-
-	this.body = 'Hello world !';
-});
+// Sedbot webhook
+app.use(webhook(parser, fixer, commiter));
 
 app.listen(3000);
