@@ -22,12 +22,13 @@
   },
   "engine": "node >= 4.2.1",
   "devDependencies": {
-    "co-mocha": "^1.1.2",
+    "co-mocha": "~1.1.2",
     "eslint": "~1.5.1",
     "eslint-config-airbnb": "~0.1.0",
     "mocha": "~2.3.3"
   },
   "dependencies": {
+    "config": "~1.16.0",
     "koa": "~1.1.1",
     "koa-body-parser": "~1.1.2",
     "koa-json": "~1.1.1",

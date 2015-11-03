@@ -31,13 +31,13 @@ describe('WebHook', function() {
 
     describe('commiter', function() {
         it('should be called if fixer\'s content is not null', function *() {
-            fixer = sinon.spy(function() { return 42; });
+            fixer = sinon.stub().returns(42);
             yield webhook(parser, fixer, commiter)(next);
             assert(commiter.called);
         });
 
         it('should not be called if fixer\'s content is null', function *() {
-            fixer = sinon.spy(function() { return null; });
+            fixer = sinon.stub().returns(null)
             yield webhook(parser, fixer, commiter)(next);
             assert.equal(commiter.callCount, 0);
         });
