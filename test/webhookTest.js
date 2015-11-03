@@ -1,3 +1,4 @@
+var co = require('co');
 var assert = require('assert');
 var sinon = require('sinon');
 var webhook = require('../lib/webhook');
@@ -15,25 +16,55 @@ describe('WebHook', function() {
         next = {};
     });
 
+    it('should render correct response', function *() {
+        var ctx = {};
+        yield co.wrap(webhook(parser, fixer, commiter)).call(ctx, next);
+        assert.deepEqual(ctx.body, {'response': 'OK'});
+    });
+
     describe('parser', function() {
-        it('should be called every time', function *() {
-            yield webhook(parser, fixer, commiter)(next);
-            assert(parser.called);
+        it('should be called every time with good args', function *() {
+            var ctx = {
+                request: {
+                    headers: {'x-github-event': 'ping'},
+                    body: {},
+                },
+            };
+            yield co.wrap(webhook(parser, fixer, commiter)).call(ctx, next);
+            assert.deepEqual(parser.getCall(0).args, [
+                {
+                    headers: {'x-github-event': 'ping'},
+                    body: {},
+                },
+            ]);
         });
     });
 
     describe('fixer', function() {
-        it('should be called every time', function *() {
+        it('should be called every time with good args', function *() {
+            parser = sinon.stub().returns({
+                type: 'pull_request_review_comment',
+                matches: [
+                    {from: 'bad', to: 'good'},
+                ],
+            });
             yield webhook(parser, fixer, commiter)(next);
-            assert(fixer.called);
+            assert.deepEqual(fixer.getCall(0).args, [
+                {
+                    type: 'pull_request_review_comment',
+                    matches: [
+                        {from: 'bad', to: 'good'},
+                    ],
+                },
+            ]);
         });
     });
 
     describe('commiter', function() {
         it('should be called if fixer\'s content is not null', function *() {
-            fixer = sinon.stub().returns(42);
+            fixer = sinon.stub().returns('commit instructions');
             yield webhook(parser, fixer, commiter)(next);
-            assert(commiter.called);
+            assert.deepEqual(commiter.getCall(0).args, ['commit instructions']);
         });
 
         it('should not be called if fixer\'s content is null', function *() {
