@@ -15,7 +15,7 @@ make install
 make run
 ```
 
-You should locally use ngrok to expose your port for link with Github.
+You should locally use [ngrok](https://ngrok.com/) to expose your port for link with Github.
 
 # Unit-testing
 
