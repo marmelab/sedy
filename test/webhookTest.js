@@ -3,7 +3,7 @@ var assert = require('assert');
 var sinon = require('sinon');
 var webhook = require('../lib/webhook');
 
-describe('WebHook', function() {
+describe('webhook', function() {
     var parser;
     var fixer;
     var commiter;
@@ -11,17 +11,23 @@ describe('WebHook', function() {
     var next;
 
     beforeEach(function() {
-        parser = sinon.spy();
-        fixer = sinon.spy(function() {
-            return function(callback) {
-                callback(null, 'commit instructions');
-            };
-        });
-        commiter = sinon.spy(function() {
-            return function(callback) {
-                callback(null, null);
-            };
-        });
+        parser = {
+            parse: sinon.spy(),
+        };
+        fixer = {
+            fixTypo: sinon.spy(function() {
+                return function(callback) {
+                    callback(null, 'commit instructions');
+                };
+            }),
+        };
+        commiter = {
+            commit: sinon.spy(function() {
+                return function(callback) {
+                    callback(null, null);
+                };
+            }),
+        };
         githubApi = sinon.spy();
         next = {};
     });
@@ -41,7 +47,7 @@ describe('WebHook', function() {
                 },
             };
             yield co.wrap(webhook(parser, fixer, commiter, githubApi)).call(ctx, next);
-            assert.deepEqual(parser.getCall(0).args, [
+            assert.deepEqual(parser.parse.getCall(0).args, [
                 {
                     headers: {'x-github-event': 'ping'},
                     body: {},
@@ -52,14 +58,14 @@ describe('WebHook', function() {
 
     describe('fixer', function() {
         it('should be called with good args', function *() {
-            parser = sinon.stub().returns({
+            parser.parse = sinon.stub().returns({
                 type: 'pull_request_review_comment',
                 matches: [
                     {from: 'bad', to: 'good'},
                 ],
             });
             yield webhook(parser, fixer, commiter)(next);
-            assert.deepEqual(fixer.getCall(0).args[0].matches, [
+            assert.deepEqual(fixer.fixTypo.getCall(0).args[0].matches, [
                 {from: 'bad', to: 'good'},
             ]);
         });
@@ -68,17 +74,17 @@ describe('WebHook', function() {
     describe('commiter', function() {
         it('should be called if fixer\'s content is not null', function *() {
             yield webhook(parser, fixer, commiter, githubApi)(next);
-            assert.deepEqual(commiter.getCall(0).args[0], 'commit instructions');
+            assert.deepEqual(commiter.commit.getCall(0).args[0], 'commit instructions');
         });
 
         it('should not be called if fixer\'s content is null', function *() {
-            fixer = sinon.spy(function() {
+            fixer.fixTypo = sinon.spy(function() {
                 return function(callback) {
                     callback();
                 };
             });
             yield webhook(parser, fixer, commiter, githubApi)(next);
-            assert.equal(commiter.callCount, 0);
+            assert.equal(commiter.commit.callCount, 0);
         });
     });
 });

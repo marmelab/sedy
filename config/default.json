@@ -8,5 +8,9 @@
     "committer": {
         "name": "COMMITTER-NAME",
         "email": "an@example.mail"
+    },
+    "allowed": {
+        "repositories": ["USER/REPOSITORY"],
+        "authors": ["USER", "USER", "USER"]
     }
 }
