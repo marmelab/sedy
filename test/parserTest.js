@@ -59,5 +59,15 @@ describe('Parser', function() {
                 {from: 'To Remove', to: ''},
             ]);
         });
+
+        it('should match if sed `from` value is not ascii', function() {
+            request.body.comment.body = 's/Thαt/This/';
+            assert.deepEqual(parser(request).matches, []);
+        });
+
+        it('should match if sed `to` value is not ascii', function() {
+            request.body.comment.body = 's/That/Thιs/';
+            assert.deepEqual(parser(request).matches, []);
+        });
     });
 });
