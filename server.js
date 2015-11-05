@@ -3,10 +3,10 @@ var bodyParser = require('koa-body-parser');
 var config = require('config');
 var webhook = require('./lib/webhook');
 var parser = require('./lib/parser');
-var fixer = require('./lib/fixer');
+var typoFixer = require('./lib/fixer');
 var commiter = require('./lib/commiter');
 var GithubClass = require('github');
-var githubapi = require('./lib/githubapi');
+var githubApi = require('./lib/githubApi');
 
 var app = koa();
 
@@ -21,6 +21,6 @@ github.authenticate({type: 'oauth', token: config.bot.oauthToken});
 // Request parser
 app.use(bodyParser());
 
-app.use(webhook(parser, fixer, commiter, githubapi(github)));
+app.use(webhook(parser, typoFixer, commiter, githubApi(github)));
 
 app.listen(config.port);

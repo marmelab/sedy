@@ -7,7 +7,7 @@ describe('WebHook', function() {
     var parser;
     var fixer;
     var commiter;
-    var githubapi;
+    var githubApi;
     var next;
 
     beforeEach(function() {
@@ -18,13 +18,13 @@ describe('WebHook', function() {
             };
         });
         commiter = sinon.spy();
-        githubapi = sinon.spy();
+        githubApi = sinon.spy();
         next = {};
     });
 
     it('should render correct response', function *() {
         var ctx = {};
-        yield co.wrap(webhook(parser, fixer, commiter, githubapi)).call(ctx, next);
+        yield co.wrap(webhook(parser, fixer, commiter, githubApi)).call(ctx, next);
         assert.deepEqual(ctx.body, {'response': 'OK'});
     });
 
@@ -36,7 +36,7 @@ describe('WebHook', function() {
                     body: {},
                 },
             };
-            yield co.wrap(webhook(parser, fixer, commiter, githubapi)).call(ctx, next);
+            yield co.wrap(webhook(parser, fixer, commiter, githubApi)).call(ctx, next);
             assert.deepEqual(parser.getCall(0).args, [
                 {
                     headers: {'x-github-event': 'ping'},
@@ -63,7 +63,7 @@ describe('WebHook', function() {
 
     describe('commiter', function() {
         it('should be called if fixer\'s content is not null', function *() {
-            yield webhook(parser, fixer, commiter, githubapi)(next);
+            yield webhook(parser, fixer, commiter, githubApi)(next);
             assert.deepEqual(commiter.getCall(0).args[0], 'commit instructions');
         });
 
@@ -73,7 +73,7 @@ describe('WebHook', function() {
                     callback();
                 };
             });
-            yield webhook(parser, fixer, commiter, githubapi)(next);
+            yield webhook(parser, fixer, commiter, githubApi)(next);
             assert.equal(commiter.callCount, 0);
         });
     });

@@ -17,6 +17,10 @@ make run
 
 You should locally use [ngrok](https://ngrok.com/) to expose your port for link with Github.
 
+For example: With the command `ngrok http 3000` you'll get a link like `https://XXXXXXXXX.ngrok.io/` that you can use as a webhook.
+
+Don't forget to configure your webhook to push these events: **Pull Request review comment** and **Issue comment**. All other events will be ignored.
+
 # Unit-testing
 
 ```bash
