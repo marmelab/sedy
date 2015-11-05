@@ -4,5 +4,9 @@
     "bot": {
         "login": "GITHUB-ACCOUNT",
         "oauthToken": "GITHUB-OAUTH-ACCESS-TOKEN"
+    },
+    "committer": {
+        "name": "COMMITTER-NAME",
+        "email": "an@example.mail"
     }
 }

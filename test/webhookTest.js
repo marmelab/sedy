@@ -17,7 +17,11 @@ describe('WebHook', function() {
                 callback(null, 'commit instructions');
             };
         });
-        commiter = sinon.spy();
+        commiter = sinon.spy(function() {
+            return function(callback) {
+                callback(null, null);
+            };
+        });
         githubApi = sinon.spy();
         next = {};
     });

@@ -36,7 +36,7 @@ describe('Parser', function() {
                     comment: {id: 42, body: 'This is a comment'},
                     sender: {login: 'Someone'},
                     repository: {name: 'SedBot', owner: {login: 'Marmelab'}},
-                    pull_request: {number: 42},
+                    pull_request: {number: 42, head: {ref: 'master'}},
                 },
             };
         });
