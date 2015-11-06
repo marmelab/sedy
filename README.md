@@ -21,8 +21,30 @@ For example: With the command `ngrok http 3000` you'll get a link like `https://
 
 Don't forget to configure your webhook to push these events: **Pull Request review comment** and **Issue comment**. All other events will be ignored.
 
+# Configuration
+
+```json
+{
+    "port": 3000,
+    "debug": false,
+    "bot": {
+        "login": "GITHUB-ACCOUNT",
+        "oauthToken": "GITHUB-OAUTH-ACCESS-TOKEN"
+    },
+    "committer": {
+        "name": "COMMITTER-NAME",
+        "email": "an@example.mail"
+    },
+    "allowed": {
+        "repositories": ["USER/REPOSITORY"],
+        "authors": ["USER", "USER", "USER"]
+    }
+}
+```
+
 # Unit-testing
 
 ```bash
 make test
+b
 ```
