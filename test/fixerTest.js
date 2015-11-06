@@ -32,6 +32,7 @@ describe('fixer', function() {
                 };
             }),
         };
+
         content = {
             type: 'pull_request_review_comment',
             comment: {
