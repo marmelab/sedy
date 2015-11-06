@@ -1,3 +1,16 @@
 {
-    "port": 3000
+    "port": 3000,
+    "debug": false,
+    "bot": {
+        "login": "GITHUB-ACCOUNT",
+        "oauthToken": "GITHUB-OAUTH-ACCESS-TOKEN"
+    },
+    "committer": {
+        "name": "COMMITTER-NAME",
+        "email": "an@example.mail"
+    },
+    "allowed": {
+        "repositories": ["USER/REPOSITORY"],
+        "authors": ["USER", "USER", "USER"]
+    }
 }
