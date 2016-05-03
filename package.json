@@ -16,6 +16,7 @@
     "test": "make test"
   },
   "dependencies": {
+    "babel-regenerator-runtime": "^6.5.0",
     "co": "^4.6.0",
     "config": "^1.20.1",
     "github": "^0.2.4",

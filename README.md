@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/marmelab/sedy.svg?branch=master)](https://travis-ci.org/marmelab/sedy)
+
 # Sedy
 A github webhook which helps you to correct your commits
 
