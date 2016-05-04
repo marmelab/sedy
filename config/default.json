@@ -8,7 +8,6 @@
         "email": "an@example.mail"
     },
     "allowed": {
-        "repositories": ["Username/Repo", "Organization/Repo"],
         "authors": ["Username", "Username", "Username"]
     }
 }
