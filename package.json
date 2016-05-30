@@ -2,7 +2,7 @@
   "name": "sedy",
   "version": "0.1.0",
   "description": "Sedy",
-  "main": "./lib/index.js",
+  "main": "./src/index.js",
   "keywords": [
     "sed",
     "bot",
@@ -11,6 +11,10 @@
   ],
   "engine": "node >= 4.4.3",
   "author": "Kmaschta <kevin@marmelab.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marmelab/sedy.git"
+  },
   "license": "MIT",
   "scripts": {
     "test": "make test"
