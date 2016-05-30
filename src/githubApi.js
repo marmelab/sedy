@@ -32,7 +32,7 @@ export default (logger, github) => {
         },
 
         getTreeFromId: ({ repoUser, repoName, id }) => callback => {
-            const endpoint = `/repos/${repoUser}/${repoName}/git/trees/${id}?recursive=1`;
+            const endpoint = `/repos/${repoUser}/${repoName}/git/trees/${id}`;
             logger.debug('Github API Request', { endpoint, method: 'GET' });
 
             github.get(endpoint, callbackProxy(callback));
@@ -84,6 +84,11 @@ export default (logger, github) => {
                 sha,
                 force,
             }, callbackProxy(callback));
+        },
+
+        getFromUrl: url => callback => {
+            logger.debug('Github API Request', { endpoint: url, method: 'GET' });
+            github.get(url, callbackProxy(callback));
         },
     };
 };

@@ -71,14 +71,14 @@ describe('Github API', () => {
     });
 
     describe('tree', () => {
-        it('should retrieve a tree recursively from its id', function* () {
+        it('should retrieve a tree from its id', function* () {
             const result = yield githubApi(logger, github).getTreeFromId({
                 repoUser: 'User',
                 repoName: 'Repo',
                 id: 42,
             });
 
-            assert.deepEqual(result, '/repos/User/Repo/git/trees/42?recursive=1');
+            assert.deepEqual(result, '/repos/User/Repo/git/trees/42');
         });
 
         it('should create a tree', function* () {
