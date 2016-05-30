@@ -1,4 +1,7 @@
 {
+    "allowed": {
+        "authors": ["Username", "Username", "Username"]
+    },
     "bot": {
         "login": "GITHUB-ACCOUNT",
         "oauthToken": "GITHUB-OAUTH-ACCESS-TOKEN"
@@ -7,7 +10,7 @@
         "name": "COMMITTER-NAME",
         "email": "an@example.mail"
     },
-    "allowed": {
-        "authors": ["Username", "Username", "Username"]
+    "logs": {
+        "debug": false
     }
 }
