@@ -8,6 +8,7 @@ export default config => {
     const parsePullRequestReviewComment = request => ({
         type: 'pull_request_review_comment',
         comment: {
+            action: request.body.action,
             id: request.body.comment.id,
             body: request.body.comment.body,
             sender: request.body.sender.login,
@@ -46,6 +47,10 @@ export default config => {
                 return null;
             case 'pull_request_review_comment':
                 eventData = parsePullRequestReviewComment(request);
+
+                if (eventData.comment.action !== 'created') {
+                    return null;
+                }
                 break;
             // @todo commit_comment
             // @todo issue_comment

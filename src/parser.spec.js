@@ -16,6 +16,7 @@ describe('Parser', () => {
         request = {
             headers: { 'X-GitHub-Event': 'pull_request_review_comment' },
             body: {
+                action: 'created',
                 comment: { id: 42, body: 'This is a comment' },
                 sender: { login: 'Someone' },
                 repository: { name: 'Sedy', owner: { login: 'Marmelab'} },
@@ -78,6 +79,14 @@ describe('Parser', () => {
         it('should match if sed `to` value is not ascii', () => {
             request.body.comment.body = 's/That/Thιs/';
             assert.deepEqual(parser(config).parse(request).matches, []);
+        });
+
+        it("should not match if it isn't a created comment", () => {
+            request.body.action = 'deleted';
+            assert.deepEqual(parser(config).parse(request), null);
+
+            request.body.action = 'edited';
+            assert.deepEqual(parser(config).parse(request), null);
         });
     });
 });
