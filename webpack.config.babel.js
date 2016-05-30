@@ -4,7 +4,7 @@ import webpack from 'webpack';
 
 export default {
     target: 'node',
-    entry: path.join(__dirname, 'lib/index.js'),
+    entry: ['babel-polyfill', path.join(__dirname, 'lib/index.js')],
     output: {
         path: './build/',
         publicPath: '/',
