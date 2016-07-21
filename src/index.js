@@ -2,23 +2,21 @@
 import co from 'co';
 import commiterFactory from './commiter';
 import fixerFactory from './fixer';
+import gitFactory from './git';
 import github from 'octonode';
-import githubApiFactory from './githubApi';
+import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
 import parserFactory from './parser';
 
 const logger = loggerFactory(config);
-const parser = parserFactory(config);
-const githubClient = github.client(config.bot.oauthToken);
-const githubApi = githubApiFactory(logger, githubClient);
-const fixer = fixerFactory(githubApi);
-const commiter = commiterFactory(config, githubApi);
 
 const main = function* (event, context) {
+    const parser = parserFactory(config);
     const parsedContent = parser.parse(event);
 
     if (!parsedContent || parsedContent.matches.length === 0) {
         logger.info('Request', { parsedContent });
+
         return {
             success: false,
             reason: 'No fix found',
@@ -26,10 +24,18 @@ const main = function* (event, context) {
     }
 
     logger.debug('Fixes found', { parsedContent });
+    const githubClient = githubClientFactory(logger, github.client(config.bot.oauthToken));
+    const git = gitFactory(githubClient, {
+        owner: parsedContent.repository.user,
+        repository: parsedContent.repository.name,
+    });
 
+    const fixer = fixerFactory(git);
     const fixedContent = yield fixer.fixTypo(parsedContent);
     logger.debug('Content fixed', { fixedContent });
 
+    // TODO: replace githubClient by git
+    const commiter = commiterFactory(config, githubClient);
     const success = yield commiter.commit(parsedContent, fixedContent);
 
     const response = {

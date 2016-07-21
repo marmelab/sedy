@@ -1,3 +1,5 @@
+/* TODO: Split and clean this crappy file */
+
 export default (logger, github) => {
     const callbackProxy = callback => (error, statusCode, response) => {
         if (error) {

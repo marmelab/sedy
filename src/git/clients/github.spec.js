@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import sinon from 'sinon';
-import githubApi from './githubApi';
+import githubApi from './github';
 
 describe('Github API', () => {
     const logger = {

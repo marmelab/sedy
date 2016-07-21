@@ -1,4 +1,4 @@
-export default githubApi => {
+export default git => {
     const fixBlob = (parsedContent, lastCommit, blob, treeBlob, match) => {
         const buffer = new Buffer(blob.content, blob.encoding);
         const blobContent = buffer.toString('ascii');
@@ -54,29 +54,15 @@ export default githubApi => {
     };
 
     const fixMatch = function* (parsedContent, match) {
-        const lastCommit = yield githubApi.getCommitFromId({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            commitId: parsedContent.commit.id,
-        });
-
-        const lastCommitTree = yield githubApi.getTreeFromId({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            id: lastCommit.tree.sha,
-        });
-
+        const lastCommit = yield git.commits.get(parsedContent.commit.id);
+        const lastCommitTree = yield git.trees.get(lastCommit.tree.sha);
         const treeBlob = lastCommitTree.tree.find(b => b.path === parsedContent.comment.path);
 
         if (treeBlob === null) {
             return null;
         }
 
-        const blob = yield githubApi.getBlobFromId({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            id: treeBlob.sha,
-        });
+        const blob = yield git.blobs.get(treeBlob.sha);
 
         return fixBlob(parsedContent, lastCommit, blob, treeBlob, match);
     };
