@@ -6,13 +6,12 @@ import github from 'octonode';
 import githubApiFactory from './githubApi';
 import loggerFactory from './lib/logger';
 import parserFactory from './parser';
+import treeManagerFactory from './treeManager';
 
 const logger = loggerFactory(config);
 const parser = parserFactory(config);
 const githubClient = github.client(config.bot.oauthToken);
 const githubApi = githubApiFactory(logger, githubClient);
-const fixer = fixerFactory(githubApi);
-const commiter = commiterFactory(config, githubApi);
 
 const main = function* (event, context) {
     const parsedContent = parser.parse(event);
@@ -26,6 +25,9 @@ const main = function* (event, context) {
     }
 
     logger.debug('Fixes found', { parsedContent });
+    const treeManager = treeManagerFactory(githubApi, parsedContent);
+    const fixer = fixerFactory(githubApi, treeManager);
+    const commiter = commiterFactory(config, githubApi);
 
     const fixedContent = yield fixer.fixTypo(parsedContent);
     logger.debug('Content fixed', { fixedContent });

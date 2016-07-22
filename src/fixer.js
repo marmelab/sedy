@@ -1,6 +1,6 @@
-export default githubApi => {
-    const fixBlob = (parsedContent, lastCommit, blob, treeBlob, match) => {
-        const buffer = new Buffer(blob.content, blob.encoding);
+export default (githubApi, treeManager) => {
+    const fixBlob = (parsedContent, lastCommit, blob, match) => {
+        const buffer = new Buffer(blob.raw.content, blob.raw.encoding);
         const blobContent = buffer.toString('ascii');
 
         // Github API send the diff with a application/vnd.github.v3.diff media type
@@ -43,12 +43,12 @@ export default githubApi => {
 
         return {
             tree: {
-                path: treeBlob.path,
+                path: blob.path,
                 content: newBlobContent,
-                mode: treeBlob.mode,
-                type: treeBlob.type,
+                mode: blob.mode,
+                type: blob.type,
             },
-            baseTree: lastCommit.tree.sha,
+            baseTree: blob.parentTreeSha,
             parents: [lastCommit.sha],
         };
     };
@@ -60,25 +60,14 @@ export default githubApi => {
             commitId: parsedContent.commit.id,
         });
 
-        const lastCommitTree = yield githubApi.getTreeFromId({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            id: lastCommit.tree.sha,
-        });
+        const tree = yield treeManager.getFromSha(lastCommit.tree.sha);
+        const blob = tree[parsedContent.comment.path];
 
-        const treeBlob = lastCommitTree.tree.find(b => b.path === parsedContent.comment.path);
-
-        if (treeBlob === null) {
+        if (!blob || !blob.content) {
             return null;
         }
 
-        const blob = yield githubApi.getBlobFromId({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            id: treeBlob.sha,
-        });
-
-        return fixBlob(parsedContent, lastCommit, blob, treeBlob, match);
+        return fixBlob(parsedContent, lastCommit, blob, match);
     };
 
     const fixTypo = function* (parsedContent) {
