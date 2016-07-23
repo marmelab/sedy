@@ -1,6 +1,7 @@
 import blobs from './blobs';
 import commits from './commits';
 import trees from './trees';
+import storeFactory from './store';
 
 const mandatoryOptions = ['owner', 'repository'];
 
@@ -21,6 +22,8 @@ const checkOptions = options => {
 export default (client, options) => {
     checkOptions(options);
 
+    const store = storeFactory();
+
     const repository = {
         id: `${options.owner}/${options.repository}`,
         owner: options.owner,
@@ -28,9 +31,10 @@ export default (client, options) => {
     };
 
     return {
-        blobs: blobs(client, repository),
-        commits: commits(client, repository),
-        trees: trees(client, repository),
+        blobs: blobs(client, repository, store),
+        commits: commits(client, repository, store),
+        trees: trees(client, repository, store),
         repository,
+        store,
     };
 };

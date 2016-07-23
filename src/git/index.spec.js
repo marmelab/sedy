@@ -46,4 +46,9 @@ describe('Git library', () => {
             name: 'sedy',
         });
     });
+
+    it('should return its store', () => {
+        const git = gitFactory(client, options);
+        assert.include(Object.keys(git), 'store');
+    });
 });
