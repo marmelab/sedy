@@ -112,7 +112,7 @@ describe('Git Commits', () => {
             assert.deepEqual(commit, storedCommit);
         });
 
-        it('should standardize thew new commit', function* () {
+        it('should standardize the new commit', function* () {
             const commits = factory(client, repo, store);
             const commit = yield commits.create({ sha: 'tree sha' }, 'message', { author: 'name' }, 'parents');
 
