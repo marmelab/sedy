@@ -12,16 +12,6 @@ describe('Git library', () => {
         };
     });
 
-    it('should throw an error if repository owner is not specified', () => {
-        delete options.owner;
-        assert.throws(() => gitFactory(client, options));
-    });
-
-    it('should throw an error if repository name is not specified', () => {
-        delete options.repository;
-        assert.throws(() => gitFactory(client, options));
-    });
-
     it('should return blobs api', () => {
         const git = gitFactory(client, options);
         assert.include(Object.keys(git), 'blobs');
@@ -39,12 +29,7 @@ describe('Git library', () => {
 
     it('should return repository informations', () => {
         const git = gitFactory(client, options);
-
-        assert.deepEqual(git.repository, {
-            id: 'marmelab/sedy',
-            owner: 'marmelab',
-            name: 'sedy',
-        });
+        assert.include(Object.keys(git), 'repository');
     });
 
     it('should return its store', () => {
