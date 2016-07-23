@@ -1,6 +1,6 @@
-import blobs from './blobs';
-import commits from './commits';
-import trees from './trees';
+import blobs from './objects/blobs';
+import commits from './objects/commits';
+import trees from './objects/trees';
 import storeFactory from './store';
 
 const mandatoryOptions = ['owner', 'repository'];
