@@ -7,8 +7,14 @@ describe('Git library', () => {
 
     beforeEach(() => {
         options = {
-            owner: 'marmelab',
-            repository: 'sedy',
+            repository: {
+                owner: 'marmelab',
+                name: 'sedy',
+            },
+            commitAuthor: {
+                name: 'commit author',
+                email: 'author@mail.com',
+            },
         };
     });
 

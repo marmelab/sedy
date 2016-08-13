@@ -1,39 +1,18 @@
-export default (config, githubApi) => {
-    const digestCommit = function* (parsedContent, typoFix) {
-        const author = {
-            name: config.committer.name,
-            email: config.committer.email,
-            date: parsedContent.comment.createdDate,
-        };
-
-        // Create tree with edited file
-        const tree = yield githubApi.createTree({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            baseTree: typoFix.baseTree,
-            tree: [typoFix.tree],
+export default (config, githubApi, git) => {
+    const digestCommit = function* (parsedContent, fix) {
+        yield git.checkout(parsedContent.pullRequest.ref);
+        const newBlob = Object.assign({}, fix.blob, {
+            content: fix.content,
+            mode: '100644',
         });
+        yield git.add(newBlob, '/' + parsedContent.comment.path);
+        const message = `Typo fix authored by ${parsedContent.comment.sender}
 
-        // Commit the change
-        const commit = yield githubApi.createCommit({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            commitAuthor: author,
-            commitTree: tree.sha,
-            commitParents: typoFix.parents,
-            commitMessage: `Typo fix authored by ${parsedContent.comment.sender}
+${git.commitAuthor.name} is configured to automatically commit change authored by specific syntax in a comment.
+See the trigger at ${parsedContent.comment.url}`;
 
-${author.name} is configured to automatically commit change authored by specific syntax in a comment.
-See the trigger at ${parsedContent.comment.url}`,
-        });
-
-        yield githubApi.updateReference({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            reference: `heads/${parsedContent.pullRequest.ref}`,
-            sha: commit.sha,
-            force: true,
-        });
+        const commit = yield git.commit(parsedContent.pullRequest.ref, message);
+        yield git.push(parsedContent.pullRequest.ref);
 
         return commit;
     };
@@ -55,17 +34,19 @@ See the trigger at ${parsedContent.comment.url}`,
             return false;
         }
 
-        const digestedCommits = fixedContent.map(fix => digestCommit(parsedContent, fix));
-
         try {
-            const commits = yield digestedCommits; // Commit & push
-            const commitIds = commits.map(commit => commit.sha);
+            const commits = [];
+            for (const fix of fixedContent) {
+                const commit = yield digestCommit(parsedContent, fix);
+                commits.push(commit);
+            }
 
             yield replyToAuthor(parsedContent, `:white_check_mark: @${parsedContent.comment.sender}, check out my commits!
-I have fixed your typo(s) at ${commitIds.join(', ')}`);
+I have fixed your typo(s) at ${commits.map(commit => commit.sha).join(', ')}`);
 
             return true;
         } catch (error) {
+            // @TODO Rollback branch reference
             console.error('An error occured while commiting', error);
 
             yield replyToAuthor(parsedContent, `:warning: @${parsedContent.comment.sender}, an error occured.

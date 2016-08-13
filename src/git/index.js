@@ -12,7 +12,7 @@ import commit from './commands/commit';
 import push from './commands/push';
 
 export default (client, options) => {
-    const { repository } = config(options);
+    const { repository, commitAuthor } = config(options);
     const store = storeFactory();
 
     const blobs = blobsFactory(client, repository, store);
@@ -24,7 +24,8 @@ export default (client, options) => {
         add: add(references, commits, trees),
         blobs,
         checkout: checkout(references, commits),
-        commit: commit(references, trees, commits),
+        commit: commit(commitAuthor, references, trees, commits),
+        commitAuthor,
         commits,
         push: push(references),
         references,

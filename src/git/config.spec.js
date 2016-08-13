@@ -6,24 +6,30 @@ describe('Git Config', () => {
 
     beforeEach(() => {
         options = {
-            owner: 'marmelab',
-            repository: 'sedy',
+            repository: {
+                owner: 'marmelab',
+                name: 'sedy',
+            },
+            commitAuthor: {
+                name: 'commit author',
+                email: 'author@mail.com',
+            },
         };
     });
 
-    it('should throw an error if repository owner is not specified', () => {
-        delete options.owner;
+    it('should throw an error if repository is not specified', () => {
+        delete options.repository;
         assert.throws(() => config(options));
     });
 
-    it('should throw an error if repository name is not specified', () => {
-        delete options.repository;
+    it('should throw an error if commit author is not specified', () => {
+        delete options.commitAuthor;
         assert.throws(() => config(options));
     });
 
     describe('repository', () => {
         it('should return repository informations', () => {
-            options.defaultReference = 'develop';
+            options.repository.defaultReference = 'develop';
             const { repository } = config(options);
 
             assert.deepEqual(repository, {
@@ -38,6 +44,17 @@ describe('Git Config', () => {
             const { repository } = config(options);
 
             assert.equal(repository.defaultReference, 'refs/heads/master');
+        });
+    });
+
+    describe('commit author', () => {
+        it('should return commit author informations', () => {
+            const { commitAuthor } = config(options);
+
+            assert.deepEqual(commitAuthor, {
+                name: 'commit author',
+                email: 'author@mail.com',
+            });
         });
     });
 });

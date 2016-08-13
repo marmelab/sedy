@@ -1,6 +1,6 @@
 import { CommandError } from '../errors';
 
-export default (references, trees, commits) => function* (ref, message) {
+export default (commitAuthor, references, trees, commits) => function* (ref, message) {
     const head = yield references.get('head');
 
     let tree;
@@ -12,7 +12,7 @@ export default (references, trees, commits) => function* (ref, message) {
     }
 
     const parent = yield references.get(ref);
-    const commit = yield commits.create(tree, message, [parent]);
+    const commit = yield commits.create(tree, message, commitAuthor, [parent]);
 
     yield references.update('head', commit);
 

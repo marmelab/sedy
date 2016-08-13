@@ -1,5 +1,5 @@
 export default git => {
-    const fixBlob = (parsedContent, lastCommit, blob, treeBlob, match) => {
+    const fixBlob = (parsedContent, lastCommit, blob, match) => {
         const buffer = new Buffer(blob.content, blob.encoding);
         const blobContent = buffer.toString('ascii');
 
@@ -42,29 +42,39 @@ export default git => {
         const newBlobContent = lines.join('\n');
 
         return {
-            tree: {
-                path: treeBlob.path,
-                content: newBlobContent,
-                mode: treeBlob.mode,
-                type: treeBlob.type,
-            },
-            baseTree: lastCommit.tree.sha,
-            parents: [lastCommit.sha],
+            blob,
+            content: newBlobContent,
         };
+    };
+
+    const findBlob = function* (rootTree, path) {
+        const chunkPaths = path.split('/');
+
+        let chunk = Object.assign({}, rootTree);
+
+        for (const chunkPath of chunkPaths) {
+            chunk = chunk.tree.find(obj => ['tree', 'blob'].includes(obj.type) && obj.path === chunkPath);
+
+            if (!chunk) {
+                return null;
+            }
+
+            chunk = yield git[chunk.type + 's'].get(chunk.sha);
+        }
+
+        return chunk;
     };
 
     const fixMatch = function* (parsedContent, match) {
         const lastCommit = yield git.commits.get(parsedContent.commit.id);
-        const lastCommitTree = yield git.trees.get(lastCommit.tree.sha);
-        const treeBlob = lastCommitTree.tree.find(b => b.path === parsedContent.comment.path);
+        const tree = yield git.trees.get(lastCommit.tree.sha);
+        const blob = yield findBlob(tree, parsedContent.comment.path);
 
-        if (treeBlob === null) {
+        if (!blob) {
             return null;
         }
 
-        const blob = yield git.blobs.get(treeBlob.sha);
-
-        return fixBlob(parsedContent, lastCommit, blob, treeBlob, match);
+        return fixBlob(parsedContent, lastCommit, blob, match);
     };
 
     const fixTypo = function* (parsedContent) {

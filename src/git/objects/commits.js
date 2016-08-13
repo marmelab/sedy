@@ -39,16 +39,15 @@ export default (client, repo, store) => {
         return standardizedCommit;
     };
 
-    const create = function* (tree, message, parents) {
+    const create = function* (tree, message, author, parents) {
         const commit = yield client.createCommit({
             repoUser: repo.owner,
             repoName: repo.name,
             commitMessage: message,
-            commitAuthor: {
-                name: 'Kévin Maschtaler',
-                email: 'maschtaler.kevin.iris@gmail.com',
+            commitAuthor: Object.assign({}, author, {
+                // @TODO: Set new Date() with the good format
                 date: '2016-07-24T00:49:30+02:00',
-            },
+            }),
             commitTree: tree.sha,
             commitParents: parents,
         });

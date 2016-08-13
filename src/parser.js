@@ -27,7 +27,7 @@ export default config => {
         },
         pullRequest: {
             number: request.body.pull_request.number,
-            ref: request.body.pull_request.head.ref,
+            ref: `refs/heads/${request.body.pull_request.head.ref}`,
         },
     });
 

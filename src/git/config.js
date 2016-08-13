@@ -1,4 +1,4 @@
-const mandatoryOptions = ['owner', 'repository'];
+const mandatoryOptions = ['repository', 'commitAuthor'];
 
 const check = config => {
     const missingOptions = mandatoryOptions.reduce((missings, option) => {
@@ -18,13 +18,19 @@ export default config => {
     check(config);
 
     const repository = {
-        id: `${config.owner}/${config.repository}`,
-        owner: config.owner,
-        name: config.repository,
-        defaultReference: config.defaultReference || 'refs/heads/master',
+        id: `${config.repository.owner}/${config.repository.name}`,
+        owner: config.repository.owner,
+        name: config.repository.name,
+        defaultReference: config.repository.defaultReference || 'refs/heads/master',
+    };
+
+    const commitAuthor = {
+        name: config.commitAuthor.name,
+        email: config.commitAuthor.email,
     };
 
     return {
+        commitAuthor,
         repository,
     };
 };
