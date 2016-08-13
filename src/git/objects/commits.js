@@ -39,8 +39,29 @@ export default (client, repo, store) => {
         return standardizedCommit;
     };
 
+    const create = function* (tree, message, parents) {
+        const commit = yield client.createCommit({
+            repoUser: repo.owner,
+            repoName: repo.name,
+            commitMessage: message,
+            commitAuthor: {
+                name: 'Kévin Maschtaler',
+                email: 'maschtaler.kevin.iris@gmail.com',
+                date: '2016-07-24T00:49:30+02:00',
+            },
+            commitTree: tree.sha,
+            commitParents: parents,
+        });
+
+        const standardizedCommit = standardize(commit);
+
+        store.update(standardizedCommit);
+        return standardizedCommit;
+    };
+
     return {
         get,
+        create,
         validate,
     };
 };

@@ -82,7 +82,7 @@ describe('Github API', () => {
         });
 
         it('should create a tree', function* () {
-            const result = yield githubApi(logger, github).createTree({
+            const result = yield githubApi(logger, github).createTreeFromBase({
                 repoUser: 'User',
                 repoName: 'Repo',
                 tree: 'tree',

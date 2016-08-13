@@ -1,6 +1,7 @@
 import { ValidationError } from './errors';
 
 const SHA_LENGTH = 40;
+const SEP = '/';
 
 const validate = obj => {
     if (!obj || typeof obj !== 'object') {
@@ -18,4 +19,23 @@ const validate = obj => {
     return true;
 };
 
-export { validate };
+const validatePath = path => {
+    if (!path || typeof path !== 'string') {
+        throw new ValidationError(`Path "${path}" is invalid`);
+    }
+
+    if (!path.startsWith(SEP)) {
+        throw new ValidationError(`Path "${path}" should starts with a ${SEP}`);
+    }
+
+    if (path.endsWith(SEP)) {
+        throw new ValidationError(`Path "${path}" can not ends with a ${SEP}`);
+    }
+
+    return true;
+};
+
+export {
+    validate,
+    validatePath,
+};

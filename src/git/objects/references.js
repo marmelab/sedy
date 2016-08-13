@@ -1,16 +1,21 @@
 import { ValidationError } from '../errors';
+import { validate as validateObject } from '../validation';
 
 const SEP = '/';
 const LOCATIONS = ['heads', 'remotes', 'tags'];
 
 export default (client, repo) => {
     const refs = {
-        head: 'HEAD',
+        head: null,
         [repo.defaultReference]: null,
     };
 
     const validate = reference => {
-        if (!reference || typeof reference !== 'string') {
+        if (reference === 'head' || reference === null) {
+            return true;
+        }
+
+        if (typeof reference !== 'string') {
             throw new ValidationError(`Reference "${reference}" is invalid`);
         }
 
@@ -32,19 +37,60 @@ export default (client, repo) => {
         return true;
     };
 
-    const get = function* (reference) {
-        const storedReference = refs[reference];
+    const standardize = reference => ({
+        ref: reference.ref,
+        sha: reference.object.sha,
+    });
 
-        if (storedReference && validate(storedReference)) {
+    const get = function* (ref) {
+        validate(ref);
+
+        const storedReference = refs[ref];
+
+        if (storedReference || storedReference === null) {
             return storedReference;
         }
 
-        // @TODO: Retrieve reference from client
-        return null;
+        const reference = yield client.getReferenceFromId({
+            repoUser: repo.owner,
+            repoName: repo.name,
+            reference: ref,
+        });
+
+        const standardizedReference = standardize(reference);
+
+        refs[standardizedReference.ref] = standardizedReference.sha;
+        return standardizedReference.sha;
+    };
+
+    const update = function* (ref, obj) {
+        validate(ref);
+        validateObject(obj);
+
+        refs[ref] = obj.sha;
+    };
+
+    const push = function* (ref, force = false) {
+        const commitSha = yield get('head');
+
+        const reference = yield client.updateReference({
+            repoUser: repo.owner,
+            repoName: repo.name,
+            sha: commitSha,
+            reference: ref,
+            force,
+        });
+
+        const standardizedReference = standardize(reference);
+
+        refs[standardizedReference.ref] = standardizedReference.sha;
+        return standardizedReference.sha;
     };
 
     return {
         get,
+        update,
         validate,
+        push,
     };
 };

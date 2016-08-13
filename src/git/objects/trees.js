@@ -1,6 +1,8 @@
 import { ValidationError } from '../errors';
 import { validate as validateObject } from '../validation';
 
+const MODE = '040000';
+
 export default (client, repo, store) => {
     const validate = tree => {
         validateObject(tree);
@@ -17,6 +19,7 @@ export default (client, repo, store) => {
 
         return Object.assign({}, tree, {
             type: 'tree',
+            mode: MODE,
         });
     };
 
@@ -39,8 +42,25 @@ export default (client, repo, store) => {
         return standardizedTree;
     };
 
+    const createTreeFromBase = function* (base, tree) {
+        const oldTree = yield get(base.sha);
+
+        const newTree = yield client.createTreeFromBase({
+            repoUser: repo.owner,
+            repoName: repo.name,
+            tree: tree.tree,
+            baseTree: oldTree.sha,
+        });
+
+        const standardizedTree = standardize(newTree);
+
+        store.update(standardizedTree);
+        return standardizedTree;
+    };
+
     return {
         get,
         validate,
+        createTreeFromBase,
     };
 };

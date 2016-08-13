@@ -53,6 +53,7 @@ describe('Git Trees', () => {
             const storedTree = {
                 sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4',
                 type: 'tree',
+                mode: '040000',
             };
 
             store.update(storedTree);
@@ -70,6 +71,47 @@ describe('Git Trees', () => {
             assert.deepEqual(tree, {
                 sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4',
                 type: 'tree',
+                mode: '040000',
+            });
+        });
+    });
+
+    describe('createTreeFromBase', () => {
+        let client;
+
+        beforeEach(() => {
+            client = {
+                createTreeFromBase: sinon.spy(content => cb => cb(null, {
+                    sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e5',
+                    type: 'tree',
+                    mode: '040000',
+                    content,
+                })),
+            };
+        });
+
+        it('should create a tree from its predecesor', function* () {
+            const base = {
+                sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4',
+                type: 'tree',
+                mode: '040000',
+            };
+
+            store.update(base);
+            trees = factory(client, repo, store);
+
+            const tree = yield trees.createTreeFromBase(base, { tree: ['some tree infos'] });
+
+            assert.deepEqual(tree, {
+                mode: '040000',
+                type: 'tree',
+                sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e5',
+                content: {
+                    repoUser: 'marmelab',
+                    repoName: 'sedy',
+                    baseTree: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4',
+                    tree: ['some tree infos'],
+                },
             });
         });
     });

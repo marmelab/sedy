@@ -47,7 +47,7 @@ export default (logger, github) => {
             github.get(endpoint, callbackProxy(callback));
         },
 
-        createTree: ({ repoUser, repoName, tree, baseTree }) => callback => {
+        createTreeFromBase: ({ repoUser, repoName, tree, baseTree }) => callback => {
             const endpoint = `/repos/${repoUser}/${repoName}/git/trees`;
             logger.debug('Github API Request', { endpoint, method: 'POST' });
 
@@ -75,8 +75,17 @@ export default (logger, github) => {
             }, callbackProxy(callback));
         },
 
+        getReferenceFromId: ({ repoUser, repoName, reference }) => callback => {
+            const ref = reference.replace('refs/', '');
+            const endpoint = `/repos/${repoUser}/${repoName}/git/refs/${ref}`;
+            logger.debug('Github API Request', { endpoint, method: 'GET' });
+
+            github.get(endpoint, callbackProxy(callback));
+        },
+
         updateReference: ({ repoUser, repoName, reference, sha, force }) => callback => {
-            const endpoint = `/repos/${repoUser}/${repoName}/git/refs/${reference}`;
+            const ref = reference.replace('refs/', '');
+            const endpoint = `/repos/${repoUser}/${repoName}/git/refs/${ref}`;
             logger.debug('Github API Request', { endpoint, method: 'PATCH' });
 
             github.patch(endpoint, {

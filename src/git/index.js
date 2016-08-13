@@ -1,21 +1,35 @@
 import config from './config';
 import storeFactory from './store';
 
-import blobs from './objects/blobs';
-import commits from './objects/commits';
-import references from './objects/references';
-import trees from './objects/trees';
+import blobsFactory from './objects/blobs';
+import commitsFactory from './objects/commits';
+import referencesFactory from './objects/references';
+import treesFactory from './objects/trees';
+
+import add from './commands/add';
+import checkout from './commands/checkout';
+import commit from './commands/commit';
+import push from './commands/push';
 
 export default (client, options) => {
     const { repository } = config(options);
     const store = storeFactory();
 
+    const blobs = blobsFactory(client, repository, store);
+    const commits = commitsFactory(client, repository, store);
+    const references = referencesFactory(client, repository);
+    const trees = treesFactory(client, repository, store);
+
     return {
-        blobs: blobs(client, repository, store),
-        commits: commits(client, repository, store),
-        references: references(client, repository),
-        trees: trees(client, repository, store),
+        add: add(references, commits, trees),
+        blobs,
+        checkout: checkout(references, commits),
+        commit: commit(references, trees, commits),
+        commits,
+        push: push(references),
+        references,
         repository,
+        trees,
         store,
     };
 };
