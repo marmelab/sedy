@@ -1,6 +1,6 @@
 import { assert } from 'chai';
 import sinon from 'sinon';
-import githubApi from './githubApi';
+import githubApi from './github';
 
 describe('Github API', () => {
     const logger = {
@@ -82,7 +82,7 @@ describe('Github API', () => {
         });
 
         it('should create a tree', function* () {
-            const result = yield githubApi(logger, github).createTree({
+            const result = yield githubApi(logger, github).createTreeFromBase({
                 repoUser: 'User',
                 repoName: 'Repo',
                 tree: 'tree',

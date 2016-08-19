@@ -2,23 +2,21 @@
 import co from 'co';
 import commiterFactory from './commiter';
 import fixerFactory from './fixer';
+import gitFactory from './git';
 import github from 'octonode';
-import githubApiFactory from './githubApi';
+import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
 import parserFactory from './parser';
 
 const logger = loggerFactory(config);
-const parser = parserFactory(config);
-const githubClient = github.client(config.bot.oauthToken);
-const githubApi = githubApiFactory(logger, githubClient);
-const fixer = fixerFactory(githubApi);
-const commiter = commiterFactory(config, githubApi);
 
 const main = function* (event, context) {
+    const parser = parserFactory(config);
     const parsedContent = parser.parse(event);
 
     if (!parsedContent || parsedContent.matches.length === 0) {
-        logger.info('Request', { parsedContent });
+        logger.debug('Parsed content', { parsedContent });
+
         return {
             success: false,
             reason: 'No fix found',
@@ -26,17 +24,29 @@ const main = function* (event, context) {
     }
 
     logger.debug('Fixes found', { parsedContent });
+    const githubClient = githubClientFactory(logger, github.client(config.bot.oauthToken));
+    const git = gitFactory(githubClient, {
+        commitAuthor: {
+            name: config.committer.name,
+            email: config.committer.email,
+        },
+        repository: {
+            owner: parsedContent.repository.user,
+            name: parsedContent.repository.name,
+        },
+    });
 
+    const fixer = fixerFactory(git);
     const fixedContent = yield fixer.fixTypo(parsedContent);
     logger.debug('Content fixed', { fixedContent });
 
+    const commiter = commiterFactory(config, githubClient, git);
     const success = yield commiter.commit(parsedContent, fixedContent);
 
     const response = {
         success,
         result: parsedContent.matches,
     };
-    logger.info('Request', { parsedContent, response });
 
     return response;
 };
@@ -48,7 +58,11 @@ export const handler = function (event, context, callback) {
     })
     .then(value => callback(null, value))
     .catch(error => {
-        logger.error('An error occured', error);
+        logger.error('An error occured', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack,
+        });
         callback(new Error('An error occured, please contact an administrator.'));
     });
 };

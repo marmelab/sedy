@@ -1,5 +1,5 @@
-export default githubApi => {
-    const fixBlob = (parsedContent, lastCommit, blob, treeBlob, match) => {
+export default git => {
+    const fixBlob = (parsedContent, lastCommit, blob, match) => {
         const buffer = new Buffer(blob.content, blob.encoding);
         const blobContent = buffer.toString('ascii');
 
@@ -42,43 +42,39 @@ export default githubApi => {
         const newBlobContent = lines.join('\n');
 
         return {
-            tree: {
-                path: treeBlob.path,
-                content: newBlobContent,
-                mode: treeBlob.mode,
-                type: treeBlob.type,
-            },
-            baseTree: lastCommit.tree.sha,
-            parents: [lastCommit.sha],
+            blob,
+            content: newBlobContent,
         };
     };
 
+    const findBlob = function* (rootTree, path) {
+        const chunkPaths = path.split('/');
+
+        let chunk = Object.assign({}, rootTree);
+
+        for (const chunkPath of chunkPaths) {
+            chunk = chunk.tree.find(obj => ['tree', 'blob'].includes(obj.type) && obj.path === chunkPath);
+
+            if (!chunk) {
+                return null;
+            }
+
+            chunk = yield git[chunk.type + 's'].get(chunk.sha);
+        }
+
+        return chunk;
+    };
+
     const fixMatch = function* (parsedContent, match) {
-        const lastCommit = yield githubApi.getCommitFromId({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            commitId: parsedContent.commit.id,
-        });
+        const lastCommit = yield git.commits.get(parsedContent.commit.id);
+        const tree = yield git.trees.get(lastCommit.tree.sha);
+        const blob = yield findBlob(tree, parsedContent.comment.path);
 
-        const lastCommitTree = yield githubApi.getTreeFromId({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            id: lastCommit.tree.sha,
-        });
-
-        const treeBlob = lastCommitTree.tree.find(b => b.path === parsedContent.comment.path);
-
-        if (treeBlob === null) {
+        if (!blob) {
             return null;
         }
 
-        const blob = yield githubApi.getBlobFromId({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            id: treeBlob.sha,
-        });
-
-        return fixBlob(parsedContent, lastCommit, blob, treeBlob, match);
+        return fixBlob(parsedContent, lastCommit, blob, match);
     };
 
     const fixTypo = function* (parsedContent) {
