@@ -1,17 +1,21 @@
 export default (config, githubApi, git) => {
     const digestCommit = function* (parsedContent, fix) {
         yield git.checkout(parsedContent.pullRequest.ref);
+
         const newBlob = Object.assign({}, fix.blob, {
             content: fix.content,
             mode: '100644',
         });
+
         yield git.add(newBlob, '/' + parsedContent.comment.path);
+
         const message = `Typo fix authored by ${parsedContent.comment.sender}
 
 ${git.commitAuthor.name} is configured to automatically commit change authored by specific syntax in a comment.
 See the trigger at ${parsedContent.comment.url}`;
 
         const commit = yield git.commit(parsedContent.pullRequest.ref, message);
+
         yield git.push(parsedContent.pullRequest.ref);
 
         return commit;
