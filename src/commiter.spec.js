@@ -4,19 +4,21 @@ import { assert } from 'chai';
 
 describe('Commiter', () => {
     let config;
+    let git;
     let githubApi;
     let parsedContent;
     let fixedContent;
 
     beforeEach(() => {
-        config = {
-            committer: { name: 'user', email: 'user@fake.mail' },
+        git = {
+            checkout: sinon.spy(content => callback => callback(null, null)),
+            add: sinon.spy(content => callback => callback(null, null)),
+            commit: sinon.spy(content => callback => callback(null, { sha: 'commit sha' })),
+            push: sinon.spy(content => callback => callback(null, null)),
+            commitAuthor: { name: 'marmelab-bot' },
         };
         githubApi = {
             replyToPullRequestReviewComment: sinon.spy(content => callback => callback(null, null)),
-            createTree: sinon.spy(content => callback => callback(null, { sha: 'tree sha' })),
-            createCommit: sinon.spy(content => callback => callback(null, { sha: 'commit sha' })),
-            updateReference: sinon.spy(content => callback => callback(null, null)),
         };
         parsedContent = {
             repository: { user: 'marmelab', name: 'sedy' },
@@ -25,20 +27,19 @@ describe('Commiter', () => {
                 sender: 'username',
                 createdDate: new Date(),
                 url: 'http://perdu.com',
+                path: 'folder/to/blob.txt',
             },
-            pullRequest: { number: 1, ref: 'master' },
+            pullRequest: { number: 1, ref: 'branch-name' },
         };
         fixedContent = [{
-            sha: 'sha',
-            baseTree: 'baseTree',
-            tree: 'tree',
-            parents: ['parent'],
+            blob: { content: 'old blob content' },
+            content: 'new blob content',
         }];
     });
 
     describe('workflow', () => {
         it('should warn the comment author if no fix found', function* () {
-            const commiter = commiterFactory(config, githubApi);
+            const commiter = commiterFactory(null, githubApi, git);
             const result = yield commiter.commit(parsedContent, null);
 
             assert.deepEqual(result, false);
@@ -51,54 +52,43 @@ describe('Commiter', () => {
             }]);
         });
 
-        it('should create a tree', function* () {
-            const commiter = commiterFactory(config, githubApi);
+        it('should checkout to the related branch', function* () {
+            const commiter = commiterFactory(null, githubApi, git);
             yield commiter.commit(parsedContent, fixedContent);
 
-            assert.deepEqual(githubApi.createTree.getCall(0).args, [{
-                baseTree: 'baseTree',
-                repoName: 'sedy',
-                repoUser: 'marmelab',
-                tree: ['tree'],
-            }]);
+            assert.deepEqual(git.checkout.getCall(0).args[0], 'branch-name');
+        });
+
+        it('should add a new blob head', function* () {
+            const commiter = commiterFactory(null, githubApi, git);
+            yield commiter.commit(parsedContent, fixedContent);
+
+            assert.deepEqual(git.add.getCall(0).args, [{
+                content: 'new blob content',
+                mode: '100644',
+            }, '/folder/to/blob.txt']);
         });
 
         it('shoud create a commit', function* () {
-            const commiter = commiterFactory(config, githubApi);
+            const commiter = commiterFactory(null, githubApi, git);
             yield commiter.commit(parsedContent, fixedContent);
 
-            assert.deepEqual(githubApi.createCommit.getCall(0).args, [{
-                repoName: 'sedy',
-                repoUser: 'marmelab',
-                commitAuthor: {
-                    name: 'user',
-                    email: 'user@fake.mail',
-                    date: parsedContent.comment.createdDate,
-                },
-                commitParents: ['parent'],
-                commitTree: 'tree sha',
-                commitMessage: `Typo fix authored by username
+            assert.deepEqual(git.commit.getCall(0).args, ['branch-name', `Typo fix authored by username
 
-user is configured to automatically commit change authored by specific syntax in a comment.
+marmelab-bot is configured to automatically commit change authored by specific syntax in a comment.
 See the trigger at http://perdu.com`,
-            }]);
+            ]);
         });
 
-        it('should force update branch reference', function* () {
-            const commiter = commiterFactory(config, githubApi);
+        it('should push to the related branch', function* () {
+            const commiter = commiterFactory(null, githubApi, git);
             yield commiter.commit(parsedContent, fixedContent);
 
-            assert.deepEqual(githubApi.updateReference.getCall(0).args, [{
-                repoName: 'sedy',
-                repoUser: 'marmelab',
-                sha: 'commit sha',
-                reference: 'heads/master',
-                force: true,
-            }]);
+            assert.deepEqual(git.push.getCall(0).args, ['branch-name']);
         });
 
         it('should warn the author that the commit is pushed', function* () {
-            const commiter = commiterFactory(config, githubApi);
+            const commiter = commiterFactory(null, githubApi, git);
             const result = yield commiter.commit(parsedContent, fixedContent);
 
             assert.deepEqual(result, true);
@@ -114,10 +104,8 @@ See the trigger at http://perdu.com`,
 
     describe('security', () => {
         it('should warn the author if an occured while commiting', function* () {
-            delete config.committer;
-            const commiter = commiterFactory(config, githubApi);
-
-            const result = yield commiter.commit(parsedContent, fixedContent);
+            const commiter = commiterFactory(null, githubApi, git);
+            const result = yield commiter.commit(parsedContent, { missing: 'value' });
 
             assert.deepEqual(result, false);
             assert.deepEqual(githubApi.replyToPullRequestReviewComment.getCall(0).args, [{
