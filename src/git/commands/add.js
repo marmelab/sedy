@@ -24,7 +24,7 @@ export default (references, commits, trees) => function* (blob, path) {
     }
 
     const parents = [];
-    let blobTree = Object.assign({}, rootTree);
+    let blobTree = { ...rootTree }; // Isolation
 
     for (const folder of folders) {
         blobTree = blobTree.tree.find(obj => obj.type === 'tree' && obj.path === folder);
@@ -52,15 +52,15 @@ export default (references, commits, trees) => function* (blob, path) {
         }]);
 
     if (rootTree.sha === blobTree.sha) {
-        const newTree = yield trees.createTreeFromBase(rootTree, Object.assign({}, blobTree, { tree: newTreeContent }));
+        const newTree = yield trees.createTreeFromBase(rootTree, { ...blobTree, tree: newTreeContent });
 
         return yield references.update('head', newTree);
     }
 
-    const newTree = yield trees.createTreeFromBase(blobTree, Object.assign({}, blobTree, { tree: newTreeContent }));
+    const newTree = yield trees.createTreeFromBase(blobTree, { ...blobTree, tree: newTreeContent });
 
     const firstParent = parents.pop();
-    let lastTree = Object.assign({}, newTree, { path: firstParent.path });
+    let lastTree = { ...newTree, path: firstParent.path };
 
     if (parents.length > 0) {
         for (const parent of parents.sort(reverse)) {
@@ -74,19 +74,20 @@ export default (references, commits, trees) => function* (blob, path) {
                     mode: lastTree.mode,
                 }]);
 
-            const newParentTree = yield trees.createTreeFromBase(oldParentTree, Object.assign({}, oldParentTree, {
+            const newParentTree = yield trees.createTreeFromBase(oldParentTree, {
+                ...oldParentTree,
                 tree: newParentTreeContent,
                 path: parent.path,
-            }));
+            });
 
-            lastTree = Object.assign({}, newParentTree, { path: parent.path });
+            lastTree = { ...newParentTree, path: parent.path };
         }
     }
 
     const newRootTreeContent = rootTree.tree
         .filter(obj => obj.sha !== lastTree.sha)
         .concat([lastTree]);
-    const newRootTree = yield trees.createTreeFromBase(rootTree, Object.assign({}, rootTree, { tree: newRootTreeContent }));
+    const newRootTree = yield trees.createTreeFromBase(rootTree, { ...rootTree, tree: newRootTreeContent });
 
     return yield references.update('head', newRootTree);
 };

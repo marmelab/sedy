@@ -17,10 +17,11 @@ export default (client, repo, store) => {
     const standardize = tree => {
         validateObject(tree);
 
-        return Object.assign({}, tree, {
+        return {
+            ...tree,
             type: 'tree',
             mode: MODE,
-        });
+        };
     };
 
     const get = function* (sha) {

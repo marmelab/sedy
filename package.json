@@ -38,7 +38,6 @@
     "babel-register": "^6.7.2",
     "babel-runtime": "^6.6.1",
     "chai": "^3.5.0",
-    "co-mocha": "^1.1.2",
     "eslint": "^2.8.0",
     "eslint-plugin-import": "^1.6.1",
     "json-loader": "^0.5.4",

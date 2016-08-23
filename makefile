@@ -15,4 +15,9 @@ deploy: build
 	@aws lambda update-function-code --function-name Sedy --zip-file fileb://build/sedy.zip
 
 test:
-	@./node_modules/.bin/mocha --compilers js:babel-core/register --require babel-polyfill --require co-mocha --recursive ./src/*.spec.js ./src/**/*.spec.js ./src/**/**/*.spec.js
+	@./node_modules/.bin/mocha \
+		--compilers js:babel-core/register \
+		--require babel-polyfill \
+		--recursive \
+			./src/*.spec.js \
+			'./src/**/*.spec.js'

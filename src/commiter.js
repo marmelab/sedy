@@ -2,10 +2,11 @@ export default (config, githubApi, git) => {
     const digestCommit = function* (parsedContent, fix) {
         yield git.checkout(parsedContent.pullRequest.ref);
 
-        const newBlob = Object.assign({}, fix.blob, {
+        const newBlob = {
+            ...fix.blob,
             content: fix.content,
             mode: '100644',
-        });
+        };
 
         yield git.add(newBlob, '/' + parsedContent.comment.path);
 
