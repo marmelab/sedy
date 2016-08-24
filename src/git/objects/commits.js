@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { ValidationError } from '../errors';
 import { validate as validateObject } from '../validation';
 
@@ -47,8 +48,7 @@ export default (client, repo, store) => {
             commitMessage: message,
             commitAuthor: {
                 ...author,
-                // @TODO: Set new Date() with the good format
-                date: '2016-07-24T00:49:30+02:00',
+                date: moment().format(),
             },
             commitTree: tree.sha,
             commitParents: parents,

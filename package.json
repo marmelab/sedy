@@ -7,9 +7,10 @@
     "sed",
     "bot",
     "node",
+    "git",
     "github"
   ],
-  "engine": "node >= 4.4.3",
+  "engine": "node >= 4.3",
   "author": "Kmaschta <kevin@marmelab.com>",
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
     "co": "^4.6.0",
     "config": "^1.20.1",
     "github": "^0.2.4",
+    "moment": "^2.14.1",
     "oauth": "^0.9.14",
     "octonode": "^0.7.5"
   },
