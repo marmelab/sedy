@@ -1,7 +1,7 @@
 export default (initialState = {}) => {
-    const store = Object.assign({}, initialState);
+    const store = { ...initialState };
 
-    const copy = () => Object.assign({}, store);
+    const copy = () => ({ ...store });
 
     const get = sha => store[sha];
 

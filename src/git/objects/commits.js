@@ -15,9 +15,10 @@ export default (client, repo, store) => {
     const standardize = commit => {
         validateObject(commit);
 
-        return Object.assign({}, commit, {
+        return {
+            ...commit,
             type: 'commit',
-        });
+        };
     };
 
     const get = function* (sha) {
@@ -44,10 +45,11 @@ export default (client, repo, store) => {
             repoUser: repo.owner,
             repoName: repo.name,
             commitMessage: message,
-            commitAuthor: Object.assign({}, author, {
+            commitAuthor: {
+                ...author,
                 // @TODO: Set new Date() with the good format
                 date: '2016-07-24T00:49:30+02:00',
-            }),
+            },
             commitTree: tree.sha,
             commitParents: parents,
         });

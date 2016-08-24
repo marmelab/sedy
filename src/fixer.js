@@ -50,7 +50,7 @@ export default git => {
     const findBlob = function* (rootTree, path) {
         const chunkPaths = path.split('/');
 
-        let chunk = Object.assign({}, rootTree);
+        let chunk = { ...rootTree }; // Isolation purposes
 
         for (const chunkPath of chunkPaths) {
             chunk = chunk.tree.find(obj => ['tree', 'blob'].includes(obj.type) && obj.path === chunkPath);

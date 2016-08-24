@@ -15,9 +15,10 @@ export default (client, repo, store) => {
     const standardize = blob => {
         validateObject(blob);
 
-        return Object.assign({}, blob, {
+        return {
+            ...blob,
             type: 'blob',
-        });
+        };
     };
 
     const get = function* (sha) {
