@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { ValidationError } from '../errors';
 import { validate as validateObject } from '../validation';
 
@@ -48,7 +47,7 @@ export default (client, repo, store) => {
             commitMessage: message,
             commitAuthor: {
                 ...author,
-                date: moment().format(),
+                date: (new Date()).toISOString(),
             },
             commitTree: tree.sha,
             commitParents: parents,

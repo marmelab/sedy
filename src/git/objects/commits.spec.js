@@ -1,6 +1,5 @@
 import { assert } from 'chai';
 import sinon from 'sinon';
-import moment from 'moment';
 
 import factory from './commits';
 import storeFactory from '../store';
@@ -98,7 +97,7 @@ describe('Git Commits', () => {
                 commitMessage: 'message',
                 commitAuthor: {
                     author: 'name',
-                    date: moment(currentDate).format(),
+                    date: currentDate.toISOString(),
                 },
                 commitTree: 'tree sha',
                 commitParents: 'parents',
