@@ -73,4 +73,57 @@ describe('Git Commits', () => {
             });
         });
     });
+
+    describe('create', () => {
+        let currentDate;
+        let clock;
+        let client;
+
+        beforeEach(() => {
+            currentDate = new Date();
+            clock = sinon.useFakeTimers(currentDate.getTime(), 'Date');
+            client = {
+                createCommit: sinon.spy(() => cb => cb(null, { sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4' })),
+            };
+        });
+
+        it('should create a commit with the client', function* () {
+            const commits = factory(client, repo, store);
+            yield commits.create({ sha: 'tree sha' }, 'message', { author: 'name' }, 'parents');
+
+            assert.deepEqual(client.createCommit.getCall(0).args[0], {
+                repoUser: 'marmelab',
+                repoName: 'sedy',
+                commitMessage: 'message',
+                commitAuthor: {
+                    author: 'name',
+                    date: currentDate.toISOString(),
+                },
+                commitTree: 'tree sha',
+                commitParents: 'parents',
+            });
+        });
+
+        it('should store the new commit in the store', function* () {
+            const commits = factory(client, repo, store);
+            const commit = yield commits.create({ sha: 'tree sha' }, 'message', { author: 'name' }, 'parents');
+            const storedCommit = store.get(commit.sha);
+
+            assert.deepEqual(commit, storedCommit);
+        });
+
+        it('should standardize the new commit', function* () {
+            const commits = factory(client, repo, store);
+            const commit = yield commits.create({ sha: 'tree sha' }, 'message', { author: 'name' }, 'parents');
+
+            assert.deepEqual(commit, {
+                sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4',
+                type: 'commit',
+            });
+        });
+
+        afterEach(() => {
+            if (clock) clock.restore();
+        });
+    });
 });

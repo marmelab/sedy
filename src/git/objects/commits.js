@@ -47,8 +47,7 @@ export default (client, repo, store) => {
             commitMessage: message,
             commitAuthor: {
                 ...author,
-                // @TODO: Set new Date() with the good format
-                date: '2016-07-24T00:49:30+02:00',
+                date: (new Date()).toISOString(),
             },
             commitTree: tree.sha,
             commitParents: parents,
