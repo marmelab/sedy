@@ -37,7 +37,7 @@ const main = function* (event, context) {
     });
 
     const fixer = fixerFactory(git);
-    const fixedContent = yield fixer.fixTypo(parsedContent);
+    const fixedContent = yield fixer.fix(parsedContent);
     logger.debug('Content fixed', { fixedContent });
 
     const commiter = commiterFactory(logger, githubClient, git);
