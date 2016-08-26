@@ -44,6 +44,7 @@ export default git => {
         return {
             blob,
             content: newBlobContent,
+            match,
         };
     };
 

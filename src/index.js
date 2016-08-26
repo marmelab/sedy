@@ -40,15 +40,13 @@ const main = function* (event, context) {
     const fixedContent = yield fixer.fixTypo(parsedContent);
     logger.debug('Content fixed', { fixedContent });
 
-    const commiter = commiterFactory(config, githubClient, git);
+    const commiter = commiterFactory(logger, githubClient, git);
     const success = yield commiter.commit(parsedContent, fixedContent);
 
-    const response = {
+    return {
         success,
         result: parsedContent.matches,
     };
-
-    return response;
 };
 
 export const handler = function (event, context, callback) {
@@ -63,6 +61,10 @@ export const handler = function (event, context, callback) {
             message: error.message,
             stack: error.stack,
         });
-        callback(new Error('An error occured, please contact an administrator.'));
+
+        callback(null, {
+            success: false,
+            error: 'An error occured, please contact an administrator.',
+        });
     });
 };
