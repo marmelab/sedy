@@ -7,14 +7,15 @@ export default config => {
 
     const parsePullRequestReviewComment = request => ({
         type: 'pull_request_review_comment',
+        // @TODO Split comment part into mutliple ones: diff, action, sender, etc
         comment: {
             action: request.body.action,
             id: request.body.comment.id,
             body: request.body.comment.body,
             sender: request.body.sender.login,
             path: request.body.comment.path,
-            diffHunk: request.body.comment.diff_hunk,
-            position: request.body.comment.position,
+            diffHunk: request.body.diff_hunk,
+            position: request.body.position,
             createdDate: request.body.comment.created_at,
             url: request.body.comment.html_url,
         },
