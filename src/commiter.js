@@ -1,4 +1,4 @@
-export default (config, githubApi, git) => {
+export default (logger, githubApi, git) => {
     const digestCommit = function* (parsedContent, fix) {
         yield git.checkout(parsedContent.pullRequest.ref);
 
@@ -10,10 +10,9 @@ export default (config, githubApi, git) => {
 
         yield git.add(newBlob, '/' + parsedContent.comment.path);
 
-        const message = `Typo fix authored by ${parsedContent.comment.sender}
+        const message = `Typo fix s/${fix.match.from}/${fix.match.to}/
 
-${git.commitAuthor.name} is configured to automatically commit change authored by specific syntax in a comment.
-See the trigger at ${parsedContent.comment.url}`;
+As requested by @${parsedContent.comment.sender} at ${parsedContent.comment.url}`;
 
         const commit = yield git.commit(parsedContent.pullRequest.ref, message);
 
@@ -46,8 +45,7 @@ See the trigger at ${parsedContent.comment.url}`;
                 commits.push(commit);
             }
 
-            yield replyToAuthor(parsedContent, `:white_check_mark: @${parsedContent.comment.sender}, check out my commits!
-I have fixed your typo(s) at ${commits.map(commit => commit.sha).join(', ')}`);
+            logger.info('Successful commits', { commitsIds: commits.map(commit => commit.sha) });
 
             return true;
         } catch (error) {
