@@ -1,0 +1,40 @@
+{
+    "env": {
+        "development": {
+            "presets": [
+                "es2015",
+                "react",
+                "react-hmre",
+                "stage-0"
+            ],
+            "plugins": [
+                "transform-runtime",
+                "add-module-exports"
+            ],
+        },
+
+        "production": {
+            "presets": [
+                "es2015",
+                "react",
+                "stage-0"
+            ],
+            "plugins": [
+                "transform-runtime",
+                "add-module-exports"
+            ],
+        },
+
+        "test": {
+            "presets": [
+                "es2015",
+                "react",
+                "stage-0"
+            ],
+            "plugins": [
+                "transform-runtime",
+                "add-module-exports"
+            ],
+        }
+    }
+}

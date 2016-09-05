@@ -1,0 +1,12 @@
+$enable-flex: true;
+@import "~bootstrap/scss/bootstrap";
+@import "compass/css3";
+
+
+.app {
+    padding-top: 60px;
+}
+
+.label {
+    margin: 0 .1em;
+}

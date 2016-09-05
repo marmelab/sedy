@@ -1,0 +1,21 @@
+{
+    "apps": [
+        {
+            "args": [
+                "--content-base=build",
+                "--devtool=cheap-module-inline-source-map",
+                "--hot",
+                "--inline",
+                "--quiet",
+                "--progress"
+            ],
+            "autorestart": true,
+            "env": {
+                "NODE_ENV": "development"
+            },
+            "instances": 1,
+            "name": "bpm_frontend-dev",
+            "script": "./node_modules/.bin/webpack-dev-server"
+        }
+    ]
+}

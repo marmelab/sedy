@@ -1,4 +1,12 @@
 app/lambda/node_modules/*
 app/lambda/config/development.json
 app/lambda/config/production.json
+
+app/installer/node_modules/*
+app/installer/config/development.json
+app/installer/config/production.json
+
 build/lambda/*
+build/installer/*
+
+*.pyc
