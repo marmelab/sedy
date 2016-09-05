@@ -9,7 +9,7 @@ build: build-lambda build-installer
 
 test: test-lambda test-installer
 
-deploy: deploy-lambda deploy-frontend
+deploy: deploy-lambda deploy-installer
 
 run: run-installer
 
@@ -53,7 +53,7 @@ deploy-installer: clean-installer
 test-installer-unit:
 	@cd ./app/installer && NODE_ENV=test ./node_modules/.bin/mocha \
 		--compilers="css:./webpack/null-compiler,js:babel-core/register" \
-		"./src/frontend/js/**/*.spec.js"
+		"./src/js/**/*.spec.js"
 
 test-installer-functional:
 	echo 'Functional tests todo'
