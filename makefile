@@ -1,21 +1,33 @@
-.PHONY: test
+.PHONY: test install-lambda install
 
-install:
-	@npm install
+## Generic
+install: install-lambda
 
-clean:
-	@rm -rf build/*
+clean: clean-lambda
 
-build: clean
-	@./node_modules/.bin/webpack --progress
+build: build-lambda
 
-deploy: clean
-	@./node_modules/.bin/webpack -p --progress --optimize-dedupe
-	@cd build && zip -r sedy.zip *
-	@aws lambda update-function-code --function-name Sedy --zip-file fileb://build/sedy.zip
+test: test-lambda
 
-test:
-	@./node_modules/.bin/mocha \
+deploy: deploy-lambda
+
+## Lambda management
+install-lambda:
+	@cd ./app/lambda && npm install
+
+clean-lambda:
+	@rm -rf build/lambda/*
+
+build-lambda: clean-lambda
+	@cd ./app/lambda && ./node_modules/.bin/webpack --progress
+
+deploy-lambda: clean-lambda
+	@cd ./app/lambda && ./node_modules/.bin/webpack -p --progress --optimize-dedupe
+	@cd ./build/lambda && zip -r sedy.zip *
+	@aws lambda update-function-code --function-name Sedy --zip-file fileb://build/lambda/sedy.zip
+
+test-lambda:
+	@cd ./app/lambda && ./node_modules/.bin/mocha \
 		--compilers js:babel-core/register \
 		--require babel-polyfill \
 		--require co-mocha \
