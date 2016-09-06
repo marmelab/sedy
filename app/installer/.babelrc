@@ -5,7 +5,6 @@
                 "es2015",
                 "react",
                 "react-hmre",
-                "stage-0"
             ],
             "plugins": [
                 "transform-runtime",
@@ -17,7 +16,6 @@
             "presets": [
                 "es2015",
                 "react",
-                "stage-0"
             ],
             "plugins": [
                 "transform-runtime",
@@ -29,7 +27,6 @@
             "presets": [
                 "es2015",
                 "react",
-                "stage-0"
             ],
             "plugins": [
                 "transform-runtime",

@@ -55,13 +55,9 @@ test-installer-unit:
 		--compilers="css:./webpack/null-compiler,js:babel-core/register" \
 		"./src/js/**/*.spec.js"
 
-test-installer-functional:
-	echo 'Functional tests todo'
-
 test-installer:
 	@cd ./app/installer && cp -n ./config/test-dist.js ./config/test.js | true
 	@make test-installer-unit
-	@make test-installer-functional
 
 run-installer:
 	@cd ./app/installer && ./node_modules/.bin/webpack-dev-server \

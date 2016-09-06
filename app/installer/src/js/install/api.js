@@ -1,3 +1,4 @@
+/* global fetch */
 const githubUrl = 'https://api.github.com';
 
 const retrieveUserRepositories = user => () => {

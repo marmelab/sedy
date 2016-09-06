@@ -3,8 +3,9 @@ app/lambda/config/development.json
 app/lambda/config/production.json
 
 app/installer/node_modules/*
-app/installer/config/development.json
-app/installer/config/production.json
+app/installer/config/development.js
+app/installer/config/production.js
+app/installer/config/test.js
 
 build/lambda/*
 build/installer/*
