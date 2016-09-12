@@ -1,37 +1,12 @@
 {
-    "env": {
-        "development": {
-            "presets": [
-                "es2015",
-                "react",
-                "react-hmre",
-            ],
-            "plugins": [
-                "transform-runtime",
-                "add-module-exports"
-            ],
-        },
-
-        "production": {
-            "presets": [
-                "es2015",
-                "react",
-            ],
-            "plugins": [
-                "transform-runtime",
-                "add-module-exports"
-            ],
-        },
-
-        "test": {
-            "presets": [
-                "es2015",
-                "react",
-            ],
-            "plugins": [
-                "transform-runtime",
-                "add-module-exports"
-            ],
-        }
-    }
+    "presets": [
+        "es2015",
+        "react",
+        "react-hmre",
+    ],
+    "plugins": [
+        "transform-runtime",
+        "transform-object-rest-spread",
+        "add-module-exports"
+    ],
 }

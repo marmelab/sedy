@@ -52,8 +52,12 @@ deploy-installer: clean-installer
 
 test-installer-unit:
 	@cd ./app/installer && NODE_ENV=test ./node_modules/.bin/mocha \
-		--compilers="css:./webpack/null-compiler,js:babel-core/register" \
-		"./src/js/**/*.spec.js"
+		--compilers js:babel-core/register \
+		--require babel-polyfill \
+		--require co-mocha \
+		--recursive \
+			./src/js/*.spec.js \
+			'./src/js/**/*.spec.js'
 
 test-installer:
 	@cd ./app/installer && cp -n ./config/test-dist.js ./config/test.js | true
