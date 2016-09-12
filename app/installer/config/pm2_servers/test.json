@@ -1,0 +1,18 @@
+{
+    "apps": [
+        {
+            "args": [
+                "./build/frontend",
+                "-p 8081",
+                "--silent"
+            ],
+            "env": {
+                "NODE_ENV": "test",
+                "NODE_PORT": 3020
+            },
+            "exec_mode": "fork",
+            "name": "bpm_frontend-test",
+            "script": "./node_modules/.bin/http-server"
+        }
+    ]
+}

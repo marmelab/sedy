@@ -1,0 +1,12 @@
+{
+    "presets": [
+        "es2015",
+        "react",
+        "react-hmre",
+    ],
+    "plugins": [
+        "transform-runtime",
+        "transform-object-rest-spread",
+        "add-module-exports"
+    ],
+}
