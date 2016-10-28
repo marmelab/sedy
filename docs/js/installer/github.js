@@ -18,7 +18,7 @@ const isContributorAdded = (user, repository) => {
         .then(response => Promise.resolve(response.status == 204));
 };
 
-const isHookAdded = (user, repository) => {
+const getHookId = (user, repository) => {
     const headers = {
         Authorization: `token ${user.token}`,
     };
@@ -32,10 +32,22 @@ const isHookAdded = (user, repository) => {
             return response.json();
         })
         .then(
-            (hooks) => hooks.filter(hook => hook.config.url == webhookUrl).length > 0,
+            (hooks) => {
+                let sedyHooks = hooks.filter(hook => hook.config.url == webhookUrl);
+
+                if(sedyHooks.length){
+                    return sedyHooks[0].id;
+                }
+                return Promise.reject();
+            },
             error => { error; }
         );
-};
+}
+
+const isHookAdded = (user, repository) => {
+    return getHookId(user, repository)
+        .then((hookId) => true)
+        .catch(() => false);
 
 const isSedyInstalled = (user, repository) => {
     return Promise.all([
@@ -131,7 +143,57 @@ const install = (user, repository) => {
     ]);
 };
 
+const removeHook = (user, repository) => {
+    const options = {
+        method: 'DELETE',
+        headers: {
+            Authorization: `token ${user.token}`,
+        }
+    };
+
+    return getHookId(user, repository)
+        .then((hookId) => {
+            return fetch(`${githubUrl}/repos/${user.name}/${repository.name}/hooks/${hookId}`, options)
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(result => Promise.reject(new Error(result)));
+                    }
+                    Promise.resolve();
+                });
+        });
+
+
+};
+
+const removeContributor = (user, repository) => {
+    const options = {
+        method: 'DELETE',
+        headers: {
+            Authorization: `token ${user.token}`,
+        },
+    };
+
+    return fetch(`${githubUrl}/repos/${user.name}/${repository.name}/collaborators/${sedyUsername}`, options)
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(result => Promise.reject(new Error(result)));
+            }
+            return Promise.resolve();
+        });
+};
+
+const uninstall = (user, repository) => {
+    if(!repository.sedy_installed) {
+        return;
+    }
+    return Promise.all([
+        removeHook(user, repository),
+        removeContributor(user, repository),
+    ]);
+};
+
 export default {
     getRepositories,
     install,
+    uninstall,
 };
