@@ -1,17 +1,18 @@
+/* global APP_BASE_URL, GITHUB_APP_ID, GITHUB_REDIRECTION, GITHUB_SCOPES */
 require ('react-tap-event-plugin')();
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
-import FontIcon from 'material-ui/FontIcon';
+import GithubLogin from './GithubLogin';
 
 ReactDOM.render(
     <MuiThemeProvider>
-        <RaisedButton
-            label="Signin with GitHub"
-            icon={<FontIcon className="github-icon" />}
+        <GithubLogin
+            appId={GITHUB_APP_ID}
+            scopes={GITHUB_SCOPES}
+            redirectUri={`${APP_BASE_URL}${GITHUB_REDIRECTION}`}
         />
     </MuiThemeProvider>,
     document.getElementById('setup')
