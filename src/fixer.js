@@ -19,7 +19,6 @@ export default (git, logger) => {
         }
         // count nb of line till target line without the deleted line
         const index = diff.slice(0, position).filter(line => !line.startsWith('-')).length - 1;
-
         return offset + index;
     };
 

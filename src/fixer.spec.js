@@ -36,11 +36,11 @@ describe('Fixer', () => {
         it('should handle accented characters', () => {
             const fixer = fixerFactory(null, logger);
             const parsedContent = {
-                comment: { diffHunk: diffHunkWithAccents, position: 5 },
+                comment: { diffHunk: diffHunkWithAccents, position: 1 },
             };
 
             const blob = {
-                content: ' +### Conventions & consistence',
+                content: '### Conventions & consistence',
                 encoding: 'utf8',
             };
 
@@ -51,7 +51,7 @@ describe('Fixer', () => {
 
             const { content } = fixer.fixBlob(parsedContent, blob, match);
 
-            assert.deepEqual(content, ' +### Conventions & cohérence');
+            assert.deepEqual(content, '### Conventions & cohérence');
         });
     });
 });
