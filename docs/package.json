@@ -1,0 +1,25 @@
+{
+  "name": "sedy-website",
+  "version": "0.1.0",
+  "description": "sedy website",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marmelab/sedy.git"
+  },
+  "author": "marmelab <contact@marmelab.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marmelab/sedy/issues"
+  },
+  "homepage": "https://github.com/marmelab/sedy#readme",
+  "devDependencies": {
+    "css-loader": "^0.25.0",
+    "extract-text-webpack-plugin": "^1.0.1",
+    "html-webpack-plugin": "^2.24.0",
+    "webpack": "^1.13.3",
+    "webpack-dev-server": "^1.16.2"
+  }
+}
