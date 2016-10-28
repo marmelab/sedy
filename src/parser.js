@@ -64,11 +64,6 @@ export default config => {
             return null;
         }
 
-        // If comment author not in allowed authors
-        if (config.allowed.authors.indexOf(eventData.comment.sender) < 0) {
-            return null;
-        }
-
         let match = regex.exec(eventData.comment.body);
         while (match) {
             if (isASCII(match[1]) && isASCII(match[2])) {

@@ -2,17 +2,10 @@ import { assert } from 'chai';
 import parserFactory from './parser';
 
 describe('Parser', () => {
-    let config;
+    const config = {};
     let request;
 
     beforeEach(() => {
-        config = {
-            allowed: {
-                repositories: ['Marmelab/Sedy'],
-                authors: ['Someone'],
-            },
-        };
-
         request = {
             headers: { 'X-GitHub-Event': 'pull_request_review_comment' },
             body: {
@@ -49,13 +42,6 @@ describe('Parser', () => {
             shouldReturnNull({ headers: { 'bad': 'header' } });
             shouldReturnNull({ headers: { 'X-GitHub-Event': 'bad event' } });
             shouldReturnNull({ headers: { 'X-GitHub-Event': 'ping' } });
-        });
-    });
-
-    describe('authorization', () => {
-        it('should not match if user is not authorized', () => {
-            request.body.sender.login = 'Somebody else';
-            assert.deepEqual(parserFactory(config).parse(request), null);
         });
     });
 
