@@ -1,5 +1,5 @@
 export default (git, logger) => {
-    const interpretDiff = (hunk, position) => {
+    const getLineIndexFromDiff = (hunk, position) => {
         // Github API send the diff with a application/vnd.github.v3.diff media type
         // See https://developer.github.com/v3/pulls/comments/#input
         const diff = hunk.split('\n');
@@ -9,28 +9,35 @@ export default (git, logger) => {
             logger.error('debug infos', { hunk, position });
             throw new Error('Inefficient diff parser');
         }
-
-        if (line.startsWith('+') || line.startsWith('-')) {
-            line = line.substring(1);
+        if (line.startsWith('-')) {
+            return null;
         }
-
-        return { line };
+        const offset = parseInt(diff[0].match(/@@.*?\+(\d+)/)[1], 10) - 1;
+        // if negative offset, then it means there is no add
+        if (offset < 0) {
+            return null;
+        }
+        // count nb of line till target line without the deleted line
+        const index = diff.slice(0, position).filter(line => !line.startsWith('-')).length - 1;
+        return offset + index;
     };
 
     const fixBlob = (parsedContent, blob, match) => {
         const buffer = new Buffer(blob.content, blob.encoding);
         const blobContent = buffer.toString('utf8');
 
-        const diff = interpretDiff(parsedContent.comment.diffHunk, parsedContent.comment.position);
+        const { diffHunk, position } = parsedContent.comment;
+        const index = getLineIndexFromDiff(diffHunk, position);
+        if (index === null) {
+            return null;
+        }
 
         const lines = blobContent.split('\n');
         logger.debug(`found ${lines.length} lines`);
-        const index = lines.indexOf(diff.line);
         const line = lines[index];
-        logger.debug('current line', line);
 
         if (!line) {
-            console.log('debug infos', { parsedContent, lines, index, diff });
+            logger.debug('debug infos', { parsedContent, lines, index, diffHunk, position });
             return null;
         }
 
@@ -100,5 +107,5 @@ export default (git, logger) => {
         return fixes;
     };
 
-    return { fix, fixBlob, interpretDiff };
+    return { fix, fixBlob, getLineIndexFromDiff };
 };
