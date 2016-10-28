@@ -29,7 +29,7 @@ const isContributorAdded = (user, repository) => {
     // Response if user is not a collaborator
     // Status: 404 Not Found
 
-    return fetch(`${config.githubUrl}/repos/${user.name}/${repository.name}/collaborators/${config.sedyUsername}`, { headers})
+    return fetch(`${config.githubUrl}/repos/${user.name}/${repository.name}/collaborators/${config.sedyUsername}`, { headers })
         .then(response => Promise.resolve(response.status == 204));
 };
 
