@@ -147,4 +147,15 @@ describe('Github API', () => {
             }]);
         });
     });
+
+    describe('repository', () => {
+        it('should retrieve collaborators', function* () {
+            const result = yield githubApi(logger, github).getRepoCollaborators({
+                repoUser: 'User',
+                repoName: 'Repo',
+            });
+
+            assert.deepEqual(result, '/repos/User/Repo/collaborators');
+        });
+    });
 });
