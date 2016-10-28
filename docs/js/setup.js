@@ -8,7 +8,10 @@ import GithubLogin from './GithubLogin';
 
 ReactDOM.render(
     <MuiThemeProvider>
-        <GithubLogin />
+        <GithubLogin
+            appId='xxx'
+            scopes={['write:repo_hook', 'repo']}
+        />
     </MuiThemeProvider>,
     document.getElementById('setup')
 );
