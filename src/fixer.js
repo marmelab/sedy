@@ -1,4 +1,4 @@
-export default git => {
+export default (git, logger) => {
     const interpretDiff = (hunk, position) => {
         // Github API send the diff with a application/vnd.github.v3.diff media type
         // See https://developer.github.com/v3/pulls/comments/#input
@@ -6,7 +6,7 @@ export default git => {
         let line = diff[position];
 
         if (!line) {
-            console.log('debug infos', { hunk, position });
+            logger.error('debug infos', { hunk, position });
             throw new Error('Inefficient diff parser');
         }
 
@@ -24,8 +24,10 @@ export default git => {
         const diff = interpretDiff(parsedContent.comment.diffHunk, parsedContent.comment.position);
 
         const lines = blobContent.split('\n');
+        logger.debug(`found ${lines.length} lines`);
         const index = lines.indexOf(diff.line);
         const line = lines[index];
+        logger.debug('current line', line);
 
         if (!line) {
             console.log('debug infos', { parsedContent, lines, index, diff });
@@ -35,6 +37,7 @@ export default git => {
         // TODO: Allow to specify refex flags with sed comment
         const regex = new RegExp(match.from, 'gi');
         const newLine = line.replace(regex, match.to);
+        logger.debug('current new line', newLine);
 
         if (line === newLine) {
             // No need to commit the same file

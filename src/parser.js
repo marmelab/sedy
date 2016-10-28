@@ -1,4 +1,4 @@
-export default config => {
+export default (config, logger) => {
     /**
      * Check if string is ASCII only
      * @see http://stackoverflow.com/a/14313213
@@ -40,14 +40,18 @@ export default config => {
         const event = request.headers && request.headers['X-GitHub-Event'];
 
         if (!event) {
+            logger.debug('no event in github payload');
             return null;
         }
+
+        logger.debug('event in github payload', event);
 
         switch (event) {
             case 'ping':
                 return null;
             case 'pull_request_review_comment':
                 eventData = parsePullRequestReviewComment(request);
+                logger.debug('eventData extracted from github payload', eventData);
 
                 if (eventData.comment.action !== 'created') {
                     return null;
@@ -65,6 +69,8 @@ export default config => {
         }
 
         let match = regex.exec(eventData.comment.body);
+        logger.debug('matched sed command', match);
+
         while (match) {
             if (isASCII(match[1]) && isASCII(match[2])) {
                 matches.push({ from: match[1], to: match[2] });
@@ -72,7 +78,7 @@ export default config => {
             match = regex.exec(eventData.comment.body);
         }
 
-        return {
+        const result = {
             type: eventData.type,
             comment: eventData.comment,
             commit: eventData.commit,
@@ -80,6 +86,9 @@ export default config => {
             pullRequest: eventData.pullRequest,
             matches,
         };
+
+        logger.debug('result of github payload parsing', result);
+        return result;
     };
 
     return {
