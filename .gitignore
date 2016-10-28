@@ -3,3 +3,5 @@ node_modules/*
 build/*
 config/development.json
 config/production.json
+docs/config/development.js
+docs/config/production.js
