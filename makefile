@@ -1,24 +1,24 @@
 .PHONY: test
 
 copy-conf: ## Initialize the configuration files by copying the *''-dist" versions (does not override existing config)
-	@cp -n ./config/production-dist.js ./config/production.js | true
+	-cp -n ./config/production-dist.js ./config/production.js
 
 install: copy-conf
-	@npm install
+	npm install
 
 clean:
-	@rm -rf build/*
+	rm -rf build/*
 
 build: clean
-	@./node_modules/.bin/webpack --progress
+	./node_modules/.bin/webpack --progress
 
 deploy: clean
-	@./node_modules/.bin/webpack -p --progress --optimize-dedupe
-	@cd build && zip -r sedy.zip *
-	@aws lambda update-function-code --function-name Sedy --zip-file fileb://build/sedy.zip
+	./node_modules/.bin/webpack -p --progress --optimize-dedupe
+	cd build && zip -r sedy.zip *
+	aws lambda update-function-code --function-name Sedy --zip-file fileb://build/sedy.zip
 
 test:
-	@./node_modules/.bin/mocha \
+	./node_modules/.bin/mocha \
 		--compilers js:babel-core/register \
 		--require babel-polyfill \
 		--require co-mocha \
