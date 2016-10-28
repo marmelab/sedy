@@ -1,13 +1,11 @@
-const githubUrl = 'https://api.github.com';
-const webhookUrl = 'https://sedy.marmelab.com';
-const sedyUsername = 'sedy-bot';
+import config from 'config';
 
 const getUserInfo = token => {
     const headers = {
         Authorization: `token ${token}`,
     };
 
-    return fetch(`${githubUrl}/user`, { headers })
+    return fetch(`${config.githubUrl}/user`, { headers })
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
@@ -31,7 +29,7 @@ const isContributorAdded = (user, repository) => {
     // Response if user is not a collaborator
     // Status: 404 Not Found
 
-    return fetch(`${githubUrl}/repos/${user.name}/${repository.name}/collaborators/${sedyUsername}`, { headers})
+    return fetch(`${config.githubUrl}/repos/${user.name}/${repository.name}/collaborators/${config.sedyUsername}`, { headers})
         .then(response => Promise.resolve(response.status == 204));
 };
 
@@ -40,7 +38,7 @@ const getHookId = (user, repository) => {
         Authorization: `token ${user.token}`,
     };
 
-    return fetch(`${githubUrl}/repos/${user.name}/${repository.name}/hooks`, { headers })
+    return fetch(`${config.githubUrl}/repos/${user.name}/${repository.name}/hooks`, { headers })
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
@@ -50,7 +48,7 @@ const getHookId = (user, repository) => {
         })
         .then(
             (hooks) => {
-                let sedyHooks = hooks.filter(hook => hook.config.url == webhookUrl);
+                let sedyHooks = hooks.filter(hook => hook.config.url == config.webhookUrl);
 
                 if(sedyHooks.length){
                     return sedyHooks[0].id;
@@ -80,7 +78,7 @@ const getRepositories = (user, page = 1, perPage = 30) => {
         Authorization: `token ${user.token}`,
     };
 
-    return fetch(`${githubUrl}/user/repos?affiliation=owner&page=${page}&per_page=${perPage}`, { headers })
+    return fetch(`${config.githubUrl}/user/repos?affiliation=owner&page=${page}&per_page=${perPage}`, { headers })
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
@@ -113,13 +111,13 @@ const addHook = (user, repository) => () => {
             active: true,
             events: ['pull_request_review_comment'],
             config: {
-                url: webhookUrl,
+                url: config.webhookUrl,
                 content_type: 'json',
             },
         }),
     };
 
-    return fetch(`${githubUrl}/repos/${user.name}/${repository.name}/hooks`, options)
+    return fetch(`${config.githubUrl}/repos/${user.name}/${repository.name}/hooks`, options)
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
@@ -141,7 +139,7 @@ const addContributor = (user, repository) => {
         },
     };
 
-    return fetch(`${githubUrl}/repos/${user.name}/${repository.name}/collaborators/${sedyUsername}?permission=push`, options)
+    return fetch(`${config.githubUrl}/repos/${user.name}/${repository.name}/collaborators/${config.sedyUsername}?permission=push`, options)
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
@@ -170,7 +168,7 @@ const removeHook = (user, repository) => {
 
     return getHookId(user, repository)
         .then((hookId) => {
-            return fetch(`${githubUrl}/repos/${user.name}/${repository.name}/hooks/${hookId}`, options)
+            return fetch(`${config.githubUrl}/repos/${user.name}/${repository.name}/hooks/${hookId}`, options)
                 .then(response => {
                     if (!response.ok) {
                         return response.text().then(result => Promise.reject(new Error(result)));
@@ -190,7 +188,7 @@ const removeContributor = (user, repository) => {
         },
     };
 
-    return fetch(`${githubUrl}/repos/${user.name}/${repository.name}/collaborators/${sedyUsername}`, options)
+    return fetch(`${config.githubUrl}/repos/${user.name}/${repository.name}/collaborators/${config.sedyUsername}`, options)
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
