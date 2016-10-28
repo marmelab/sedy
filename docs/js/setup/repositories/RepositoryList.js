@@ -48,11 +48,12 @@ class RepositoryList extends Component {
                         ))}
                     </TableBody>
                 </Table>
+                {/* to be implemented
                 <Pagination
                     hasNext={true}
                     page={2}
                     onChange={this.onPageChange}
-                />
+                />*/}
             </div>
         );
     };

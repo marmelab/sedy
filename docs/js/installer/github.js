@@ -165,9 +165,6 @@ const addContributor = (accessToken, user, repository) => {
 };
 
 export const install = (accessToken, user, repository) => {
-    if(repository.sedy_installed) {
-        return;
-    }
     return Promise.all([
         addHook(accessToken, user, repository),
         addContributor(accessToken, user, repository),
@@ -182,7 +179,7 @@ const removeHook = (accessToken, user, repository) => {
         }
     };
 
-    return getHookId(user, repository)
+    return getHookId(accessToken, user, repository)
         .then((hookId) => {
             return fetch(`${GITHUB_URL}/repos/${user.user.login}/${repository.name}/hooks/${hookId}`, options)
                 .then(response => {
@@ -214,10 +211,6 @@ const removeContributor = (accessToken, user, repository) => {
 };
 
 export const uninstall = (accessToken, user, repository) => {
-    if(!repository.sedy_installed) {
-        return Promise.resolve();
-    }
-
     return Promise.all([
         removeHook(accessToken, user, repository),
         removeContributor(accessToken, user, repository),
