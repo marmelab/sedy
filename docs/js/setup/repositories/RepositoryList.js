@@ -1,10 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
 
+import { getRepositories } from '../../installer/github';
+
 import Repository from './Repository';
 import Pagination from './Pagination';
 
-const repositories = require('../repositories');
+const accessToken = window.localStorage.accessToken;
+const user = JSON.parse(window.localStorage.user);
 
 class RepositoryList extends Component {
     constructor(props) {
@@ -12,12 +15,24 @@ class RepositoryList extends Component {
         this.state = {
             page: 1,
             hasNext: false,
+            loading: true,
+            repositories: [],
         };
     }
 
+    fetchRepositories = page => getRepositories(accessToken, user, page);
+
+    componentWillMount() {
+        this.fetchRepositories(this.state.page)
+            .then(repositories => this.setState({ repositories }));
+    }
+
     onPageChange = page => () => {
-        console.log(`New page: ${page}`);
-        this.setState({ page });
+        this.fetchRepositories(page)
+            .then(repositories => this.setState({
+                page,
+                repositories,
+            }));
     };
 
     render() {
@@ -25,7 +40,7 @@ class RepositoryList extends Component {
             <div>
                 <Table>
                     <TableBody>
-                        {repositories.map(repository => (
+                        {this.state.repositories.map(repository => (
                             <Repository
                                 key={repository.id}
                                 repository={repository}
@@ -42,13 +57,5 @@ class RepositoryList extends Component {
         );
     };
 }
-
-RepositoryList.propTypes = {
-    repositories: PropTypes.array,
-};
-
-RepositoryList.defaultProps = {
-    repositories: [],
-};
 
 export default RepositoryList;

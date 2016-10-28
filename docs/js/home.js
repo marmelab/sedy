@@ -1,11 +1,18 @@
-const letters = ['S', 'E', 'D', 'Y', '!'];
+require ('react-tap-event-plugin')();
 
-let index = 0;
-setInterval(() => {
-    if (index >= letters.length) {
-        index = 0;
-    }
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-    document.body.innerHTML = letters[index];
-    index++;
-}, 1000);
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import GithubLogin from './GithubLogin';
+
+ReactDOM.render(
+    <MuiThemeProvider>
+        <GithubLogin
+            appId={GITHUB_APP_ID}
+            scopes={GITHUB_SCOPES}
+            redirectUri={`${APP_BASE_URL}${GITHUB_REDIRECTION}`}
+        />
+    </MuiThemeProvider>,
+    document.getElementById('login')
+);

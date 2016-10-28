@@ -25,6 +25,9 @@ export default {
             GITHUB_APP_ID: JSON.stringify(config.githubAppId),
             GITHUB_REDIRECTION: JSON.stringify(config.githubRedirection),
             GITHUB_SCOPES: JSON.stringify(config.githubScopes),
+            GITHUB_URL: JSON.stringify(config.githubUrl),
+            WEBHOOK_URL: JSON.stringify(config.webhookUrl),
+            SEDY_USERNAME: JSON.stringify(config.sedyUsername),
         }),
         new HtmlWebpackPlugin({
             template: './index.html',

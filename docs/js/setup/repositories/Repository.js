@@ -1,11 +1,15 @@
 import React, { Component, PropTypes } from 'react';
 import { TableRow, TableRowColumn } from 'material-ui/Table';
 import { red400, green500 } from 'material-ui/styles/colors';
+import { install, uninstall } from '../../installer/github';
 
 import AddSedy from 'material-ui/svg-icons/content/add';
 import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
 import RemoveSedy from 'material-ui/svg-icons/action/delete';
+
+const accessToken = window.localStorage.accessToken;
+const user = JSON.parse(window.localStorage.user);
 
 const styles = {
     name: {
@@ -30,8 +34,9 @@ const styles = {
 class Repository extends Component {
     constructor(props) {
         super(props);
+        console.log(props.repository.full_name, props.repository.sedy_installed)
         this.state = {
-            hasSedy: props.sedy_installed,
+            hasSedy: props.repository.sedy_installed,
             loading: false,
         };
     }
@@ -39,12 +44,17 @@ class Repository extends Component {
     toggleSedy = () => {
         this.setState({ loading: true });
 
-        setTimeout(() => {
-            this.setState({
-                loading: false,
-                hasSedy: !this.state.hasSedy,
-            });
-        }, 2000);
+        let promise;
+        if (!this.state.hasSedy) {
+            promise = install(accessToken, user, this.props.repository);
+        } else {
+            promise = uninstall(accessToken, user, this.props.repository);
+        }
+
+        promise.then(() => this.setState({
+            loading: false,
+            hasSedy: !this.state.hasSedy,
+        }));
     };
 
     actions() {
