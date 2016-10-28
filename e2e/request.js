@@ -1,9 +1,9 @@
 import http from 'http';
 import request from 'request';
 import { handler } from '../';
-import nock from 'nock';
+import mockGithubApi from './mockGithubApi';
 
-nock('https://api.github.com').get(/repos/).reply(200, { sha: '8d10a43368b8b25d5079422496f2df43f5e1dc93', tree: { sha: '8d10a43368b8b25d5079422496f2df43f5e1dc93' } });
+mockGithubApi();
 
 export default function myRequest(params, authToken = null, cookies = {}) {
     return (callback) => {
