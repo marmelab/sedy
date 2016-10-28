@@ -1,17 +1,4 @@
 {
-    "allowed": {
-        "authors": [
-            "alexisjanvier",
-            "djhi",
-            "floo51",
-            "fzaninotto",
-            "jpetitcolas",
-            "JulienDemangeon",
-            "Kmaschta",
-            "ThieryMichel",
-            "YannGens"
-        ]
-    },
     "bot": {
         "login": "sedy-bot",
         "oauthToken": ""
