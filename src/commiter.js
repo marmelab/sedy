@@ -31,9 +31,31 @@ As requested by @${parsedContent.comment.sender} at ${parsedContent.comment.url}
         });
     };
 
+    const checkCommenterCanCommit = function* (parsedContent) {
+        const collaborators = yield githubApi.getRepoCollaborators({
+            repoUser: parsedContent.repository.user,
+            repoName: parsedContent.repository.name,
+        });
+
+        const commenter = collaborators.find(c => c.login === parsedContent.comment.sender);
+
+        // Commenter is not a collaborator of the repo
+        if (!commenter) return false;
+
+        return commenter.permissions.push || commenter.permissions.admin;
+    };
+
     const commit = function* (parsedContent, fixedContent) {
+        const commentSender = parsedContent.comment.sender;
         if (!fixedContent || fixedContent.length === 0) {
-            yield replyToAuthor(parsedContent, `:confused: @${parsedContent.comment.sender}, I did not understand the request.`);
+            yield replyToAuthor(parsedContent, `:confused: @${commentSender}, I did not understand the request.`);
+
+            return false;
+        }
+
+        const commenterCanCommit = yield checkCommenterCanCommit(parsedContent);
+        if (!commenterCanCommit) {
+            yield replyToAuthor(parsedContent, `:x: @${commentSender}, you are not allowed to commit on this repository.`);
 
             return false;
         }

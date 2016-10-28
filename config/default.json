@@ -1,7 +1,4 @@
 {
-    "allowed": {
-        "authors": ["Username", "Username", "Username"]
-    },
     "bot": {
         "login": "GITHUB-ACCOUNT",
         "oauthToken": "GITHUB-OAUTH-ACCESS-TOKEN"
