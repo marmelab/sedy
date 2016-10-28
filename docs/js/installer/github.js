@@ -1,8 +1,25 @@
-/* global fetch */
 const githubUrl = 'https://api.github.com';
 const webhookUrl = 'https://sedy.marmelab.com';
 const sedyUsername = 'sedy-bot';
 
+const getUserInfo = token => {
+    const headers = {
+        Authorization: `token ${token}`,
+    };
+
+    return fetch(`${githubUrl}/user`, { headers })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(result => Promise.reject(new Error(result)));
+            }
+
+            return response.json();
+        })
+        .then(
+            user => ({ user }),
+            error => ({ error })
+        );
+};
 
 const isContributorAdded = (user, repository) => {
     const headers = {
@@ -193,6 +210,7 @@ const uninstall = (user, repository) => {
 };
 
 export default {
+    getUserInfo,
     getRepositories,
     install,
     uninstall,
