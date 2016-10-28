@@ -9,7 +9,7 @@ before(() => {
 describe('Main', () => {
     it('should answer', function* () {
         const { body, statusCode } = yield request({
-            body: JSON.stringify({ foo: 'bar' }),
+            body: { foo: 'bar' },
             method: 'POST',
             uri: '/',
         });
