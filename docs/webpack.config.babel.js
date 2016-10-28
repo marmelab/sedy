@@ -21,7 +21,9 @@ export default {
     },
     plugins: [
         new DefinePlugin({
+            APP_BASE_URL: JSON.stringify(config.appBaseUrl),
             GITHUB_APP_ID: JSON.stringify(config.githubAppId),
+            GITHUB_REDIRECTION: JSON.stringify(config.githubRedirection),
             GITHUB_SCOPES: JSON.stringify(config.githubScopes),
         }),
         new HtmlWebpackPlugin({

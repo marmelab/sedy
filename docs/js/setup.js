@@ -1,4 +1,4 @@
-/* global GITHUB_APP_ID, GITHUB_SCOPES */
+/* global APP_BASE_URL, GITHUB_APP_ID, GITHUB_REDIRECTION, GITHUB_SCOPES */
 require ('react-tap-event-plugin')();
 
 import React from 'react';
@@ -12,6 +12,7 @@ ReactDOM.render(
         <GithubLogin
             appId={GITHUB_APP_ID}
             scopes={GITHUB_SCOPES}
+            redirectUri={`${APP_BASE_URL}${GITHUB_REDIRECTION}`}
         />
     </MuiThemeProvider>,
     document.getElementById('setup')
