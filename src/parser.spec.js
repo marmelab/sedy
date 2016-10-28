@@ -80,7 +80,7 @@ describe('Parser', () => {
 
         it('should match the deletion pattern', () => {
             request.body.comment.body = 's/To Remove//';
-            assert.deepEqual(parser(config).parse(request).matches, [
+            assert.deepEqual(parserFactory(config, logger).parse(request).matches, [
                 { from: 'To Remove', to: '' },
             ]);
         });
@@ -113,12 +113,12 @@ describe('Parser', () => {
 
         it('should not match if the pattern is an image url', () => {
             request.body.comment.body = 'https://perdu.com/os/images/lost/image.jpg';
-            assert.deepEqual(parser(config).parse(request).matches, []);
+            assert.deepEqual(parserFactory(config, logger).parse(request).matches, []);
         });
 
         it('should match sed together with image url', () => {
             request.body.comment.body = ' s/remove// https://perdu.com/os/images/lost/image.jpg s/replace/me/';
-            assert.deepEqual(parser(config).parse(request).matches, [
+            assert.deepEqual(parserFactory(config, logger).parse(request).matches, [
                 { from: 'remove', to: '' },
                 { from: 'replace', to: 'me' },
             ]);
