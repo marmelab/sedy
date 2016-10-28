@@ -121,20 +121,14 @@ const addContributor = (user, repository) => {
         });
 };
 
-const install = (user, repositories) => {
-    return Promise.all(
-        repositories
-        .filter(repository => !repository.sedy_installed)
-        .map(repository => {
-            if(repository.sedy_installed) {
-                return;
-            }
-            return Promise.all([
-                addHook(user, repository),
-                addContributor(user, repository),
-            ]);
-        })
-    );
+const install = (user, repository) => {
+    if(repository.sedy_installed) {
+        return;
+    }
+    return Promise.all([
+        addHook(user, repository),
+        addContributor(user, repository),
+    ]);
 };
 
 export default {
