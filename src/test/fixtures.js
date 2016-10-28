@@ -103,3 +103,80 @@ export const diffHunk = `@@ -0,0 +1,202 @@
 +Now, we need to isolate a single frame into a picture. Principle is not trivial: we need
 +to add a 'canvas' element to our page, set the canvas content to current video frame,
 +and then convert canvas content to data URL.`;
+
+export const diffHunkWithAccents = `@@ -51,9 +51,74 @@ Le nom \`discs\` n'est plus du tout adapté à ce que le concept représente, il p
+
+  ## Best practices
+
+ -### Techniques
+ +### Conventions & consistence
+ +
+ +Pour des développements évolutifs et maintenables, il est important que le code soit compréhensible par tous et que le "ticket d'entrée" sur un projet ne soit pas trop important.
+ +
+ +Pour rendre le code compréhensible par tous, il faut essayer de faire converger au maximum les différents styles de développements sur le fond comme sur la forme en suivant les conventions déjà établies pour la techno utilisée et en s'imposant les mêmes règles partout ailleurs.
+ +
+ +Quelques exemples :
+ +- Les constantes doivent être en UPPERCASE
+ +- L'indentation doit être de 4 espaces partout
+ +- \`sprintf\` plutôt que interpolation de chaîne
+ +
+ +Des outils tels que [php-cs-fixer](https://github.com/FriendsOfPHP/PHP-CS-Fixer) peuvent aider à standardiser les styles de code.
+ +
+ +### Simplification
+ +
+ +Un code simple est toujours plus facile d'accès et est signe d'un développement sain et maintenable.
+ +
+ +L'objectif est donc ici de se débarasser de tout ce qui ne sert pas directement.
+ +
+ +Quelques exemples :
+ +
+ +- Le \`else\` de cette fonction n'a aucune valeur ajoutée :
+ +
+ +\`\`\`diff
+ +    public function getStatus() : string
+ +    {
+ +        if ($this->isFinished()) {
+ +            return self::FINISHED;
+ +        } elseif ((bool) $this->yellowPlayer && (bool) $this->redPlayer) {
+ +            return self::PLAYING;
+ +-       } else {
+ +-           return self::WAITING;
+ +        }
+ ++       return self::WAITING;
+ +    }
+ +\`\`\`
+ +
+ +- Le bundle \`SwiftmailerBundle\` n'est pas utilisé est peut donc être enlevé:
+ +
+ +\`\`\`diff
+ +    $bundles = [
+ +        new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+ +        new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+ +        new Symfony\Bundle\TwigBundle\TwigBundle(),
+ +        new Symfony\Bundle\MonologBundle\MonologBundle(),
+ +-       new Symfony\Bundle\SwiftmailerBundle\SwiftmailerBundle(),
+ +        new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+ +        new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+ +        new AppBundle\AppBundle(),
+ +    ];
+ +\`\`\`
+ +
+ +- Le commentaire phpdoc ne sert pas puisque notre code est auto-explicatif :
+ +
+ +\`\`\`diff
+ +-   /**
+ +-    * Get id.
+ +-    *
+ +-    * @return int
+ +-    */
+ +    public function getId()
+ +    {
+ +        return $this->id;
+ +    }
+ +\`\`\`
+ +
+ +### Partage
+
+ -### Organisationnelles
+
+  ## Du temps presque réel`;
