@@ -4,15 +4,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import RaisedButton from 'material-ui/RaisedButton';
-import FontIcon from 'material-ui/FontIcon';
+import GithubLogin from './GithubLogin';
 
 ReactDOM.render(
     <MuiThemeProvider>
-        <RaisedButton
-            label="Signin with GitHub"
-            icon={<FontIcon className="github-icon" />}
-        />
+        <GithubLogin />
     </MuiThemeProvider>,
     document.getElementById('setup')
 );
