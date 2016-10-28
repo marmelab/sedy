@@ -4,3 +4,5 @@ build/*
 config/development.json
 config/production.json
 config/test.json
+docs/config/development.js
+docs/config/production.js
