@@ -2,6 +2,11 @@ body {
     background: #EEE;
 }
 
+.wrapper {
+    max-width: 60rem;
+    margin: auto;
+}
+
 .github-icon {
     width: 2rem;
     height: 2rem;
