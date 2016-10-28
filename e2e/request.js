@@ -1,9 +1,6 @@
 import http from 'http';
 import request from 'request';
 import { handler } from '../';
-import mockGithubApi from './mockGithubApi';
-
-mockGithubApi();
 
 export default function myRequest(params, authToken = null, cookies = {}) {
     return (callback) => {
