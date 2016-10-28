@@ -115,5 +115,13 @@ describe('Parser', () => {
             request.body.comment.body = 'https://perdu.com/os/images/lost/image.jpg';
             assert.deepEqual(parser(config).parse(request).matches, []);
         });
+
+        it('should match sed together with image url', () => {
+            request.body.comment.body = ' s/remove// https://perdu.com/os/images/lost/image.jpg s/replace/me/';
+            assert.deepEqual(parser(config).parse(request).matches, [
+                { from: 'remove', to: '' },
+                { from: 'replace', to: 'me' },
+            ]);
+        });
     });
 });

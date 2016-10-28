@@ -36,7 +36,7 @@ export default (config, logger) => {
         let eventData;
         const matches = [];
 
-        const regex = new RegExp('s\/(.*)\/(.*)\/', 'g');
+        const regex = new RegExp('(^s\/|.*?\\ss\/)(.*?())\/(.*?)\/.*?', 'g');
         const event = request.headers && request.headers['X-GitHub-Event'];
 
         if (!event) {
@@ -72,8 +72,8 @@ export default (config, logger) => {
         logger.debug('matched sed command', match);
 
         while (match) {
-            if (isASCII(match[1]) && isASCII(match[2])) {
-                matches.push({ from: match[1], to: match[2] });
+            if (isASCII(match[2]) && isASCII(match[4])) {
+                matches.push({ from: match[2], to: match[4] });
             }
             match = regex.exec(eventData.comment.body);
         }
