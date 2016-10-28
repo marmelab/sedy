@@ -2,7 +2,7 @@ export default (git, logger) => {
     const getLineIndexFromDiff = (hunk, position) => {
         // Github API send the diff with a application/vnd.github.v3.diff media type
         // See https://developer.github.com/v3/pulls/comments/#input
-        const diff = hunk.split(/\n/);
+        const diff = hunk.split('\n');
         let line = diff[position];
 
         if (!line) {
@@ -37,7 +37,7 @@ export default (git, logger) => {
         const line = lines[index];
 
         if (!line) {
-            console.log('debug infos', { parsedContent, lines, index, diffHunk, position });
+            logger.debug('debug infos', { parsedContent, lines, index, diffHunk, position });
             return null;
         }
 
