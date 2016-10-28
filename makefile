@@ -1,7 +1,11 @@
 .PHONY: test
 
+run:
+	@cd docs && ./node_modules/.bin/webpack-dev-server --host=0.0.0.0 --colors
+
 install:
 	@npm install
+	@cd docs && npm install
 
 clean:
 	@rm -rf build/*

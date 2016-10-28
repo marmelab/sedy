@@ -1,0 +1,10 @@
+body {
+    background: #EEE;
+}
+
+.github-icon {
+    width: 2rem;
+    height: 2rem;
+    background: url('./icons/github.svg') no-repeat 50% 50%;
+    background-size: 75% 75%;
+}
