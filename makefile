@@ -17,7 +17,7 @@ deploy: clean
 	cd build && zip -r sedy.zip *
 	aws lambda update-function-code --function-name Sedy --zip-file fileb://build/sedy.zip
 
-test:
+test-unit:
 	./node_modules/.bin/mocha \
 		--compilers js:babel-core/register \
 		--require babel-polyfill \
@@ -25,3 +25,14 @@ test:
 		--recursive \
 			./src/*.spec.js \
 			'./src/**/*.spec.js'
+
+test-e2e:
+	./node_modules/.bin/mocha \
+		--compilers js:babel-core/register \
+		--require babel-polyfill \
+		--require co-mocha \
+		--recursive \
+			./e2e/*.spec.js \
+			'./e2e/**/*.spec.js'
+
+test: test-unit test-e2e
