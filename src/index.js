@@ -7,11 +7,10 @@ import github from 'octonode';
 import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
 import parserFactory from './parser';
-
 const logger = loggerFactory(config);
 
 const main = function* (event, context) {
-    const parser = parserFactory(config);
+    const parser = parserFactory(config, logger);
     const parsedContent = parser.parse(event);
 
     if (!parsedContent || parsedContent.matches.length === 0) {
@@ -36,7 +35,7 @@ const main = function* (event, context) {
         },
     });
 
-    const fixer = fixerFactory(git);
+    const fixer = fixerFactory(git, logger);
     const fixedContent = yield fixer.fix(parsedContent);
     logger.debug('Content fixed', { fixedContent });
 
