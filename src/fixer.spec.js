@@ -1,17 +1,35 @@
 import { assert } from 'chai';
 import fixerFactory from './fixer';
-import { diffHunk, diffHunkWithAccents } from './test/fixtures';
+import { diffHunkWithAccents, simpleDiffHunk, simpleFile } from './test/fixtures';
 
 describe('Fixer', () => {
     const logger = console;
     logger.debug = console.log;
 
-    describe('interpretDiff', () => {
+    describe('getLineIndexFromDiff', () => {
         it('should return the correct line', () => {
             const fixer = fixerFactory(null, logger);
-            const diff = fixer.interpretDiff(diffHunk, 85);
+            const index = fixer.getLineIndexFromDiff(simpleDiffHunk, 5);
 
-            assert.deepEqual(diff.line, "Note that if we don't use any module bundler, we need to replace the 'require' call");
+            assert.equal(index, 2);
+
+            assert.equal(simpleFile.split('\n')[index], simpleDiffHunk.split('\n')[5].slice(1));
+        });
+        it('should return the correct line even if several line are identical', () => {
+            const fixer = fixerFactory();
+            let index = fixer.getLineIndexFromDiff(simpleDiffHunk, 7);
+            assert.equal(index, 4);
+            assert.equal(simpleFile.split('\n')[index], simpleDiffHunk.split('\n')[7].slice(1));
+
+            index = fixer.getLineIndexFromDiff(simpleDiffHunk, 6);
+            assert.equal(index, 3);
+            assert.equal(simpleFile.split('\n')[index], simpleDiffHunk.split('\n')[6].slice(1));
+        });
+        it('should return null if position point on a deleted line', () => {
+            const fixer = fixerFactory();
+            const index = fixer.getLineIndexFromDiff(simpleDiffHunk, 3);
+
+            assert.isNull(index);
         });
     });
     describe('fix', () => {

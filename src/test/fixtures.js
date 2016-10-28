@@ -180,3 +180,22 @@ export const diffHunkWithAccents = `@@ -51,9 +51,74 @@ Le nom \`discs\` n'est pl
  -### Organisationnelles
 
   ## Du temps presque réel`;
+
+export const simpleDiffHunk = `@@ -1,4 +1,6 @@
+ {
+-    "presets": ["es2015", "stage-0"],
+-    "plugins": ["transform-regenerator"]
++    "plugins": [
++        "transform-regenerator",
++        "transform-regenerator"
++    ]
+ }
+`;
+
+export const simpleFile = `{
+    "plugins": [
+        "transform-regenerator",
+        "transform-regenerator"
+    ]
+}
+`;
