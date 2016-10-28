@@ -1,6 +1,9 @@
 .PHONY: test
 
-install:
+copy-conf: ## Initialize the configuration files by copying the *''-dist" versions (does not override existing config)
+	@cp -n ./config/production-dist.js ./config/production.js | true
+
+install: copy-conf
 	@npm install
 
 clean:

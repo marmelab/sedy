@@ -44,6 +44,7 @@
     "eslint-plugin-import": "^1.6.1",
     "json-loader": "^0.5.4",
     "mocha": "^2.4.5",
-    "sinon": "^1.17.3"
+    "sinon": "^1.17.3",
+    "webpack": "1.13.3"
   }
 }
