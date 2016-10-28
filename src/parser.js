@@ -32,12 +32,26 @@ export default (config, logger) => {
         },
     });
 
+    const getGitHubEventHeader = headers => {
+        if (!headers) return;
+
+        let header = headers['X-GitHub-Event'];
+        if (header) return header;
+
+        header = headers['x-github-event'];
+        if (header) return header;
+
+        header = headers['X-GITHUB-EVENT'];
+        if (header) return header;
+    };
+
     const parse = request => {
         let eventData;
         const matches = [];
 
+
         const regex = new RegExp('(^s\/|.*?\\ss\/)(.*?())\/(.*?)\/.*?', 'g');
-        const event = request.headers && request.headers['X-GitHub-Event'];
+        const event = getGitHubEventHeader(request.headers);
 
         if (!event) {
             logger.debug('no event in github payload');
