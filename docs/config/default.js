@@ -1,7 +1,7 @@
 export default {
     appBaseUrl: 'http://localhost:8080',
     githubRedirection: '/setup.html',
-    githubAppId: 'ea3f3d378a84370344bb',
+    githubAppId: 'xxx',
     githubScopes: [
         'write:repo_hook',
         'repo',
