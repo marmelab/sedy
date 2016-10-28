@@ -33,7 +33,7 @@ export default {
         }),
         new HtmlWebpackPlugin({
             template: './setup.html',
-            filename: 'setup.html',
+            filename: 'setup/index.html',
             chunks: ['style', 'setup'],
         }),
         new ExtractTextPlugin('style.css'),
