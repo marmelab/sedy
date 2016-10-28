@@ -17,9 +17,9 @@ export default git => {
         return { line };
     };
 
-    const fixBlob = (parsedContent, lastCommit, blob, match) => {
+    const fixBlob = (parsedContent, blob, match) => {
         const buffer = new Buffer(blob.content, blob.encoding);
-        const blobContent = buffer.toString('ascii');
+        const blobContent = buffer.toString('utf8');
 
         const diff = interpretDiff(parsedContent.comment.diffHunk, parsedContent.comment.position);
 
@@ -87,7 +87,7 @@ export default git => {
                 continue;
             }
 
-            const _fix = yield fixBlob(parsedContent, lastCommit, blob, match);
+            const _fix = yield fixBlob(parsedContent, blob, match);
 
             if (_fix) {
                 fixes.push(_fix);
