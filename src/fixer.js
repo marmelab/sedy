@@ -6,7 +6,7 @@ export default (git, logger) => {
         let line = diff[position];
 
         if (!line) {
-            logger.debug('debug infos', { hunk, position });
+            logger.error('debug infos', { hunk, position });
             throw new Error('Inefficient diff parser');
         }
 
