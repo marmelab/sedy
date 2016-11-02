@@ -8,10 +8,8 @@ import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
 import parserFactory from './parser';
 
-const logger = loggerFactory(config);
-
-const main = function* (event, context) {
-    const parser = parserFactory(config);
+const main = function* (event, context, logger) {
+    const parser = parserFactory(config, logger);
     const parsedContent = parser.parse(event);
 
     if (!parsedContent || parsedContent.matches.length === 0) {
@@ -36,7 +34,7 @@ const main = function* (event, context) {
         },
     });
 
-    const fixer = fixerFactory(git);
+    const fixer = fixerFactory(git, logger);
     const fixedContent = yield fixer.fix(parsedContent);
     logger.debug('Content fixed', { fixedContent });
 
@@ -50,9 +48,11 @@ const main = function* (event, context) {
 };
 
 export const handler = function (event, context, callback) {
+    const logger = loggerFactory(config);
+
     return co(function* () {
         logger.debug('Handler initialized', { event, context });
-        return yield main(event, context);
+        return yield main(event, context, logger);
     })
     .then(value => callback(null, value))
     .catch(error => {

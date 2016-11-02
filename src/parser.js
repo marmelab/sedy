@@ -1,4 +1,4 @@
-export default config => {
+export default (config, logger) => {
     /**
      * Check if string is ASCII only
      * @see http://stackoverflow.com/a/14313213
@@ -32,22 +32,40 @@ export default config => {
         },
     });
 
+    const getGitHubEventHeader = headers => {
+        if (!headers) return;
+
+        let header = headers['X-GitHub-Event'];
+        if (header) return header;
+
+        header = headers['x-github-event'];
+        if (header) return header;
+
+        header = headers['X-GITHUB-EVENT'];
+        if (header) return header;
+    };
+
     const parse = request => {
         let eventData;
         const matches = [];
 
-        const regex = new RegExp('s\/(.*)\/(.*)\/', 'g');
-        const event = request.headers && request.headers['X-GitHub-Event'];
+
+        const regex = new RegExp('(^s\/|.*?\\ss\/)(.*?())\/(.*?)\/.*?', 'g');
+        const event = getGitHubEventHeader(request.headers);
 
         if (!event) {
+            logger.debug('no event in github payload');
             return null;
         }
+
+        logger.debug('event in github payload', event);
 
         switch (event) {
             case 'ping':
                 return null;
             case 'pull_request_review_comment':
                 eventData = parsePullRequestReviewComment(request);
+                logger.debug('eventData extracted from github payload', eventData);
 
                 if (eventData.comment.action !== 'created') {
                     return null;
@@ -64,20 +82,17 @@ export default config => {
             return null;
         }
 
-        // If comment author not in allowed authors
-        if (config.allowed.authors.indexOf(eventData.comment.sender) < 0) {
-            return null;
-        }
-
         let match = regex.exec(eventData.comment.body);
+        logger.debug('matched sed command', match);
+
         while (match) {
-            if (isASCII(match[1]) && isASCII(match[2])) {
-                matches.push({ from: match[1], to: match[2] });
+            if (isASCII(match[2]) && isASCII(match[4])) {
+                matches.push({ from: match[2], to: match[4] });
             }
             match = regex.exec(eventData.comment.body);
         }
 
-        return {
+        const result = {
             type: eventData.type,
             comment: eventData.comment,
             commit: eventData.commit,
@@ -85,6 +100,9 @@ export default config => {
             pullRequest: eventData.pullRequest,
             matches,
         };
+
+        logger.debug('result of github payload parsing', result);
+        return result;
     };
 
     return {

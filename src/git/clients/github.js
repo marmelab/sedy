@@ -96,5 +96,12 @@ export default (logger, github) => {
                 force,
             }, callbackProxy(callback));
         },
+
+        getRepoCollaborators: ({ repoUser, repoName }) => callback => {
+            const endpoint = `/repos/${repoUser}/${repoName}/collaborators`;
+            logger.debug('Github API Request', { endpoint, method: 'GET' });
+
+            github.get(endpoint, callbackProxy(callback));
+        },
     };
 };

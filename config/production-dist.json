@@ -1,0 +1,13 @@
+{
+    "bot": {
+        "login": "sedy-bot",
+        "oauthToken": ""
+    },
+    "committer": {
+        "name": "sedy-bot",
+        "email": "kevin+sedy@marmelab.com"
+    },
+    "logs": {
+        "debug": false
+    }
+}
