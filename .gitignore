@@ -1,8 +1,11 @@
-docs/node_modules/
+# Sedy
 node_modules/*
 build/*
 config/development.json
 config/production.json
 config/test.json
-docs/config/development.js
-docs/config/production.js
+
+# Sedy Installer
+installer/node_modules/
+installer/config/development.js
+installer/config/production.js

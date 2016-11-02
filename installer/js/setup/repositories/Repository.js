@@ -34,7 +34,7 @@ const styles = {
 class Repository extends Component {
     constructor(props) {
         super(props);
-        console.log(props.repository.full_name, props.repository.sedy_installed)
+
         this.state = {
             hasSedy: props.repository.sedy_installed,
             loading: false,

@@ -107,9 +107,6 @@ export const getRepositories = (accessToken, user, page = 1, perPage = 30) => {
                 ...repository,
                 sedy_installed: sedyInstallations[index],
             })));
-        })
-        .then(r => {
-            console.log(r); return r;
         });
 };
 
@@ -132,9 +129,6 @@ const addHook = (accessToken, user, repository) => {
 
     return fetch(`${GITHUB_URL}/repos/${user.user.login}/${repository.name}/hooks`, options)
         .then(response => {
-            if (repository.full_name === 'jpetitcolas/cartouche-decoder') {
-                console.log(response.json());
-            }
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
             }
@@ -142,7 +136,7 @@ const addHook = (accessToken, user, repository) => {
             return response.json();
         })
         .then(
-            () => ({ ...repository}),
+            () => ({ ...repository }),
             error => ({ error })
         );
 };
