@@ -29,9 +29,8 @@ Don't forget to configure your Github webhook to push the **Pull Request review 
         "name": "COMMITTER-NAME",
         "email": "an@example.mail"
     },
-    "allowed": {
-        "repositories": ["USER/REPOSITORY"],
-        "authors": ["USER", "USER", "USER"]
+    "logs": {
+        "debug": false
     }
 }
 ```
@@ -45,5 +44,5 @@ make test
 # Deployment
 
 ```bash
-make deploy
+NODE_ENV=production make deploy
 ```
