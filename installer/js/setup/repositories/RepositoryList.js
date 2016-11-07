@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Progress from 'material-ui/CircularProgress';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
 
 import { getRepositories } from '../../installer/github';
@@ -24,7 +25,7 @@ class RepositoryList extends Component {
 
     componentWillMount() {
         this.fetchRepositories(this.state.page)
-            .then(repositories => this.setState({ repositories }));
+            .then(repositories => this.setState({ repositories, loading: false }));
     }
 
     onPageChange = page => () => {
@@ -38,6 +39,9 @@ class RepositoryList extends Component {
     render() {
         return (
             <div>
+                {this.state.loading && <div style={{ textAlign: 'center' }}>
+                    <Progress size={60} thickness={5} />
+                </div>}
                 <Table>
                     <TableBody>
                         {this.state.repositories.map(repository => (
