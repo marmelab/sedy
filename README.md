@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/marmelab/sedy.svg?branch=master)](https://travis-ci.org/marmelab/sedy) [![Deps Status](https://david-dm.org/marmelab/sedy.svg)](https://david-dm.org/marmelab/sedy)
 
 # Sedy
-A github webhook which helps you to correct your commits
+A github webhook which helps you to correct your commits.
 
 # Install npm dependencies
 
@@ -46,3 +46,6 @@ make test
 ```bash
 NODE_ENV=production make deploy
 ```
+
+# Installer
+Sedy is delivered with its own installer, read the [installer README](installer/README.md) for more informations.

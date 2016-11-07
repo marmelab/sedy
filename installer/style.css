@@ -1,0 +1,26 @@
+body {
+    background: #EEE;
+    font-family: 'Lato', sans-serif;
+    color: #222;
+}
+
+.wrapper {
+    max-width: 60rem;
+    margin: auto;
+}
+
+.github-icon {
+    width: 2rem;
+    height: 2rem;
+    background: url('./icons/github.svg') no-repeat 50% 50%;
+    background-size: 75% 75%;
+}
+
+a {
+    color: rgb(33, 150, 243);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
