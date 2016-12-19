@@ -33,6 +33,13 @@ export default (logger, github) => {
             github.get(endpoint, callbackProxy(callback));
         },
 
+        getCommentsFromReviewId: ({ repoUser, repoName, pullRequestNumber, reviewId }) => callback => {
+            const endpoint = `/repos/${repoUser}/${repoName}/pulls/${pullRequestNumber}/reviews/${reviewId}/comments`;
+            logger.debug('Github API Request', { endpoint, method: 'GET' });
+
+            github.get(endpoint, callbackProxy(callback));
+        },
+
         getTreeFromId: ({ repoUser, repoName, id }) => callback => {
             const endpoint = `/repos/${repoUser}/${repoName}/git/trees/${id}?recursive=1`;
             logger.debug('Github API Request', { endpoint, method: 'GET' });

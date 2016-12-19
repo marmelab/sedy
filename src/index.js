@@ -6,13 +6,14 @@ import gitFactory from './git';
 import github from 'octonode';
 import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
-import parserFactory from './parser';
+import parseFactory from './parser';
 
 const main = function* (event, context, logger) {
-    const parser = parserFactory(config, logger);
-    const parsedContent = parser.parse(event);
+    const githubClient = githubClientFactory(logger, github.client(config.bot.oauthToken));
+    const parse = parseFactory(githubClient, logger);
+    const parsedContent = parse(event);
 
-    if (!parsedContent || parsedContent.matches.length === 0) {
+    if (!parsedContent || parsedContent.length === 0 || !parsedContent.every(p => p.matches.length === 0)) {
         logger.debug('Parsed content', { parsedContent });
 
         return {
@@ -22,7 +23,6 @@ const main = function* (event, context, logger) {
     }
 
     logger.debug('Fixes found', { parsedContent });
-    const githubClient = githubClientFactory(logger, github.client(config.bot.oauthToken));
     const git = gitFactory(githubClient, {
         commitAuthor: {
             name: config.committer.name,
