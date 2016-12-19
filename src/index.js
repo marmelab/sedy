@@ -11,10 +11,10 @@ import parseFactory from './parser';
 const main = function* (event, context, logger) {
     const githubClient = githubClientFactory(logger, github.client(config.bot.oauthToken));
     const parse = parseFactory(githubClient, logger);
-    const parsedContent = parse(event);
+    const parsedContents = parse(event);
 
-    if (!parsedContent || parsedContent.length === 0 || !parsedContent.every(p => p.matches.length === 0)) {
-        logger.debug('Parsed content', { parsedContent });
+    if (!parsedContents || parsedContents.length === 0 || !parsedContents.every(p => p.matches.length === 0)) {
+        logger.debug('Parsed content', JSON.stringify(parsedContents, null, 4));
 
         return {
             success: false,
@@ -22,29 +22,31 @@ const main = function* (event, context, logger) {
         };
     }
 
-    logger.debug('Fixes found', { parsedContent });
+    logger.debug('Fixes found', JSON.stringify(parsedContents, null, 4));
     const git = gitFactory(githubClient, {
         commitAuthor: {
             name: config.committer.name,
             email: config.committer.email,
         },
         repository: {
-            owner: parsedContent.repository.user,
-            name: parsedContent.repository.name,
+            owner: parsedContents[0].repository.user,
+            name: parsedContents[0].repository.name,
         },
     });
 
     const fixer = fixerFactory(git, logger);
-    const fixedContent = yield fixer.fix(parsedContent);
-    logger.debug('Content fixed', { fixedContent });
+    const fixedContent = yield parsedContents.map(parsedContent => co.wrap(function* () {
+        fixer.fix(parsedContent);
+        logger.debug('Content fixed', { fixedContent });
 
-    const commiter = commiterFactory(logger, githubClient, git);
-    const success = yield commiter.commit(parsedContent, fixedContent);
+        const commiter = commiterFactory(logger, githubClient, git);
+        return {
+            success: yield commiter.commit(parsedContent, fixedContent),
+            matches: parsedContent.matches,
+        };
+    }));
 
-    return {
-        success,
-        result: parsedContent.matches,
-    };
+    return fixedContent;
 };
 
 export const handler = function (event, context, callback) {

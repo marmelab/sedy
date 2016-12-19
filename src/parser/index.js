@@ -4,6 +4,7 @@ import parsePullRequestReviewComment from './parsePullRequestReviewComment';
 
 export default (client, logger) => {
     const parsers = {
+        ping: null,
         pull_request_review_comment: parsePullRequestReviewComment,
         pull_request_review: parsePullRequestReviewFactory(client, logger),
     };
@@ -20,10 +21,11 @@ export default (client, logger) => {
 
         logger.debug('event in github payload', event);
 
-        if (event === 'ping') return [];
-
         const parser = parsers[event];
-        if (!parser) return [];
+        if (!parser) {
+            logger.debug(`no parser found for event ${event}`);
+            return [];
+        };
 
         result = parsePullRequestReviewComment(request);
 

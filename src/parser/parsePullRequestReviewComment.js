@@ -6,13 +6,13 @@ export default request => {
     return [{
         // @TODO Split comment part into mutliple ones: diff, action, sender, etc
         comment: {
-            id: request.body.comment.id,
             body: request.body.comment.body,
-            sender: request.body.sender.login,
-            path: request.body.comment.path,
-            diffHunk: request.body.diff_hunk || request.body.comment.diff_hunk,
-            position: request.body.position || request.body.comment.position,
             createdDate: request.body.comment.created_at,
+            diffHunk: request.body.diff_hunk || request.body.comment.diff_hunk,
+            id: request.body.comment.id,
+            path: request.body.comment.path,
+            position: request.body.position || request.body.comment.position,
+            sender: request.body.sender.login,
             url: request.body.comment.html_url,
         },
         commit: {

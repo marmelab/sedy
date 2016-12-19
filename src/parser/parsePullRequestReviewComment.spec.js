@@ -22,15 +22,16 @@ describe('pull request', () => {
     };
 
     it('should find correct comment', () => {
-        assert.deepEqual(parsePullRequestReviewComment(request).comment, {
-            action: 'created',
-            id: 'comment id',
+        const [{ comment }] = parsePullRequestReviewComment(request);
+
+        assert.deepEqual(comment, {
             body: 'comment body',
-            sender: 'Someone',
-            path: 'comment path',
-            diffHunk: 'diff hunk',
-            position: 'diff position',
             createdDate: 'comment date',
+            diffHunk: 'diff hunk',
+            id: 'comment id',
+            path: 'comment path',
+            position: 'diff position',
+            sender: 'Someone',
             url: 'comment url',
         });
     });

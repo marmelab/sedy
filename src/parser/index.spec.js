@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import parseFactory from './';
 
-describe.only('Parser', () => {
+describe('Parser', () => {
     const config = {};
     const logger = console;
     logger.debug = console.log;
