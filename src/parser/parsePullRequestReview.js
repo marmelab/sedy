@@ -1,39 +1,39 @@
 import getSedyCommandsFromComment from './getSedyCommandsFromComment';
 
-export default (client, logger) =>
+export default client =>
     async (request) => {
         if (request.body.action !== 'submitted') return [];
 
         const comments = await client.getCommentsFromReviewId({
-            repoUser: request.body.repository.owner.login,
-            repoName: request.body.repository.name,
             pullRequestNumber: request.body.pull_request.number,
-            reviewId: request.review.id,
+            repoName: request.body.repository.name,
+            repoUser: request.body.repository.owner.login,
+            reviewId: request.body.review.id,
         });
 
         return comments.map(comment => ({
             // @TODO Split comment part into mutliple ones: diff, action, sender, etc
             comment: {
-                id: comment.id,
                 body: comment.body,
-                sender: comment.user.login,
-                path: comment.path,
-                diffHunk: comment.diff_hunk,
-                position: comment.position,
                 createdDate: comment.created_at,
+                diffHunk: comment.diff_hunk,
+                id: comment.id,
+                path: comment.path,
+                position: comment.position,
+                sender: comment.user.login,
                 url: comment.html_url,
             },
             commit: {
                 id: comment.commit_id,
             },
-            matches: getSedyCommandsFromComment(request.body.comment.body),
-            repository: {
-                user: request.body.repository.owner.login,
-                name: request.body.repository.name,
-            },
+            matches: getSedyCommandsFromComment(comment.body),
             pullRequest: {
                 number: request.body.pull_request.number,
                 ref: `refs/heads/${request.body.pull_request.head.ref}`,
+            },
+            repository: {
+                name: request.body.repository.name,
+                user: request.body.repository.owner.login,
             },
         }));
     };

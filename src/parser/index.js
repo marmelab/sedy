@@ -6,7 +6,7 @@ export default (client, logger) => {
     const parsers = {
         ping: null,
         pull_request_review_comment: parsePullRequestReviewComment,
-        pull_request_review: parsePullRequestReviewFactory(client, logger),
+        pull_request_review: parsePullRequestReviewFactory(client),
     };
 
     return request => {

@@ -1,7 +1,7 @@
 import { assert } from 'chai';
 import parsePullRequestReviewComment from './parsePullRequestReviewComment';
 
-describe('pull request', () => {
+describe('pull request parsing', () => {
     const request = {
         headers: { 'X-GitHub-Event': 'pull_request_review_comment' },
         body: {
