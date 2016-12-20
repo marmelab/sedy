@@ -72,7 +72,6 @@ export default (client, repo) => {
 
     const push = function* (ref, force = false) {
         const commitSha = yield get('head');
-
         const reference = yield client.updateReference({
             repoUser: repo.owner,
             repoName: repo.name,

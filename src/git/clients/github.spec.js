@@ -12,6 +12,7 @@ describe('Github API', () => {
 
     beforeEach(() => {
         github = {
+            requestDefaults: { headers: [] },
             get: sinon.spy((endpoint, callback) => callback(null, 200, endpoint)),
             post: sinon.spy((endpoint, content, callback) => callback(null, 200, [endpoint, content])),
             patch: sinon.spy((endpoint, content, callback) => callback(null, 200, [endpoint, content])),

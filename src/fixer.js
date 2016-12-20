@@ -88,7 +88,9 @@ export default (git, logger) => {
         }
 
         for (let match of parsedContent.matches) {
-            const lastCommit = yield git.commits.get(parsedContent.commit.id);
+            const lastCommitFromReference = yield git.references.get(parsedContent.pullRequest.ref);
+            const lastCommit = yield git.commits.get(lastCommitFromReference);
+
             const tree = yield git.trees.get(lastCommit.tree.sha);
             const blob = yield findBlob(tree, parsedContent.comment.path);
 

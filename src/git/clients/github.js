@@ -1,6 +1,11 @@
 /* TODO: Split and clean this crappy file */
 
 export default (logger, github) => {
+    github.requestDefaults.headers = {
+        ...github.requestDefaults.headers,
+        Accept: 'application/vnd.github.black-cat-preview+json',
+    };
+
     const callbackProxy = callback => (error, statusCode, response) => {
         if (error) {
             logger.error('Github API Error', { error, response });
@@ -28,6 +33,13 @@ export default (logger, github) => {
 
         getCommitFromId: ({ repoUser, repoName, commitId }) => callback => {
             const endpoint = `/repos/${repoUser}/${repoName}/git/commits/${commitId}`;
+            logger.debug('Github API Request', { endpoint, method: 'GET' });
+
+            github.get(endpoint, callbackProxy(callback));
+        },
+
+        getCommentsFromReviewId: ({ repoUser, repoName, pullRequestNumber, reviewId }) => callback => {
+            const endpoint = `/repos/${repoUser}/${repoName}/pulls/${pullRequestNumber}/reviews/${reviewId}/comments`;
             logger.debug('Github API Request', { endpoint, method: 'GET' });
 
             github.get(endpoint, callbackProxy(callback));

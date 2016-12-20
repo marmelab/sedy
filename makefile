@@ -12,6 +12,9 @@ clean:
 build: clean
 	./node_modules/.bin/webpack --progress
 
+run:
+	node --require babel-polyfill --require babel-core/register ./src/server.js
+
 deploy: clean
 	./node_modules/.bin/webpack -p --progress --optimize-dedupe
 	cd build && zip -r sedy.zip *
