@@ -42,12 +42,12 @@ export default (client, repo) => {
         sha: reference.object.sha,
     });
 
-    const get = function* (ref, force = false) {
+    const get = function* (ref) {
         validate(ref);
 
         const storedReference = refs[ref];
 
-        if (storedReference || storedReference === null && !force) {
+        if (storedReference || storedReference === null) {
             return storedReference;
         }
 
@@ -72,7 +72,7 @@ export default (client, repo) => {
 
     const push = function* (ref, force = false) {
         const commitSha = yield get('head');
-
+        console.log('push', { commitSha, force });
         const reference = yield client.updateReference({
             repoUser: repo.owner,
             repoName: repo.name,
@@ -82,6 +82,7 @@ export default (client, repo) => {
         });
 
         const standardizedReference = standardize(reference);
+        console.log('push', { standardizedReference });
 
         refs[standardizedReference.ref] = standardizedReference.sha;
         return standardizedReference.sha;

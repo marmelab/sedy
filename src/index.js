@@ -1,6 +1,5 @@
 /* global config */
 import co from 'co';
-import defer from 'co-defer';
 
 import commiterFactory from './commiter';
 import fixerFactory from './fixer';
@@ -38,9 +37,7 @@ const main = function* (event, context, logger, conf) {
 
     const fixer = fixerFactory(git, logger);
     const fixedContents = [];
-    for (let i = 0; i < parsedContents.length; i++) {
-        const parsedContent = parsedContents[i];
-
+    for (const parsedContent of parsedContents) {
         const fixedContent = yield fixer.fix(parsedContent);
         logger.debug('Content fixed', { fixedContent });
         const commiter = commiterFactory(logger, githubClient, git);
