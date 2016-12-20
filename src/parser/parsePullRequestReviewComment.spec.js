@@ -21,8 +21,8 @@ describe('pull request parsing', () => {
         },
     };
 
-    it('should find correct comment', () => {
-        const [{ comment }] = parsePullRequestReviewComment(request);
+    it('should find correct comment', function* () {
+        const [{ comment }] = yield parsePullRequestReviewComment()(request);
 
         assert.deepEqual(comment, {
             body: 'comment body',

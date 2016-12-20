@@ -19,12 +19,12 @@ describe('review parsing', () => {
         headers: { 'X-GitHub-Event': 'submitted' },
     };
 
-    it('should retrieve the review comments', async () => {
+    it('should retrieve the review comments', function* () {
         const client = {
             getCommentsFromReviewId: stub().returns(Promise.resolve([])),
         };
 
-        await parsePullRequestReviewFactory(client)(request);
+        yield parsePullRequestReviewFactory(client)(request);
 
         assert(client.getCommentsFromReviewId.calledWith({
             pullRequestNumber: request.body.pull_request.number,
@@ -34,7 +34,7 @@ describe('review parsing', () => {
         }));
     });
 
-    it('should find correct comments', async () => {
+    it('should find correct comments', function* () {
         const client = {
             getCommentsFromReviewId: () => Promise.resolve([{
                 body: 'comment body',
@@ -63,7 +63,7 @@ describe('review parsing', () => {
             }]),
         };
 
-        const [{ comment: comment1 }, { comment: comment2 }] = await parsePullRequestReviewFactory(client)(request);
+        const [{ comment: comment1 }, { comment: comment2 }] = yield parsePullRequestReviewFactory(client)(request);
 
         assert.deepEqual(comment1, {
             body: 'comment body',

@@ -71,37 +71,27 @@ describe('Commiter', () => {
             const commiter = commiterFactory(logger, githubApi, git);
             yield commiter.commit(parsedContent, fixedContent);
 
-            assert.deepEqual(git.add.getCall(0).args, [{
+            assert(git.add.calledWith({
                 content: 'new blob content',
                 mode: '100644',
-            }, '/folder/to/blob.txt']);
+            }, '/folder/to/blob.txt'));
         });
 
         it('shoud create a commit', function* () {
             const commiter = commiterFactory(logger, githubApi, git);
             yield commiter.commit(parsedContent, fixedContent);
 
-            assert.deepEqual(git.commit.getCall(0).args, ['branch-name', `Typo fix s/old/new/
+            assert(git.commit.calledWith('branch-name', `Typo fix s/old/new/
 
 As requested by @username at http://perdu.com`,
-            ]);
+            ));
         });
 
         it('should push to the related branch', function* () {
             const commiter = commiterFactory(logger, githubApi, git);
             yield commiter.commit(parsedContent, fixedContent);
 
-            assert.deepEqual(git.push.getCall(0).args, ['branch-name']);
-        });
-
-        it('should log the commits ids', function* () {
-            const commiter = commiterFactory(logger, githubApi, git);
-            const result = yield commiter.commit(parsedContent, fixedContent);
-
-            assert.deepEqual(result, true);
-            assert.deepEqual(logger.info.getCall(0).args, ['Successful commits', {
-                commitsIds: ['commit sha'],
-            }]);
+            assert(git.push.calledWith('branch-name'));
         });
     });
 

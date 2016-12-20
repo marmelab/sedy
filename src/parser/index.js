@@ -1,15 +1,15 @@
 import getGitHubEventHeader from './getGitHubEventHeader';
 import parsePullRequestReviewFactory from './parsePullRequestReview';
-import parsePullRequestReviewComment from './parsePullRequestReviewComment';
+import parsePullRequestReviewCommentFactory from './parsePullRequestReviewComment';
 
 export default (client, logger) => {
     const parsers = {
-        ping: null,
-        pull_request_review_comment: parsePullRequestReviewComment,
-        pull_request_review: parsePullRequestReviewFactory(client),
+        ping: () => null,
+        pull_request_review_comment: parsePullRequestReviewCommentFactory,
+        pull_request_review: parsePullRequestReviewFactory,
     };
 
-    return request => {
+    return function* (request) {
         let result;
 
         const event = getGitHubEventHeader(request.headers);
@@ -27,7 +27,7 @@ export default (client, logger) => {
             return [];
         };
 
-        result = parsePullRequestReviewComment(request);
+        result = yield parser(client)(request);
 
         logger.debug('result of github payload parsing', result);
         return result;

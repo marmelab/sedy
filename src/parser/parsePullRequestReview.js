@@ -1,15 +1,17 @@
 import getSedyCommandsFromComment from './getSedyCommandsFromComment';
 
 export default client =>
-    async (request) => {
+    function* (request) {
         if (request.body.action !== 'submitted') return [];
 
-        const comments = await client.getCommentsFromReviewId({
+        const comments = yield client.getCommentsFromReviewId({
             pullRequestNumber: request.body.pull_request.number,
             repoName: request.body.repository.name,
             repoUser: request.body.repository.owner.login,
             reviewId: request.body.review.id,
         });
+
+        console.log({ comments });
 
         return comments.map(comment => ({
             // @TODO Split comment part into mutliple ones: diff, action, sender, etc

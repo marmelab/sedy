@@ -5,7 +5,7 @@ export default (references, commits) => function* (ref, force = false) {
     // If yes: if force = false throw an error else continue
     // If no: continue
 
-    const commitSha = yield references.get(ref);
+    const commitSha = yield references.get(ref, true);
 
     if (!commitSha) {
         throw new CommandError(`Reference ${ref} does not exist`);

@@ -42,12 +42,12 @@ export default (client, repo) => {
         sha: reference.object.sha,
     });
 
-    const get = function* (ref) {
+    const get = function* (ref, force = false) {
         validate(ref);
 
         const storedReference = refs[ref];
 
-        if (storedReference || storedReference === null) {
+        if (storedReference || storedReference === null && !force) {
             return storedReference;
         }
 

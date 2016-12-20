@@ -1,6 +1,11 @@
 /* TODO: Split and clean this crappy file */
 
 export default (logger, github) => {
+    github.requestDefaults.headers = {
+        ...github.requestDefaults.headers,
+        Accept: 'application/vnd.github.black-cat-preview+json',
+    };
+
     const callbackProxy = callback => (error, statusCode, response) => {
         if (error) {
             logger.error('Github API Error', { error, response });
