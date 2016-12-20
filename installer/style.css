@@ -1,7 +1,9 @@
 body {
-    background: #EEE;
+    background: #92A8D1;
     font-family: 'Lato', sans-serif;
     color: #222;
+    margin: 0;
+    padding: 0;
 }
 
 .wrapper {
@@ -14,6 +16,7 @@ body {
     height: 2rem;
     background: url('./icons/github.svg') no-repeat 50% 50%;
     background-size: 75% 75%;
+    margin-bottom: 0.2rem;
 }
 
 a {

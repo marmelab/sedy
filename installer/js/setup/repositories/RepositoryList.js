@@ -40,7 +40,7 @@ class RepositoryList extends Component {
         return (
             <div>
                 {this.state.loading && <div style={{ textAlign: 'center' }}>
-                    <Progress size={60} thickness={5} />
+                    <Progress color="#65658E" size={60} thickness={5} />
                 </div>}
                 <Table>
                     <TableBody>

@@ -47,6 +47,7 @@ const main = function* (event, context, logger, conf) {
             ...fix,
             pullRequest: parsedContent.pullRequest,
             repository: parsedContent.repository,
+            sender: parsedContent.sender,
         };
 
         const fixedContent = yield fixer.fix(contentToFix);
