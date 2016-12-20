@@ -72,7 +72,6 @@ export default (client, repo) => {
 
     const push = function* (ref, force = false) {
         const commitSha = yield get('head');
-        console.log('push', { commitSha, force });
         const reference = yield client.updateReference({
             repoUser: repo.owner,
             repoName: repo.name,
@@ -82,7 +81,6 @@ export default (client, repo) => {
         });
 
         const standardizedReference = standardize(reference);
-        console.log('push', { standardizedReference });
 
         refs[standardizedReference.ref] = standardizedReference.sha;
         return standardizedReference.sha;
