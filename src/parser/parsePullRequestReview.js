@@ -11,9 +11,7 @@ export default client =>
             reviewId: request.body.review.id,
         });
 
-        console.log({ comments });
-
-        return comments.map(comment => ({
+        const fixes = comments.map(comment => ({
             // @TODO Split comment part into mutliple ones: diff, action, sender, etc
             comment: {
                 body: comment.body,
@@ -22,13 +20,16 @@ export default client =>
                 id: comment.id,
                 path: comment.path,
                 position: comment.position,
-                sender: comment.user.login,
                 url: comment.html_url,
             },
             commit: {
                 id: comment.commit_id,
             },
             matches: getSedyCommandsFromComment(comment.body),
+        }));
+
+        return {
+            fixes,
             pullRequest: {
                 number: request.body.pull_request.number,
                 ref: `refs/heads/${request.body.pull_request.head.ref}`,
@@ -37,5 +38,6 @@ export default client =>
                 name: request.body.repository.name,
                 user: request.body.repository.owner.login,
             },
-        }));
+            sender: request.body.review.user.login,
+        };
     };

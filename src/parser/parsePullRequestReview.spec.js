@@ -10,11 +10,11 @@ describe('review parsing', () => {
             diff_hunk: 'diff hunk', // @TODO Use fixture
             position: 'diff position',
             pull_request: { number: 42, head: { ref: 'master' } },
-            repository: { name: 'Sedy', owner: { login: 'Marmelab'} },
+            repository: { name: 'Sedy', owner: { login: 'Marmelab' } },
             review: {
                 id: 'review id',
+                user: { login: 'Someone who reviewed' },
             },
-            sender: { login: 'Someone' },
         },
         headers: { 'X-GitHub-Event': 'submitted' },
     };
@@ -32,6 +32,26 @@ describe('review parsing', () => {
             repoUser: request.body.repository.owner.login,
             reviewId: request.body.review.id,
         }));
+    });
+
+    it('should find correct data', function* () {
+        const client = {
+            getCommentsFromReviewId: () => Promise.resolve([]),
+        };
+
+        const { pullRequest, repository, sender } = yield parsePullRequestReviewFactory(client)(request);
+
+        assert.deepEqual(pullRequest, {
+            number: request.body.pull_request.number,
+            ref: `refs/heads/${request.body.pull_request.head.ref}`,
+        });
+
+        assert.deepEqual(repository, {
+            name: request.body.repository.name,
+            user: request.body.repository.owner.login,
+        });
+
+        assert.deepEqual(sender, request.body.review.user.login);
     });
 
     it('should find correct comments', function* () {
@@ -63,7 +83,7 @@ describe('review parsing', () => {
             }]),
         };
 
-        const [{ comment: comment1 }, { comment: comment2 }] = yield parsePullRequestReviewFactory(client)(request);
+        const { fixes: [{ comment: comment1 }, { comment: comment2 }] } = yield parsePullRequestReviewFactory(client)(request);
 
         assert.deepEqual(comment1, {
             body: 'comment body',
@@ -72,7 +92,6 @@ describe('review parsing', () => {
             id: 'comment id',
             path: 'comment path',
             position: 'diff position',
-            sender: 'Someone',
             url: 'comment url',
         });
 
@@ -83,7 +102,6 @@ describe('review parsing', () => {
             id: 'comment id 2',
             path: 'comment path',
             position: 'diff position',
-            sender: 'Someone',
             url: 'comment url',
         });
     });

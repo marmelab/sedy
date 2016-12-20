@@ -11,29 +11,29 @@ describe('Commiter', () => {
 
     beforeEach(() => {
         git = {
-            checkout: sinon.spy(content => callback => callback(null, null)),
             add: sinon.spy(content => callback => callback(null, null)),
+            checkout: sinon.spy(content => callback => callback(null, null)),
             commit: sinon.spy(content => callback => callback(null, { sha: 'commit sha' })),
-            push: sinon.spy(content => callback => callback(null, null)),
             commitAuthor: { name: 'marmelab-bot' },
+            push: sinon.spy(content => callback => callback(null, null)),
         };
         githubApi = {
-            replyToPullRequestReviewComment: sinon.spy(content => callback => callback(null, null)),
             getRepoCollaborators: sinon.spy(content => callback => callback(null, [{
                 login: 'username',
                 permissions: { push: true },
             }])),
+            replyToPullRequestReviewComment: sinon.spy(content => callback => callback(null, null)),
         };
         parsedContent = {
-            repository: { user: 'marmelab', name: 'sedy' },
             comment: {
                 id: 42,
-                sender: 'username',
                 createdDate: new Date(),
                 url: 'http://perdu.com',
                 path: 'folder/to/blob.txt',
             },
             pullRequest: { number: 1, ref: 'branch-name' },
+            repository: { user: 'marmelab', name: 'sedy' },
+            sender: 'username',
         };
         fixedContent = [{
             blob: { content: 'old blob content' },

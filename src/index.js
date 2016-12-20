@@ -12,40 +12,52 @@ import parseFactory from './parser';
 const main = function* (event, context, logger, conf) {
     const githubClient = githubClientFactory(logger, github.client(conf.bot.oauthToken));
     const parse = parseFactory(githubClient, logger);
-    const parsedContents = yield parse(event);
+    const parsedContent = yield parse(event);
 
-    if (!parsedContents || parsedContents.length === 0 || parsedContents.every(parsedContent => parsedContent.matches.length === 0)) {
-        logger.debug('Parsed content', JSON.stringify(parsedContents, null, 4));
+    logger.debug('Parsed content', JSON.stringify(parsedContent, null, 4));
 
+    const hasNoFix = !parsedContent ||
+        !parsedContent.fixes ||
+        parsedContent.fixes.length === 0 ||
+        parsedContent.fixes.every(fix => fix.matches.length === 0);
+
+    if (hasNoFix) {
         return {
             success: false,
             reason: 'No fix found',
         };
     }
 
-    logger.debug('Fixes found', JSON.stringify(parsedContents, null, 4));
     const git = gitFactory(githubClient, {
         commitAuthor: {
             name: conf.committer.name,
             email: conf.committer.email,
         },
         repository: {
-            owner: parsedContents[0].repository.user,
-            name: parsedContents[0].repository.name,
+            owner: parsedContent.repository.user,
+            name: parsedContent.repository.name,
         },
     });
 
     const fixer = fixerFactory(git, logger);
     const fixedContents = [];
-    for (const parsedContent of parsedContents) {
-        const fixedContent = yield fixer.fix(parsedContent);
-        logger.debug('Content fixed', { fixedContent });
+    for (const fix of parsedContent.fixes) {
+        logger.debug('Fixing', JSON.stringify(fix, null, 4));
+        const contentToFix = {
+            ...fix,
+            pullRequest: parsedContent.pullRequest,
+            repository: parsedContent.repository,
+        };
+
+        const fixedContent = yield fixer.fix(contentToFix);
+
+        logger.debug('Content fixed', JSON.stringify(fixedContent, null, 4));
         const commiter = commiterFactory(logger, githubClient, git);
-        const success = yield commiter.commit(parsedContent, fixedContent);
+        const success = yield commiter.commit(contentToFix, fixedContent);
 
         fixedContents.push({
             success,
-            matches: parsedContent.matches,
+            matches: contentToFix.matches,
         });
     };
 

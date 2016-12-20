@@ -21,8 +21,28 @@ describe('pull request parsing', () => {
         },
     };
 
+    it('should find correct data', function* () {
+        const client = {
+            getCommentsFromReviewId: () => Promise.resolve([]),
+        };
+
+        const { pullRequest, repository, sender } = yield parsePullRequestReviewComment(client)(request);
+
+        assert.deepEqual(pullRequest, {
+            number: request.body.pull_request.number,
+            ref: `refs/heads/${request.body.pull_request.head.ref}`,
+        });
+
+        assert.deepEqual(repository, {
+            name: request.body.repository.name,
+            user: request.body.repository.owner.login,
+        });
+
+        assert.deepEqual(sender, request.body.sender.login);
+    });
+
     it('should find correct comment', function* () {
-        const [{ comment }] = yield parsePullRequestReviewComment()(request);
+        const { fixes: [{ comment }] } = yield parsePullRequestReviewComment()(request);
 
         assert.deepEqual(comment, {
             body: 'comment body',
@@ -31,7 +51,6 @@ describe('pull request parsing', () => {
             id: 'comment id',
             path: 'comment path',
             position: 'diff position',
-            sender: 'Someone',
             url: 'comment url',
         });
     });
