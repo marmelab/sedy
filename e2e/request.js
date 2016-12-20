@@ -1,6 +1,6 @@
 import http from 'http';
 import request from 'request';
-import { httpServerHandler } from '../src/server';
+import httpServerHandler from '../src/httpServerHandler';
 
 export default function myRequest(params, authToken = null, cookies = {}) {
     return (callback) => {
