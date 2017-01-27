@@ -39,3 +39,8 @@ test-e2e:
 			'./e2e/**/*.spec.js'
 
 test: test-unit test-e2e
+
+build-installer:
+	cd installer && make build
+	rm -rf docs/
+	mv installer/build docs/

@@ -59,7 +59,7 @@ class Repository extends Component {
 
     actions() {
         if (this.state.loading) {
-            return <CircularProgress />;
+            return <CircularProgress color="#65658E" />;
         }
 
         return (
@@ -68,8 +68,8 @@ class Repository extends Component {
                 style={styles.actionButton}
                 icon={
                     this.state.hasSedy ?
-                    <RemoveSedy color={red400} /> :
-                    <AddSedy color={green500} />
+                    <RemoveSedy color="#EC5D73" /> :
+                    <AddSedy color="#88B04B" />
                 }
             />
         );

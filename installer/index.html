@@ -5,7 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
-    <title>Sedy Homepage</title>
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <meta name="Description" content="<%= htmlWebpackPlugin.options.description %>" />
+    <meta name="Keywords" content="github, pull-requests, typos" />
+
+    <!-- Schema.org markup for Google+ -->
+    <meta itemprop="name" content="<%= htmlWebpackPlugin.options.title %>">
+    <meta itemprop="description" content="<%= htmlWebpackPlugin.options.description %>">
+    <!-- TODO: Replace with a real image -->
+    <meta itemprop="image" content="<%= htmlWebpackPlugin.options.image %>">
+
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="<%= htmlWebpackPlugin.options.url %>">
+    <meta name="twitter:title" content="<%= htmlWebpackPlugin.options.title %>">
+    <meta name="twitter:description" content="<%= htmlWebpackPlugin.options.description %>">
+    <meta name="twitter:creator" content="@marmelab">
+    <!-- TODO: Replace with a real image -->
+    <meta name="twitter:image" content="<%= htmlWebpackPlugin.options.image %>">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="<%= htmlWebpackPlugin.options.title %>" />
+    <meta property="og:type" content="article" />
+    <!-- TODO: Replace with a real address -->
+    <meta property="og:url" content="<%= htmlWebpackPlugin.options.url %>" />
+    <!-- TODO: Replace with a real image -->
+    <meta property="og:image" content="<%= htmlWebpackPlugin.options.image %>" />
+    <meta property="og:description" content="<%= htmlWebpackPlugin.options.description %>" />
 </head>
 <body>
     <div id="login"></div>

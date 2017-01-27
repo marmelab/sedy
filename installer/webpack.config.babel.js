@@ -10,13 +10,21 @@ export default {
         setup: './js/setup',
     },
     output: {
-        filename: 'build/[name].js',
+        path: 'build/',
+        filename: '[name].js',
     },
     module: {
         loaders: [
             { test: /\.css$/, include: `${__dirname}/style.css`, loader: ExtractTextPlugin.extract('css') },
             { test: /\.js$/, include: `${__dirname}/js`, loader: 'babel' },
-            { test: /\.svg$/, include: `${__dirname}/icons`, loader: 'file-loader' },
+            {
+                test: /\.(svg|png)$/,
+                include: [
+                    `${__dirname}/icons`,
+                    `${__dirname}/images`,
+                ],
+                loader: 'file-loader',
+            },
         ],
     },
     plugins: [
@@ -33,6 +41,10 @@ export default {
             template: './index.html',
             filename: 'index.html',
             chunks: ['style', 'home'],
+            title: 'Sedy, fix typos for you',
+            description: 'A github webhook based bot to fix typos in pull requests, by @marmelab.',
+            url: 'https://marmelab.com/Sedy',
+            image: 'https://avatars2.githubusercontent.com/u/3116319', // Marmelab GitHub avatar
         }),
         new HtmlWebpackPlugin({
             template: './setup.html',
