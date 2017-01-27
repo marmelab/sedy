@@ -1,7 +1,9 @@
 import config from 'config';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { DefinePlugin } from 'webpack';
+import { DefinePlugin, optimize } from 'webpack';
+
+const env = process.env.NODE_ENV;
 
 const gaScript = config.ga ? `<script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -53,6 +55,9 @@ export default {
             GITHUB_URL: JSON.stringify(config.githubUrl),
             WEBHOOK_URL: JSON.stringify(config.webhookUrl),
             SEDY_USERNAME: JSON.stringify(config.sedyUsername),
+            'process.env': {
+                NODE_ENV: JSON.stringify(env),
+            },
         }),
         new HtmlWebpackPlugin({
             ...htmlConstants,
@@ -69,5 +74,5 @@ export default {
             hash: true,
         }),
         new ExtractTextPlugin('style.css'),
-    ],
+    ].concat(env === 'production' ? [new optimize.UglifyJsPlugin()] : []),
 };
