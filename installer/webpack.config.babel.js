@@ -12,6 +12,14 @@ const gaScript = config.ga ? `<script>
     ga('send', 'pageview')
 </script>` : '<!-- no analytics -->';
 
+const htmlConstants = {
+    title: 'Sedy - fix typos for you',
+    description: 'A github webhook based bot to fix typos in pull requests, by @marmelab.',
+    url: 'https://marmelab.com/sedy',
+    image: 'https://avatars2.githubusercontent.com/u/3116319', // Marmelab GitHub avatar
+    ga: gaScript,
+};
+
 export default {
     entry: {
         style: './style.css',
@@ -47,17 +55,14 @@ export default {
             SEDY_USERNAME: JSON.stringify(config.sedyUsername),
         }),
         new HtmlWebpackPlugin({
+            ...htmlConstants,
             template: './index.html',
             filename: 'index.html',
             chunks: ['style', 'home'],
-            title: 'Sedy, fix typos for you',
-            description: 'A github webhook based bot to fix typos in pull requests, by @marmelab.',
-            url: 'https://marmelab.com/sedy',
-            image: 'https://avatars2.githubusercontent.com/u/3116319', // Marmelab GitHub avatar
-            ga: gaScript,
             hash: true,
         }),
         new HtmlWebpackPlugin({
+            ...htmlConstants,
             template: './setup.html',
             filename: 'setup/index.html',
             chunks: ['style', 'setup'],

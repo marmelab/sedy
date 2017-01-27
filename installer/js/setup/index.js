@@ -1,3 +1,4 @@
+/* global APP_BASE_URL */
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import { getUserInfo } from '../installer/github';
@@ -22,6 +23,7 @@ const styles = {
     },
     appBarTitle: {
         color: '#92A8D1',
+        cursor: 'pointer',
     },
     wrapper: {
         color: darkWhite,
@@ -31,13 +33,19 @@ const styles = {
     },
 };
 
+const homeRedirection = () => {
+    window.location.href = APP_BASE_URL;
+};
+
 ReactDOM.render(
     <MuiThemeProvider>
         <div>
             <AppBar
                 title="Sedy"
                 style={styles.appBar}
+                titleStyle={styles.appBarTitle}
                 showMenuIconButton={false}
+                onTitleTouchTap={homeRedirection}
             />
             <div style={styles.wrapper}>
                 <p>You can enable/disable Sedy bot only on repositories you own.</p>
