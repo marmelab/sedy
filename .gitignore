@@ -9,3 +9,4 @@ config/test.json
 installer/node_modules/
 installer/config/development.js
 installer/config/production.js
+installer/build/

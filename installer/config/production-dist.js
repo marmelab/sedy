@@ -1,5 +1,5 @@
 export default {
-    appBaseUrl: 'http://localhost:8080',
+    appBaseUrl: 'https://marmelab.com/Sedy',
     githubAppId: 'xxx',
     githubRedirection: '/setup.html',
 };

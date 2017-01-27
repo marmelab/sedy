@@ -12,9 +12,9 @@ import FullWidthSection from './FullWidthSection';
 
 const isMobile = window.innerWidth <= 640;
 const images = {
-    comment: `/images/pr_sed_comment${isMobile ? '_mobile' : ''}.png`,
-    commit: `/images/pr_sed_commit${isMobile ? '_mobile' : ''}.png`,
-    diff: `/images/pr_sed_diff${isMobile ? '_mobile' : ''}.png`,
+    comment: require(`../images/pr_sed_comment${isMobile ? '_mobile' : ''}.png`),
+    commit: require(`../images/pr_sed_commit${isMobile ? '_mobile' : ''}.png`),
+    diff: require(`../images/pr_sed_diff${isMobile ? '_mobile' : ''}.png`),
 };
 
 // Needed for onTouchTap
