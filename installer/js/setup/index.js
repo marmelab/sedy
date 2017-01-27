@@ -1,6 +1,7 @@
 /* global APP_BASE_URL */
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
+import hellojs from 'hellojs';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -8,6 +9,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import { darkWhite } from 'material-ui/styles/colors';
 import RepositoryList from './repositories/RepositoryList';
+import FlatButton from 'material-ui/FlatButton';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -35,6 +37,11 @@ const homeRedirection = () => {
     window.location.href = APP_BASE_URL;
 };
 
+const onLogout = () => {
+    hellojs.logout('github');
+    homeRedirection();
+};
+
 ReactDOM.render(
     <MuiThemeProvider>
         <div>
@@ -44,6 +51,7 @@ ReactDOM.render(
                 titleStyle={styles.appBarTitle}
                 showMenuIconButton={false}
                 onTitleTouchTap={homeRedirection}
+                iconElementRight={<FlatButton label="Logout" onClick={onLogout} />}
             />
             <div style={styles.wrapper}>
                 <p>You can enable/disable Sedy bot only on repositories you own.</p>

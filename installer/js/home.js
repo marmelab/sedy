@@ -14,7 +14,8 @@ import { getUserInfo } from './installer/github';
 
 const helloInfos = window.localStorage.getItem('hello');
 if (helloInfos) {
-    const token = JSON.parse(helloInfos).github.access_token;
+    const githubInfos = JSON.parse(helloInfos).github;
+    const token = githubInfos && githubInfos.access_token;
 
     if (token) {
         window.localStorage.setItem('accessToken', token);
