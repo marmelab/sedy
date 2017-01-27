@@ -43,13 +43,15 @@ export default {
             chunks: ['style', 'home'],
             title: 'Sedy, fix typos for you',
             description: 'A github webhook based bot to fix typos in pull requests, by @marmelab.',
-            url: 'https://marmelab.com/Sedy',
+            url: 'https://marmelab.com/sedy',
             image: 'https://avatars2.githubusercontent.com/u/3116319', // Marmelab GitHub avatar
+            hash: true,
         }),
         new HtmlWebpackPlugin({
             template: './setup.html',
             filename: 'setup/index.html',
             chunks: ['style', 'setup'],
+            hash: true,
         }),
         new ExtractTextPlugin('style.css'),
     ],

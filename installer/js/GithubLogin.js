@@ -25,7 +25,7 @@ class GithubLogin extends Component {
                 getUserInfo(accessToken).then(
                     user => {
                         window.localStorage.setItem('user', JSON.stringify(user));
-                        window.location.href = '/setup';
+                        window.location.href = GITHUB_REDIRECTION;
                     },
                 );
             });
