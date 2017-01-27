@@ -1,8 +1,6 @@
 /* global APP_BASE_URL */
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import { getUserInfo } from '../installer/github';
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 

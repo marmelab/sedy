@@ -6,9 +6,9 @@ import { getRepositories } from '../../installer/github';
 
 import Repository from './Repository';
 import Pagination from './Pagination';
+import getCredentials from './getCredentials';
 
-const accessToken = window.localStorage.accessToken;
-const user = JSON.parse(window.localStorage.user);
+const { accessToken, user } = getCredentials();
 
 class RepositoryList extends Component {
     constructor(props) {
@@ -24,8 +24,10 @@ class RepositoryList extends Component {
     fetchRepositories = page => getRepositories(accessToken, user, page);
 
     componentWillMount() {
-        this.fetchRepositories(this.state.page)
+        if (user) {
+            this.fetchRepositories(this.state.page)
             .then(repositories => this.setState({ repositories, loading: false }));
+        }
     }
 
     onPageChange = page => () => {
@@ -37,6 +39,13 @@ class RepositoryList extends Component {
     };
 
     render() {
+        if (!user) {
+            return (<p>
+                Please wait while we retrieve your GitHub informations.<br />
+                <a href={APP_BASE_URL}>Back to the home</a>
+            </p>);
+        };
+
         return (
             <div>
                 {this.state.loading && <div style={{ textAlign: 'center' }}>

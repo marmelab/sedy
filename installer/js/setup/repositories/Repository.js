@@ -8,8 +8,9 @@ import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
 import RemoveSedy from 'material-ui/svg-icons/action/delete';
 
-const accessToken = window.localStorage.accessToken;
-const user = JSON.parse(window.localStorage.user);
+import getCredentials from './getCredentials';
+
+const { accessToken, user } = getCredentials();
 
 const styles = {
     name: {
@@ -76,6 +77,8 @@ class Repository extends Component {
     }
 
     render() {
+        if (!user) return;
+
         const {
             repository,
         } = this.props;
