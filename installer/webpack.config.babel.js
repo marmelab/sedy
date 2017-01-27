@@ -33,6 +33,10 @@ export default {
             template: './index.html',
             filename: 'index.html',
             chunks: ['style', 'home'],
+            title: 'Sedy, fix typos for you',
+            description: 'A github webhook based bot to fix typos in pull requests, by @marmelab.',
+            url: 'https://marmelab.com/Sedy',
+            image: 'https://avatars2.githubusercontent.com/u/3116319', // Marmelab GitHub avatar
         }),
         new HtmlWebpackPlugin({
             template: './setup.html',

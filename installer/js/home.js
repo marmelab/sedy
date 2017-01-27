@@ -10,6 +10,13 @@ import { darkWhite } from 'material-ui/styles/colors';
 import GithubLogin from './GithubLogin';
 import FullWidthSection from './FullWidthSection';
 
+const isMobile = window.innerWidth <= 640;
+const images = {
+    comment: `/images/pr_sed_comment${isMobile ? '_mobile' : ''}.png`,
+    commit: `/images/pr_sed_commit${isMobile ? '_mobile' : ''}.png`,
+    diff: `/images/pr_sed_diff${isMobile ? '_mobile' : ''}.png`,
+};
+
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
@@ -37,8 +44,8 @@ const styles = {
         color: darkWhite,
         fontSize: 25,
         lineHeight: '28px',
-        paddingTop: 19,
-        marginBottom: 13,
+        paddingTop: 48,
+        marginBottom: 25,
         letterSpacing: 0,
     },
     card: {
@@ -49,34 +56,35 @@ const styles = {
 ReactDOM.render(
     <MuiThemeProvider>
         <div>
-        <FullWidthSection style={styles.root}>
-            <div style={styles.tagline}>
-                <h1 style={styles.h1}>Sedy</h1>
-                <h2 style={styles.mainH2}>
-                    A Bot listening to PR comments in GitHub to fix typos for you
-                </h2>
-            </div>
+            <FullWidthSection style={styles.root}>
+                <div style={styles.tagline}>
+                    <h1 style={styles.h1}>Sedy</h1>
+                    <h2 style={styles.mainH2}>
+                        A bot listening to PR comments in GitHub to fix typos for you
+                    </h2>
+                </div>
             </FullWidthSection>
 
             <GithubLogin />
+
             <div className="wrapper">
                 <h2 style={styles.h2}>What does it look like?</h2>
                 <Card style={styles.card}>
                     <CardTitle title="1. Comment a pull request with a sed command" />
                     <CardMedia>
-                        <img src="/images/pr_sed_comment.png" />
+                        <img src={images.comment} />
                     </CardMedia>
                 </Card>
                 <Card style={styles.card}>
                     <CardTitle title="2. Watch sedy do its job" />
                     <CardMedia>
-                        <img src="/images/pr_sed_commit.png" />
+                        <img src={images.commit} />
                     </CardMedia>
                 </Card>
                 <Card style={styles.card}>
                     <CardTitle title="3. Relax :)" />
                     <CardMedia>
-                        <img src="/images/pr_sed_diff.png" />
+                        <img src={images.diff} />
                     </CardMedia>
                 </Card>
                 <GithubLogin />
@@ -84,13 +92,14 @@ ReactDOM.render(
                 <Card style={styles.card}>
                     <CardTitle title="It's just a webhook" />
                     <CardText>
-                        You simply need to register the sedy webhook for the following events:
+                        <p>You simply need to register the sedy webhook for the following events:</p>
                         <ul>
                             <li>Pull request review comment</li>
                             <li>Pull request review</li>
                         </ul>
 
-                        This website will make the webhook registration process a bliss!
+                        <p>This website will make the webhook registration process a bliss!</p>
+                        <p><strong>The GitHub user <a href="https://github.com/sedy-bot">Sedy Bot</a> will receive permission to commit on your repository.</strong></p>
                     </CardText>
                 </Card>
                 <Card style={styles.card}>
@@ -109,6 +118,7 @@ ReactDOM.render(
                     <CardText>
                         <p><b>sed</b> does far more than simple substitution, however, we currently only support the most simple one.</p>
                         <p>In time, we will add support for regular expressions, global flags, and so on.</p>
+                        <p>Feel free to <a href="https://github.com/marmelab/sedy/issues">open an issue</a> with your suggestions!</p>
                     </CardText>
                 </Card>
                 <h2 style={styles.h2}>It's Open Source!</h2>
