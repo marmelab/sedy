@@ -27,6 +27,7 @@ export default {
         style: './style.css',
         home: './js/home',
         setup: './js/setup',
+        redirect: './js/redirect',
     },
     output: {
         path: 'build/',
@@ -50,6 +51,7 @@ export default {
         new DefinePlugin({
             APP_BASE_URL: JSON.stringify(config.appBaseUrl),
             GITHUB_APP_ID: JSON.stringify(config.githubAppId),
+            GITHUB_REDIRECT_URI: JSON.stringify(config.githubRedirectUri),
             GITHUB_REDIRECTION: JSON.stringify(config.githubRedirection),
             GITHUB_SCOPES: JSON.stringify(config.githubScopes),
             GITHUB_URL: JSON.stringify(config.githubUrl),
@@ -71,6 +73,13 @@ export default {
             template: './setup.html',
             filename: 'setup/index.html',
             chunks: ['style', 'setup'],
+            hash: true,
+        }),
+        new HtmlWebpackPlugin({
+            ...htmlConstants,
+            template: './redirect.html',
+            filename: 'redirect/index.html',
+            chunks: ['style', 'redirect'],
             hash: true,
         }),
         new ExtractTextPlugin('style.css'),

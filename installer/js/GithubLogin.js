@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import React, { Component, PropTypes } from 'react';
 import { darkWhite } from 'material-ui/styles/colors';
 
-import { authenticate, getUserInfo } from './installer/github';
+import { authenticate } from './installer/github';
 
 const styles = {
     p: {
@@ -18,18 +18,7 @@ const styles = {
 };
 
 class GithubLogin extends Component {
-    onClick = () => {
-        authenticate()
-            .then(({ accessToken }) => {
-                window.localStorage.setItem('accessToken', accessToken);
-                getUserInfo(accessToken).then(
-                    user => {
-                        window.localStorage.setItem('user', JSON.stringify(user));
-                        window.location.href = GITHUB_REDIRECTION;
-                    },
-                );
-            });
-    };
+    onClick = () => authenticate();
 
     render() {
         return (

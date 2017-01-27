@@ -10,6 +10,21 @@ import { darkWhite } from 'material-ui/styles/colors';
 import GithubLogin from './GithubLogin';
 import FullWidthSection from './FullWidthSection';
 
+import { getUserInfo } from './installer/github';
+
+const helloInfos = window.localStorage.getItem('hello');
+if (helloInfos) {
+    const token = JSON.parse(helloInfos).github.access_token;
+
+    if (token) {
+        window.localStorage.setItem('accessToken', token);
+        getUserInfo(token).then(user => {
+            window.localStorage.setItem('user', JSON.stringify(user));
+            window.location.href = GITHUB_REDIRECTION;
+        });
+    }
+}
+
 const isMobile = window.innerWidth <= 640;
 const images = {
     comment: require(`../images/pr_sed_comment${isMobile ? '_mobile' : ''}.png`),

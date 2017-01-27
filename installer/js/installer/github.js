@@ -4,16 +4,10 @@ export const authenticate = () => new Promise((resolve, reject) => {
     hello.init({
         github: GITHUB_APP_ID,
     }, {
-        redirect_uri: GITHUB_REDIRECTION,
+        redirect_uri: GITHUB_REDIRECT_URI,
     });
 
-    hello
-        .login('github', { scope: GITHUB_SCOPES })
-        .then(auth => {
-            resolve({
-                accessToken: auth.authResponse.access_token,
-            });
-        }, reject);
+    hello.login('github', { scope: GITHUB_SCOPES, display: 'page' });
 });
 
 export const getUserInfo = token => {

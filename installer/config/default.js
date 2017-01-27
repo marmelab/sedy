@@ -1,5 +1,6 @@
 export default {
     appBaseUrl: 'http://localhost:8080',
+    githubRedirectUri: 'http://localhost:8080/redirect',
     githubRedirection: '/setup',
     githubAppId: 'xxx',
     githubScopes: [
