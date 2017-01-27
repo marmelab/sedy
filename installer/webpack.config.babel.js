@@ -3,6 +3,15 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import { DefinePlugin } from 'webpack';
 
+const gaScript = config.ga ? `<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '${config.ga}', 'marmelab.com')
+    ga('send', 'pageview')
+</script>` : '<!-- no analytics -->';
+
 export default {
     entry: {
         style: './style.css',
@@ -45,6 +54,7 @@ export default {
             description: 'A github webhook based bot to fix typos in pull requests, by @marmelab.',
             url: 'https://marmelab.com/sedy',
             image: 'https://avatars2.githubusercontent.com/u/3116319', // Marmelab GitHub avatar
+            ga: gaScript,
             hash: true,
         }),
         new HtmlWebpackPlugin({

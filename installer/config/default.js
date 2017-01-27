@@ -9,4 +9,5 @@ export default {
     githubUrl: 'https://api.github.com',
     webhookUrl: 'https://sedy.marmelab.com',
     sedyUsername: 'sedy-bot',
+    ga: false,
 };
