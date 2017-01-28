@@ -1,7 +1,6 @@
 /* global APP_BASE_URL */
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
-import hellojs from 'hellojs';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
@@ -38,7 +37,8 @@ const homeRedirection = () => {
 };
 
 const onLogout = () => {
-    hellojs.logout('github');
+    window.localStorage.removeItem('accessToken');
+    window.localStorage.removeItem('user');
     homeRedirection();
 };
 
