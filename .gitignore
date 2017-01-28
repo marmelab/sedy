@@ -1,3 +1,7 @@
+# Global
+.pm2/
+node_modules/
+
 # Sedy
 sedy/node_modules/*
 sedy/build/*
