@@ -23,7 +23,6 @@
     "config": "1.21.0",
     "css-loader": "0.25.0",
     "file-loader": "0.9.0",
-    "hellojs": "1.14.0",
     "html-webpack-plugin": "2.24.0",
     "material-ui": "0.16.1",
     "react": "15.3.2",
