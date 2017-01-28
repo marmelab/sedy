@@ -39,14 +39,14 @@ stop:
 	PM2_HOME=".pm2" ./node_modules/.bin/pm2 kill
 
 deploy:
-	cd sedy && make deploy
-	cd oauth && make deploy
+	cd sedy && NODE_ENV=production make deploy
+	cd oauth && NODE_ENV=production make deploy
 
 test:
 	cd sedy && make test-unit test-e2e
 
 publish-installer:
-	cd installer && make build
+	cd installer && NODE_ENV=production make build
 	rm -rf docs/
 	mv installer/build docs/
 	echo "The installer is built"
