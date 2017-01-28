@@ -1,9 +1,9 @@
 # Sedy
-node_modules/*
-build/*
-config/development.json
-config/production.json
-config/test.json
+sedy/node_modules/*
+sedy/build/*
+sedy/config/development.json
+sedy/config/production.json
+sedy/config/test.json
 
 # Sedy Installer
 installer/node_modules/
