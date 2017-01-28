@@ -12,7 +12,7 @@
             "--colors",
             "--hot"
         ],
-        "watch": ["./installer"],
+        "watch": ["../installer"],
         "autorestart": true
     }, {
         "name": "oauth",
@@ -24,7 +24,7 @@
         "instances": 1,
         "script": "./src/server.js",
         "node_args": "--require babel-polyfill --require babel-core/register",
-        "watch": ["./oauth", "./sedy"],
+        "watch": ["../oauth", "../sedy"],
         "autorestart": true
     }]
 }

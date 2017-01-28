@@ -9,7 +9,7 @@
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.7.7",
-    "babel-eslint": "^6.0.4",
+    "babel-eslint": "^7.1.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-regenerator": "^6.6.5",
     "babel-polyfill": "^6.9.1",
@@ -17,6 +17,13 @@
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.7.2",
     "babel-runtime": "^6.6.1",
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb": "^14.0.0",
+    "eslint-import-resolver-webpack": "^0.8.1",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
+    "eslint-plugin-mocha": "^4.8.0",
+    "eslint-plugin-react": "^6.9.0",
     "pm2": "^2.3.0"
   }
 }

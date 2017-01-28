@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import Progress from 'material-ui/CircularProgress';
 import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
 
-import { getRepositories } from '../../installer/github';
+import { getRepositories } from '../../github';
 
 import Repository from './Repository';
 import Pagination from './Pagination';

@@ -1,22 +1,63 @@
-import hello from 'hellojs';
+/* global config, SEDY_USERNAME, WEBHOOK_URL */
 
-export const authenticate = () => new Promise((resolve, reject) => {
-    hello.init({
-        github: GITHUB_APP_ID,
-    }, {
-        redirect_uri: GITHUB_REDIRECT_URI,
-    });
+import { getWindowSearchParams } from './utils';
 
-    hello.login('github', { scope: GITHUB_SCOPES, display: 'page' });
+export const authenticate = () => {
+    const { github } = config;
+    const params = {
+        'client_id': github.appId, // eslint-disable-line quote-props
+        'redirect_uri': github.redirect_uri, // eslint-disable-line quote-props
+        scope: github.scopes.join(' '),
+    };
+
+    window.location.href = `${github.url}/login/oauth/authorize?` + Object // eslint-disable-line prefer-template
+        .keys(params)
+        .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`, '')
+        .join('&');
+};
+
+export const digestGithubRedirection = () => new Promise((resolve, reject) => {
+    const { code } = getWindowSearchParams();
+
+    if (!code) {
+        return resolve(false);
+    }
+
+    const options = {
+        method: 'POST',
+        headers: {
+            Authorization: `token ${config.oauth.secret}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+    };
+
+    return fetch(config.oauth.url, options)
+        .then((response) => {
+            if (!response.ok) {
+                return response.text().then(result => reject(new Error(result)));
+            }
+
+            return response.json();
+        })
+        .then((response) => {
+            const accessToken = response.body.access_token;
+            if (accessToken) {
+                return resolve(accessToken);
+            }
+
+            return resolve(false);
+        })
+        .catch(reject);
 });
 
-export const getUserInfo = token => {
+export const getUserInfo = (token) => {
     const headers = {
         Authorization: `token ${token}`,
     };
 
-    return fetch(`${GITHUB_URL}/user`, { headers })
-        .then(response => {
+    return fetch(`${config.github.api}/user`, { headers })
+        .then((response) => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
             }
@@ -25,7 +66,7 @@ export const getUserInfo = token => {
         })
         .then(
             user => ({ user }),
-            error => ({ error })
+            error => ({ error }),
         );
 };
 
@@ -39,8 +80,8 @@ const isContributorAdded = (accessToken, user, repository) => {
     // Response if user is not a collaborator
     // Status: 404 Not Found
 
-    return fetch(`${GITHUB_URL}/repos/${user.user.login}/${repository.name}/collaborators/${SEDY_USERNAME}`, { headers })
-        .then(response => Promise.resolve(response.status == 204));
+    return fetch(`${config.github.api}/repos/${user.user.login}/${repository.name}/collaborators/${SEDY_USERNAME}`, { headers })
+        .then(response => Promise.resolve(response.status === 204));
 };
 
 const getHookId = (accessToken, user, repository) => {
@@ -48,29 +89,26 @@ const getHookId = (accessToken, user, repository) => {
         Authorization: `token ${accessToken}`,
     };
 
-    return fetch(`${GITHUB_URL}/repos/${user.user.login}/${repository.name}/hooks`, { headers })
-        .then(response => {
+    return fetch(`${config.github.api}/repos/${user.user.login}/${repository.name}/hooks`, { headers })
+        .then((response) => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
             }
 
             return response.json();
         })
-        .then(
-            (hooks) => {
-                let sedyHooks = hooks.filter(hook => hook.config.url == WEBHOOK_URL);
+        .then((hooks) => {
+            const sedyHooks = hooks.filter(hook => hook.config.url === WEBHOOK_URL);
 
-                if(sedyHooks.length){
-                    return sedyHooks[0].id;
-                }
-                return Promise.reject();
-            },
-            error => { error; }
-        );
-}
+            if (sedyHooks.length) {
+                return sedyHooks[0].id;
+            }
+            return Promise.reject();
+        }, error => error);
+};
 
 const isHookAdded = (accessToken, user, repository) => getHookId(accessToken, user, repository)
-    .then(hookId => true, () => false);
+    .then(() => true, () => false);
 
 const isSedyInstalled = (accessToken, user, repository) => {
     return Promise.all([
@@ -86,7 +124,7 @@ export const getRepositories = (accessToken, user, page = 1, perPage = 30) => {
         Authorization: `token ${accessToken}`,
     };
 
-    return fetch(`${GITHUB_URL}/user/repos?affiliation=owner&page=${page}&per_page=${perPage}`, { headers })
+    return fetch(`${config.github.api}/user/repos?affiliation=owner&page=${page}&per_page=${perPage}`, { headers })
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
@@ -121,7 +159,7 @@ const addHook = (accessToken, user, repository) => {
         }),
     };
 
-    return fetch(`${GITHUB_URL}/repos/${user.user.login}/${repository.name}/hooks`, options)
+    return fetch(`${config.github.api}/repos/${user.user.login}/${repository.name}/hooks`, options)
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
@@ -143,7 +181,7 @@ const addContributor = (accessToken, user, repository) => {
         },
     };
 
-    return fetch(`${GITHUB_URL}/repos/${user.user.login}/${repository.name}/collaborators/${SEDY_USERNAME}?permission=push`, options)
+    return fetch(`${config.github.api}/repos/${user.user.login}/${repository.name}/collaborators/${SEDY_USERNAME}?permission=push`, options)
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));
@@ -169,7 +207,7 @@ const removeHook = (accessToken, user, repository) => {
 
     return getHookId(accessToken, user, repository)
         .then((hookId) => {
-            return fetch(`${GITHUB_URL}/repos/${user.user.login}/${repository.name}/hooks/${hookId}`, options)
+            return fetch(`${config.github.api}/repos/${user.user.login}/${repository.name}/hooks/${hookId}`, options)
                 .then(response => {
                     if (!response.ok) {
                         return response.text().then(result => Promise.reject(new Error(result)));
@@ -189,7 +227,7 @@ const removeContributor = (accessToken, user, repository) => {
         },
     };
 
-    return fetch(`${GITHUB_URL}/repos/${user.user.login}/${repository.name}/collaborators/${SEDY_USERNAME}`, options)
+    return fetch(`${config.github.api}/repos/${user.user.login}/${repository.name}/collaborators/${SEDY_USERNAME}`, options)
         .then(response => {
             if (!response.ok) {
                 return response.text().then(result => Promise.reject(new Error(result)));

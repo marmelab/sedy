@@ -1,3 +1,4 @@
+/* global config */
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
 import React from 'react';
@@ -7,30 +8,26 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import typography from 'material-ui/styles/typography';
 import { darkWhite } from 'material-ui/styles/colors';
-import GithubLogin from './GithubLogin';
+import GithubLogin from './github/GithubLogin';
 import FullWidthSection from './FullWidthSection';
 
-import { getUserInfo } from './installer/github';
+import { digestGithubRedirection, getUserInfo } from './github';
 
-const helloInfos = window.localStorage.getItem('hello');
-if (helloInfos) {
-    const githubInfos = JSON.parse(helloInfos).github;
-    const token = githubInfos && githubInfos.access_token;
-
+digestGithubRedirection().then((token) => {
     if (token) {
         window.localStorage.setItem('accessToken', token);
-        getUserInfo(token).then(user => {
+        getUserInfo(token).then((user) => {
             window.localStorage.setItem('user', JSON.stringify(user));
-            window.location.href = GITHUB_REDIRECTION;
+            window.location.href = config.setup;
         });
     }
-}
+});
 
 const isMobile = window.innerWidth <= 640;
 const images = {
-    comment: require(`../images/pr_sed_comment${isMobile ? '_mobile' : ''}.png`),
-    commit: require(`../images/pr_sed_commit${isMobile ? '_mobile' : ''}.png`),
-    diff: require(`../images/pr_sed_diff${isMobile ? '_mobile' : ''}.png`),
+    comment: require(`../images/pr_sed_comment${isMobile ? '_mobile' : ''}.png`), // eslint-disable-line
+    commit: require(`../images/pr_sed_commit${isMobile ? '_mobile' : ''}.png`),  // eslint-disable-line
+    diff: require(`../images/pr_sed_diff${isMobile ? '_mobile' : ''}.png`), // eslint-disable-line
 };
 
 // Needed for onTouchTap
@@ -137,7 +134,7 @@ ReactDOM.render(
                         <p>Feel free to <a href="https://github.com/marmelab/sedy/issues">open an issue</a> with your suggestions!</p>
                     </CardText>
                 </Card>
-                <h2 style={styles.h2}>It's Open Source!</h2>
+                <h2 style={styles.h2}>{"It's Open Source!"}</h2>
                 <Card style={styles.card}>
                     <CardText>
                         <p>
@@ -149,5 +146,5 @@ ReactDOM.render(
             </div>
         </div>
     </MuiThemeProvider>,
-    document.getElementById('login')
+    document.getElementById('login'),
 );

@@ -27,7 +27,6 @@ export default {
         style: './style.css',
         home: './js/home',
         setup: './js/setup',
-        redirect: './js/redirect',
     },
     output: {
         path: 'build/',
@@ -49,12 +48,8 @@ export default {
     },
     plugins: [
         new DefinePlugin({
+            config: JSON.stringify(config),
             APP_BASE_URL: JSON.stringify(config.appBaseUrl),
-            GITHUB_APP_ID: JSON.stringify(config.githubAppId),
-            GITHUB_REDIRECT_URI: JSON.stringify(config.githubRedirectUri),
-            GITHUB_REDIRECTION: JSON.stringify(config.githubRedirection),
-            GITHUB_SCOPES: JSON.stringify(config.githubScopes),
-            GITHUB_URL: JSON.stringify(config.githubUrl),
             WEBHOOK_URL: JSON.stringify(config.webhookUrl),
             SEDY_USERNAME: JSON.stringify(config.sedyUsername),
             'process.env': {
@@ -73,13 +68,6 @@ export default {
             template: './setup.html',
             filename: 'setup/index.html',
             chunks: ['style', 'setup'],
-            hash: true,
-        }),
-        new HtmlWebpackPlugin({
-            ...htmlConstants,
-            template: './redirect.html',
-            filename: 'redirect/index.html',
-            chunks: ['style', 'redirect'],
             hash: true,
         }),
         new ExtractTextPlugin('style.css'),

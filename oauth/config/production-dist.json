@@ -1,12 +1,9 @@
 {
     "secret": "MY-VERY-PRIVATE-OAUTH-SECRET",
-    "allowedOrigins": ["http://localhost:8080"],
-    "logs": {
-        "debug": false
-    },
+    "allowedOrigins": ["https://marmelab.com", "http://marmelab.com"],
     "github": {
         "clientId": "XXX",
         "clientSecret": "YYYYYYYYYYYYYYYYYYY",
-        "redirect_uri": "https://localhost:8080"
+        "redirect_uri": "https://marmelab.com/sedy"
     }
 }

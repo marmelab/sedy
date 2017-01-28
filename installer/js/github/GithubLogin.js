@@ -3,7 +3,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import React, { Component, PropTypes } from 'react';
 import { darkWhite } from 'material-ui/styles/colors';
 
-import { authenticate } from './installer/github';
+import { authenticate } from './';
 
 const styles = {
     p: {

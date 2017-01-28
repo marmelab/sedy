@@ -1,1 +1,0 @@
-import hellojs from 'hellojs';
