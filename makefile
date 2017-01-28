@@ -40,6 +40,7 @@ stop:
 
 deploy:
 	cd sedy && make deploy
+	cd oauth && make deploy
 
 test:
 	cd sedy && make test-unit test-e2e

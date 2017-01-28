@@ -1,20 +1,19 @@
 /* global config */
 import co from 'co';
-import config from 'config';
 import request from 'request';
 
 import loggerFactory from '../../sedy/src/lib/logger';
 
 const main = function* (event, context, logger, conf) {
     const { headers, body } = event;
+    const origin = headers.origin || headers.Origin;
+    const authorization = headers.Authorization || headers.Authorization;
 
-    if (!config.allowedOrigins.includes(headers.origin)) {
+    if (!config.allowedOrigins.includes(origin)) {
         throw new Error(`${headers.origin} is not an allowed origin.`);
     }
 
-    const authorization = headers.authorization && headers.authorization.replace('token ', '');
-
-    if (!authorization || authorization !== config.secret) {
+    if (!authorization || authorization.replace('token ', '') !== config.secret) {
         throw new Error('Authorization token mismatch');
     }
 
