@@ -6,6 +6,9 @@ install-sedy:
 run-sedy:
 	cd sedy && make run
 
+run-oauth:
+	cd oauth && make run
+
 run-installer:
 	cd installer && make run
 

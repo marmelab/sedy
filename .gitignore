@@ -10,3 +10,9 @@ installer/node_modules/
 installer/config/development.js
 installer/config/production.js
 installer/build/
+
+# Sedy Oauth
+oauth/node_modules/*
+oauth/build/*
+oauth/config/development.json
+oauth/config/production.json
