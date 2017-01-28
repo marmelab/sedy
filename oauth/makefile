@@ -10,4 +10,4 @@ clean:
 deploy: clean
 	./node_modules/.bin/webpack -p --progress --optimize-dedupe
 	cd build && zip -r oauth.zip *
-	aws --profile=marmelab lambda update-function-code --function-name SedyOauth --zip-file fileb://build/oauth.zip
+	aws lambda update-function-code --function-name SedyOauth --zip-file fileb://build/oauth.zip
