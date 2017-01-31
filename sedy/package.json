@@ -7,23 +7,32 @@
     "url": "https://github.com/marmelab/sedy.git"
   },
   "license": "MIT",
+  "scripts": {
+    "test": "make --silent test"
+  },
+  "dependencies": {
+    "babel-regenerator-runtime": "^6.5.0",
+    "co": "^4.6.0",
+    "config": "^1.20.1",
+    "github": "^0.2.4",
+    "oauth": "^0.9.14",
+    "octonode": "^0.7.5"
+  },
   "devDependencies": {
     "babel-core": "^6.7.7",
-    "babel-eslint": "^7.1.1",
-    "babel-loader": "^6.2.10",
+    "babel-loader": "^6.2.4",
     "babel-plugin-transform-regenerator": "^6.6.5",
     "babel-polyfill": "^6.9.1",
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-stage-0": "^6.5.0",
     "babel-register": "^6.7.2",
     "babel-runtime": "^6.6.1",
-    "eslint": "^3.14.1",
-    "eslint-config-airbnb": "^14.0.0",
-    "eslint-import-resolver-webpack": "^0.8.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^3.0.2",
-    "eslint-plugin-mocha": "^4.8.0",
-    "eslint-plugin-react": "^6.9.0",
-    "pm2": "^2.3.0"
+    "chai": "^3.5.0",
+    "co-mocha": "^1.1.3",
+    "json-loader": "^0.5.4",
+    "mocha": "^2.4.5",
+    "request": "2.76.0",
+    "sinon": "^1.17.3",
+    "webpack": "1.13.3"
   }
 }

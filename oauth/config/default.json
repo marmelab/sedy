@@ -1,0 +1,12 @@
+{
+    "secret": "MY-VERY-PRIVATE-OAUTH-SECRET",
+    "allowedOrigins": ["http://localhost:8080"],
+    "logs": {
+        "debug": false
+    },
+    "github": {
+        "clientId": "XXX",
+        "clientSecret": "YYYYYYYYYYYYYYYYYYY",
+        "redirect_uri": "https://localhost:8080"
+    }
+}

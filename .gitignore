@@ -1,12 +1,22 @@
+# Global
+.pm2/
+node_modules/
+
 # Sedy
-node_modules/*
-build/*
-config/development.json
-config/production.json
-config/test.json
+sedy/node_modules/*
+sedy/build/*
+sedy/config/development.json
+sedy/config/production.json
+sedy/config/test.json
 
 # Sedy Installer
 installer/node_modules/
 installer/config/development.js
 installer/config/production.js
 installer/build/
+
+# Sedy Oauth
+oauth/node_modules/*
+oauth/build/*
+oauth/config/development.json
+oauth/config/production.json

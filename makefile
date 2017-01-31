@@ -1,49 +1,53 @@
 .PHONY: test
 
-copy-conf: ## Initialize the configuration files by copying the *''-dist" versions (does not override existing config)
-	-cp -n ./config/production-dist.json ./config/production.json
+NODE_ENV ?= development
 
-install: copy-conf
+install-sedy:
+	cd sedy && make install
+
+install-oauth:
+	cd oauth && make install
+
+install-installer:
+	cd installer && make install
+
+install: install-sedy install-oauth install-installer
 	npm install
 
-clean:
-	rm -rf build/*
+run-sedy:
+	cd sedy && make run
 
-build: clean
-	./node_modules/.bin/webpack --progress
-
-run:
-	node --require babel-polyfill --require babel-core/register ./src/server.js
+run-oauth:
+	cd oauth && make run
 
 run-installer:
 	cd installer && make run
 
-deploy: clean
-	./node_modules/.bin/webpack -p --progress --optimize-dedupe
-	cd build && zip -r sedy.zip *
-	aws lambda update-function-code --function-name Sedy --zip-file fileb://build/sedy.zip
+run:
+	PM2_HOME=".pm2" ./node_modules/.bin/pm2 start ./pm2/${NODE_ENV}.json
+	if test "$(NODE_ENV)" = "development"; then \
+		make logs; \
+	fi
 
-test-unit:
-	./node_modules/.bin/mocha \
-		--compilers js:babel-core/register \
-		--require babel-polyfill \
-		--require co-mocha \
-		--recursive \
-			./src/*.spec.js \
-			'./src/**/*.spec.js'
+logs:
+	PM2_HOME=".pm2" ./node_modules/.bin/pm2 logs
 
-test-e2e:
-	./node_modules/.bin/mocha \
-		--compilers js:babel-core/register \
-		--require babel-polyfill \
-		--require co-mocha \
-		--recursive \
-			./e2e/*.spec.js \
-			'./e2e/**/*.spec.js'
+status:
+	PM2_HOME=".pm2" ./node_modules/.bin/pm2 status
 
-test: test-unit test-e2e
+stop:
+	PM2_HOME=".pm2" ./node_modules/.bin/pm2 kill
 
-build-installer:
-	cd installer && make build
+deploy:
+	cd sedy && NODE_ENV=production make deploy
+	cd oauth && NODE_ENV=production make deploy
+
+test:
+	cd sedy && make test-unit test-e2e
+
+publish-installer:
+	cd installer && NODE_ENV=production make build
 	rm -rf docs/
 	mv installer/build docs/
+	echo "The installer is built"
+	echo "You can now add and commit the docs/ files on the master branch"

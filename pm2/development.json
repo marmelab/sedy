@@ -1,0 +1,30 @@
+{
+    "apps": [{
+        "name": "installer",
+        "cwd": "./installer",
+        "env": {
+            "NODE_ENV": "development"
+        },
+        "exec_mode": "fork",
+        "script": "./node_modules/.bin/webpack-dev-server",
+        "args": [
+            "--host=0.0.0.0",
+            "--colors",
+            "--hot"
+        ],
+        "watch": ["../installer"],
+        "autorestart": true
+    }, {
+        "name": "oauth",
+        "cwd": "./oauth",
+        "env": {
+            "NODE_ENV": "development"
+        },
+        "exec_mode": "fork",
+        "instances": 1,
+        "script": "./src/server.js",
+        "node_args": "--require babel-polyfill --require babel-core/register",
+        "watch": ["../oauth", "../sedy"],
+        "autorestart": true
+    }]
+}

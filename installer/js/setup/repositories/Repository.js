@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { TableRow, TableRowColumn } from 'material-ui/Table';
 import { red400, green500 } from 'material-ui/styles/colors';
-import { install, uninstall } from '../../installer/github';
+import { install, uninstall } from '../../github';
 
 import AddSedy from 'material-ui/svg-icons/content/add';
 import CircularProgress from 'material-ui/CircularProgress';

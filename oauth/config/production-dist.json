@@ -1,0 +1,9 @@
+{
+    "secret": "MY-VERY-PRIVATE-OAUTH-SECRET",
+    "allowedOrigins": ["https://marmelab.com", "http://marmelab.com"],
+    "github": {
+        "clientId": "XXX",
+        "clientSecret": "YYYYYYYYYYYYYYYYYYY",
+        "redirect_uri": "https://marmelab.com/sedy"
+    }
+}

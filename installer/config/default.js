@@ -1,14 +1,18 @@
 export default {
     appBaseUrl: 'http://localhost:8080',
-    githubRedirectUri: 'http://localhost:8080/redirect',
-    githubRedirection: '/setup',
-    githubAppId: 'xxx',
-    githubScopes: [
-        'write:repo_hook',
-        'repo',
-    ],
-    githubUrl: 'https://api.github.com',
     webhookUrl: 'https://sedy.marmelab.com',
     sedyUsername: 'sedy-bot',
     ga: false,
+    setup: 'http://localhost:8080/setup',
+    github: {
+        url: 'https://github.com',
+        api: 'https://api.github.com',
+        appId: 'xxx',
+        scopes: ['write:repo_hook', 'repo'],
+        redirect_uri: 'http://localhost:8080',
+    },
+    oauth: {
+        url: 'http://localhost:3010',
+        secret: 'MY-VERY-PRIVATE-OAUTH-SECRET',
+    },
 };
