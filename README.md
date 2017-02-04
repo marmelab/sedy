@@ -1,51 +1,42 @@
-[![Build Status](https://travis-ci.org/marmelab/sedy.svg?branch=master)](https://travis-ci.org/marmelab/sedy) [![Deps Status](https://david-dm.org/marmelab/sedy.svg)](https://david-dm.org/marmelab/sedy)
+[![Build Status](https://travis-ci.org/marmelab/sedy.svg?branch=master)](https://travis-ci.org/marmelab/sedy)
 
-# Sedy
-A github webhook which helps you to correct your commits.
+# What's Sedy
+Sedy is a GitHub webhook which allows pull-request reviewers to fixes typos themselves by typing sed-like commands on review comments.
 
-# Install npm dependencies
+![commit example](./.github/sedy_commit_example.png)
 
-```bash
-make install
-```
+### How it works
+After installing Sedy on your repository, just type a sed-like command (`s/[old text]/[new text]/`) in a single comment or in a code review, and Sedy will quickly commit the fix.
 
-# Run project
 
-```bash
-make run
-```
+# Installation
 
-Don't forget to configure your Github webhook to push the **Pull Request review comment** event. All other events will be ignored.
+### On your repositories
+Log into the [Sedy Installer](https://marmelab.com/sedy/) with your GitHub account and click on your repositories.
 
-# Configuration
+[![Sedy Instaler](./.github/sedy_homepage.png)](https://marmelab.com/sedy/)
 
-```json
-{
-    "bot": {
-        "login": "GITHUB-ACCOUNT",
-        "oauthToken": "GITHUB-OAUTH-ACCESS-TOKEN"
-    },
-    "committer": {
-        "name": "COMMITTER-NAME",
-        "email": "an@example.mail"
-    },
-    "logs": {
-        "debug": false
-    }
-}
-```
+### On your repositories (manually)
 
-# Unit-testing
+- Add a webhook to your repository with these informations:
 
-```bash
-make test
-```
+| Input     | Value                          |
+|-----------|--------------------------------|
+|Payload URL| https://sedy.marmelab.com      |
+|Scopes     | `Pull request review comment`  |
 
-# Deployment
+- Invite [sedy-bot](https://github.com/sedy-bot) user as a collaborator.
 
-```bash
-NODE_ENV=production make deploy
-```
+That's it.
 
-# Installer
-Sedy is delivered with its own installer, read the [installer README](installer/README.md) for more informations.
+### On all repositories of your organisation
+Sedy is not available on GitHub organisations yet.
+If you are interessed, please contact [marmelab](https://marmelab.com) for any request.
+
+# Contributing
+Whether it's for a bug or a suggestion, your feedback is precious. Feel free to [fill an issue](https://github.com/marmelab/sedy/issues/new). Be sure that it will be considered.
+
+If you want to open a PR, all you need to know is wrote on the [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+# License
+[sedy](https://marmelab.com/sedy/) is licensed under the [MIT License](./LICENSE), and sponsored by [marmelab](https://marmelab.com).
