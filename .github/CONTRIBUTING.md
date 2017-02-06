@@ -5,7 +5,7 @@ This repository is splitted on three parts with very different roles.
 
 - The actual Sedy code triggered by the GitHub webhook (`sedy`)
 - The Sedy website hosted on https://marmelab.com/sedy/ (`installer`)
-- A little AWS lambda function which transforms GitHub code in access token (`oauth`)
+- An AWS lambda function which transforms GitHub code in access token (`oauth`)
 
 They all contains their own `makefile` and `package.json`.
 
