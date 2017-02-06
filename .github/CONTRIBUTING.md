@@ -84,7 +84,7 @@ It will give you an ngrok endpoint `https://XXXXXXX.ngrok.io` that you can use a
 
 
 # Testing
-No PR will be merged if the tests won't pass.
+No PR will be merged if the tests don't pass.
 
 ```bash
 make test
