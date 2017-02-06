@@ -1,13 +1,13 @@
-Want to open a PR on Sedy? Thank you! Heare are a few things you need to know.
+Want to open a PR on Sedy? Thank you! Here are a few things you need to know.
 
 # Project organisation
 This repository is splitted into three parts with very different roles.
 
 - The actual Sedy code triggered by the GitHub webhook (`sedy`)
 - The Sedy website hosted on https://marmelab.com/sedy/ (`installer`)
-- An AWS lambda function which transforms GitHub code in access token (`oauth`)
+- An AWS lambda function transforming GitHub Oauth temporary code in access token (`oauth`)
 
-They all contains their own `makefile` and `package.json`.
+They all contain their own `makefile` and `package.json`.
 
 ```bash
 .
@@ -29,7 +29,7 @@ make install # Install the dependencies of the three projects
 # Configuration
 
 ## Sedy
-Create a new file `sedy/config/development.json` with the following informations:
+Create a new `sedy/config/development.json` with the following informations:
 
 ```json
 {
@@ -75,7 +75,7 @@ make run            # A shortcut to run oauth & installer with PM2
 make stop           # Stop PM2
 ```
 
-To test you local code on a GitHub repository, you can expose your Sedy port on the internet with [ngrok](https://ngrok.com/):
+To test you local code on a GitHub repository, expose your Sedy port on the internet with [ngrok](https://ngrok.com/):
 ```bash
 ngrok http 3000
 ```

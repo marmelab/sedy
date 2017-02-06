@@ -31,7 +31,7 @@ That's it.
 
 ### On all repositories of your organisation
 Sedy is not available on GitHub organisations yet.
-If you are interessed, please contact [marmelab](https://marmelab.com) for any request.
+If you are interested to help, please contact [marmelab](https://marmelab.com) for any request.
 
 # Contributing
 Whether it's for a bug or a suggestion, your feedback is precious. Feel free to [fill an issue](https://github.com/marmelab/sedy/issues/new). Be sure that it will be considered.
