@@ -1,4 +1,4 @@
-Want to open a PR on Sedy? Thank you! There are a few things you need to know.
+Want to open a PR on Sedy? Thank you! Heare are a few things you need to know.
 
 # Project organisation
 This repository is splitted on three parts with very different roles.
