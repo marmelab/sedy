@@ -1,7 +1,7 @@
 Want to open a PR on Sedy? Thank you! Heare are a few things you need to know.
 
 # Project organisation
-This repository is splitted on three parts with very different roles.
+This repository is splitted into three parts with very different roles.
 
 - The actual Sedy code triggered by the GitHub webhook (`sedy`)
 - The Sedy website hosted on https://marmelab.com/sedy/ (`installer`)
