@@ -28,7 +28,7 @@ make install # Install the dependencies of the three projects
 
 # Configuration
 
-### Sedy
+## Sedy
 Create a new file `sedy/config/development.json` with the following informations:
 
 ```json
