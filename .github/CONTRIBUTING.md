@@ -53,7 +53,7 @@ Where:
 - `COMMITTER-NAME`: The name that'll appear on commits
 - `an@example.mail`: The email that'll appear on commits
 
-### Installer
+## Installer
 Create a new file `installer/config/development.json` with the following informations:
 
 ```js
