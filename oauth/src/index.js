@@ -7,13 +7,13 @@ import loggerFactory from '../../sedy/src/lib/logger';
 const main = function* (event, context, logger, conf) {
     const { headers, body } = event;
     const origin = headers.origin || headers.Origin;
-    const authorization = headers.Authorization || headers.Authorization;
+    const authorization = headers.authorization || headers.Authorization;
 
-    if (!config.allowedOrigins.includes(origin)) {
+    if (!conf.allowedOrigins.includes(origin)) {
         throw new Error(`${headers.origin} is not an allowed origin.`);
     }
 
-    if (!authorization || authorization.replace('token ', '') !== config.secret) {
+    if (!authorization || authorization.replace('token ', '') !== conf.secret) {
         throw new Error('Authorization token mismatch');
     }
 
@@ -21,13 +21,13 @@ const main = function* (event, context, logger, conf) {
     const options = {
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
+            Accept: 'application/json',
         },
         body: JSON.stringify({
             code: body.code,
-            client_id: config.github.clientId,
-            client_secret: config.github.clientSecret,
-            redirect_uri: config.github.redirectUri,
+            client_id: conf.github.clientId,
+            client_secret: conf.github.clientSecret,
+            redirect_uri: conf.github.redirectUri,
         }),
     };
 
@@ -44,7 +44,7 @@ export const handler = function (event, context, callback, conf = config) {
         return yield main(event, context, logger, conf);
     })
     .then(value => callback(null, value))
-    .catch(error => {
+    .catch((error) => {
         logger.error('An error occured', {
             name: error.name,
             message: error.message,

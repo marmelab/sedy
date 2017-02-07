@@ -50,7 +50,7 @@ class FullWidthSection extends Component {
             contentType,
             contentStyle,
             width,
-            ...other,
+            ...other
         } = this.props;
 
         const styles = this.getStyles();
@@ -65,7 +65,14 @@ class FullWidthSection extends Component {
         }
 
         return (
-            <ClearFix {...other} style={Object.assign(styles.root, style, width === SMALL && styles.rootWhenSmall, width === LARGE && styles.rootWhenLarge)}>
+            <ClearFix
+                {...other}
+                style={Object.assign(
+                    styles.root,
+                    style,
+                    width === SMALL && styles.rootWhenSmall,
+                    width === LARGE && styles.rootWhenLarge)}
+            >
                 {content}
             </ClearFix>
         );

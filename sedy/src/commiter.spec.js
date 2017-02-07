@@ -1,6 +1,6 @@
 import sinon from 'sinon';
-import commiterFactory from './commiter';
 import { assert } from 'chai';
+import commiterFactory from './commiter';
 
 describe('Commiter', () => {
     let git;

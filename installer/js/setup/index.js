@@ -7,8 +7,9 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import AppBar from 'material-ui/AppBar';
 import { darkWhite } from 'material-ui/styles/colors';
-import RepositoryList from './repositories/RepositoryList';
 import FlatButton from 'material-ui/FlatButton';
+
+import RepositoryList from './repositories/RepositoryList';
 
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
@@ -59,5 +60,5 @@ ReactDOM.render(
             </div>
         </div>
     </MuiThemeProvider>,
-    document.getElementById('setup')
+    document.getElementById('setup'),
 );
