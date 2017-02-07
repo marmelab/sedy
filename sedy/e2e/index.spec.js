@@ -1,6 +1,6 @@
+import config from 'config';
 import { expect } from 'chai';
 import request from './request';
-import config from 'config';
 
 before(() => {
     global.config = config;
