@@ -19,13 +19,13 @@ export default {
         // https://github.com/request/request/issues/1920
         // @TODO Remove octonode for request
         noParse: /node_modules\/octonode\/node_modules\/request\/node_modules\/http-signature\/node_modules\/jsprim\/node_modules\/json-schema\/lib\/validate\.js/,
-        loaders: [{
+        rules: [{
             test: /\.js$/,
             exclude: path.resolve(__dirname, 'node_modules'),
-            loader: 'babel',
+            use: 'babel-loader',
         }, {
             test: /\.json$/,
-            loader: 'json-loader',
+            use: 'json-loader',
         }],
     },
 };

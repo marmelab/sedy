@@ -15,13 +15,13 @@ export default {
         new webpack.DefinePlugin({ config: JSON.stringify(config) }),
     ],
     module: {
-        loaders: [{
+        rules: [{
             test: /\.js$/,
             exclude: path.resolve(__dirname, 'node_modules'),
-            loader: 'babel',
+            use: 'babel-loader',
         }, {
             test: /\.json$/,
-            loader: 'json-loader',
+            use: 'json-loader',
         }],
     },
 };
