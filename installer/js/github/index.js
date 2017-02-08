@@ -130,13 +130,12 @@ export const getRepositories = (accessToken, user, page = 1, perPage = 30) => {
 
             return response.json();
         })
-        .then((repositories) => {
-            return Promise.all(repositories.map(r => isSedyInstalled(accessToken, user, r)))
-                .then(sedyInstallations => repositories.map((repository, index) => ({
-                    ...repository,
-                    sedy_installed: sedyInstallations[index],
-                })));
-        });
+        .then(repositories => Promise.all(repositories.map(r => isSedyInstalled(accessToken, user, r)))
+            .then(sedyInstallations => repositories.map((repository, index) => ({
+                ...repository,
+                sedy_installed: sedyInstallations[index],
+            })),
+        ));
 };
 
 const addHook = (accessToken, user, repository) => {
