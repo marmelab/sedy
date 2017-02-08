@@ -11,18 +11,18 @@ describe('Commiter', () => {
 
     beforeEach(() => {
         git = {
-            add: sinon.spy(content => callback => callback(null, null)),
-            checkout: sinon.spy(content => callback => callback(null, null)),
-            commit: sinon.spy(content => callback => callback(null, { sha: 'commit sha' })),
+            add: sinon.spy(() => callback => callback(null, null)),
+            checkout: sinon.spy(() => callback => callback(null, null)),
+            commit: sinon.spy(() => callback => callback(null, { sha: 'commit sha' })),
             commitAuthor: { name: 'marmelab-bot' },
-            push: sinon.spy(content => callback => callback(null, null)),
+            push: sinon.spy(() => callback => callback(null, null)),
         };
         githubApi = {
-            getRepoCollaborators: sinon.spy(content => callback => callback(null, [{
+            getRepoCollaborators: sinon.spy(() => callback => callback(null, [{
                 login: 'username',
                 permissions: { push: true },
             }])),
-            replyToPullRequestReviewComment: sinon.spy(content => callback => callback(null, null)),
+            replyToPullRequestReviewComment: sinon.spy(() => callback => callback(null, null)),
         };
         parsedContent = {
             comment: {
@@ -42,6 +42,7 @@ describe('Commiter', () => {
         }];
         logger = {
             info: sinon.spy(),
+            error: sinon.spy(),
         };
     });
 
@@ -93,6 +94,24 @@ As requested by @username at http://perdu.com`,
 
             assert(git.push.calledWith('branch-name'));
         });
+
+        it('should push only once for multiple commits', function* () {
+            fixedContent = [{
+                blob: { content: 'old blob content' },
+                content: 'new blob content',
+                match: { from: 'old', to: 'new' },
+            }, {
+                blob: { content: 'old blob content' },
+                content: 'new blob content',
+                match: { from: 'old', to: 'new' },
+            }];
+
+            const commiter = commiterFactory(logger, githubApi, git);
+            yield commiter.commit(parsedContent, fixedContent);
+
+            assert(git.push.calledWith('branch-name'));
+            assert.equal(git.push.callCount, 1);
+        });
     });
 
     describe('security', () => {
@@ -111,7 +130,7 @@ As requested by @username at http://perdu.com`,
         });
 
         it('should not allow a comment from a no-collaborator', function* () {
-            githubApi.getRepoCollaborators = sinon.spy(content => callback => callback(null, []));
+            githubApi.getRepoCollaborators = sinon.spy(() => callback => callback(null, []));
 
             const commiter = commiterFactory(logger, githubApi, git);
             const result = yield commiter.commit(parsedContent, fixedContent);
@@ -127,7 +146,7 @@ As requested by @username at http://perdu.com`,
         });
 
         it('should not allow a comment from a collaborator with read only access', function* () {
-            githubApi.getRepoCollaborators = sinon.spy(content => callback => callback(null, [{
+            githubApi.getRepoCollaborators = sinon.spy(() => callback => callback(null, [{
                 login: 'username',
                 permissions: { pull: true },
             }]));

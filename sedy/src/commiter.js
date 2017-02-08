@@ -8,17 +8,13 @@ export default (logger, githubApi, git) => {
             mode: '100644',
         };
 
-        yield git.add(newBlob, '/' + parsedContent.comment.path);
+        yield git.add(newBlob, `/${parsedContent.comment.path}`);
 
         const message = `Typo fix s/${fix.match.from}/${fix.match.to}/
 
 As requested by @${parsedContent.sender} at ${parsedContent.comment.url}`;
 
-        const commit = yield git.commit(parsedContent.pullRequest.ref, message);
-
-        yield git.push(parsedContent.pullRequest.ref);
-
-        return commit;
+        return yield git.commit(parsedContent.pullRequest.ref, message);
     };
 
     const replyToAuthor = function* (parsedContent, message) {
@@ -55,7 +51,10 @@ As requested by @${parsedContent.sender} at ${parsedContent.comment.url}`;
 
         const commenterCanCommit = yield checkCommenterCanCommit(parsedContent);
         if (!commenterCanCommit) {
-            yield replyToAuthor(parsedContent, `:x: @${commentSender}, you are not allowed to commit on this repository.`);
+            yield replyToAuthor(
+                parsedContent,
+                `:x: @${commentSender}, you are not allowed to commit on this repository.`,
+            );
 
             return false;
         }
@@ -63,16 +62,20 @@ As requested by @${parsedContent.sender} at ${parsedContent.comment.url}`;
         try {
             const commits = [];
             for (const fix of fixedContent) {
-                const commit = yield digestCommit(parsedContent, fix);
-                commits.push(commit);
+                const digestedCommit = yield digestCommit(parsedContent, fix);
+                commits.push(digestedCommit);
             }
 
-            logger.info('Successful commits', { commitsIds: commits.map(commit => commit.sha) });
+            if (commits.length > 0) {
+                yield git.push(parsedContent.pullRequest.ref);
+            }
+
+            logger.info('Successful commits', { commitsIds: commits.map(c => c.sha) });
 
             return true;
         } catch (error) {
             // @TODO Rollback branch reference
-            console.error('An error occured while commiting', error);
+            logger.error('An error occured while commiting', error);
 
             yield replyToAuthor(parsedContent, `:warning: @${parsedContent.sender}, an error occured.
 Be sure to check all my commits!`);
