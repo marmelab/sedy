@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { PropTypes } from 'react';
+
 import { blue500 } from 'material-ui/styles/colors';
 
 const styles = {
@@ -34,7 +35,7 @@ const Pagination = ({ hasNext, onChange, page }) => {
             </a>
         </div>
     );
-}
+};
 
 Pagination.propTypes = {
     hasNext: PropTypes.bool,

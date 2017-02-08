@@ -85,19 +85,19 @@ ReactDOM.render(
                 <Card style={styles.card}>
                     <CardTitle title="1. Comment a pull request with a sed command" />
                     <CardMedia>
-                        <img src={images.comment} />
+                        <img alt="Comment a PR" src={images.comment} />
                     </CardMedia>
                 </Card>
                 <Card style={styles.card}>
                     <CardTitle title="2. Watch sedy do its job" />
                     <CardMedia>
-                        <img src={images.commit} />
+                        <img alt="Watch Sedy" src={images.commit} />
                     </CardMedia>
                 </Card>
                 <Card style={styles.card}>
                     <CardTitle title="3. Relax :)" />
                     <CardMedia>
-                        <img src={images.diff} />
+                        <img alt="Relax" src={images.diff} />
                     </CardMedia>
                 </Card>
                 <GithubLogin />
@@ -118,18 +118,27 @@ ReactDOM.render(
                 <Card style={styles.card}>
                     <CardTitle title="It checks comments for sed substitution commands" />
                     <CardText>
-                        <p>Whenever a new single comment is added, or a new review is submitted, sedy will check the comments for sed substitution syntax:</p>
+                        <p>
+                            Whenever a new single comment is added, or a new review is submitted,
+                            sedy will check the comments for sed substitution syntax:
+                        </p>
                         <code>
                             s/[TEXT TO FIND]/[REPLACEMENT]/
                         </code>
 
-                        <p>When it finds one, it will checkout the pull request branch, perform the sed substitution and commit the result.</p>
+                        <p>
+                            When it finds one, it will checkout the pull request branch,
+                            perform the sed substitution and commit the result.
+                        </p>
                     </CardText>
                 </Card>
                 <Card style={styles.card}>
                     <CardTitle title="Limitations" />
                     <CardText>
-                        <p><b>sed</b> does far more than simple substitution, however, we currently only support the most simple one.</p>
+                        <p>
+                            <b>sed</b> does far more than simple substitution,
+                            however, we currently only support the most simple one.
+                        </p>
                         <p>In time, we will add support for regular expressions, global flags, and so on.</p>
                         <p>Feel free to <a href="https://github.com/marmelab/sedy/issues">open an issue</a> with your suggestions!</p>
                     </CardText>

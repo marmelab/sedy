@@ -1,10 +1,10 @@
 /* global config */
 import co from 'co';
+import github from 'octonode';
 
 import commiterFactory from './commiter';
 import fixerFactory from './fixer';
 import gitFactory from './git';
-import github from 'octonode';
 import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
 import parseFactory from './parser';
@@ -60,7 +60,7 @@ const main = function* (event, context, logger, conf) {
             success,
             matches: contentToFix.matches,
         });
-    };
+    }
 
     return fixedContents;
 };
@@ -73,7 +73,7 @@ export const handler = function (event, context, callback, conf = config) {
         return yield main(event, context, logger, conf);
     })
     .then(value => callback(null, value))
-    .catch(error => {
+    .catch((error) => {
         logger.error('An error occured', {
             name: error.name,
             message: error.message,

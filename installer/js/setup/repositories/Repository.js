@@ -1,13 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import { TableRow, TableRowColumn } from 'material-ui/Table';
-import { red400, green500 } from 'material-ui/styles/colors';
-import { install, uninstall } from '../../github';
 
+import { TableRow, TableRowColumn } from 'material-ui/Table';
 import AddSedy from 'material-ui/svg-icons/content/add';
 import CircularProgress from 'material-ui/CircularProgress';
 import FlatButton from 'material-ui/FlatButton';
 import RemoveSedy from 'material-ui/svg-icons/action/delete';
 
+
+import { install, uninstall } from '../../github';
 import getCredentials from './getCredentials';
 
 const { accessToken, user } = getCredentials();
@@ -67,17 +67,13 @@ class Repository extends Component {
             <FlatButton
                 onClick={this.toggleSedy}
                 style={styles.actionButton}
-                icon={
-                    this.state.hasSedy ?
-                    <RemoveSedy color="#EC5D73" /> :
-                    <AddSedy color="#88B04B" />
-                }
+                icon={this.state.hasSedy ? <RemoveSedy color="#EC5D73" /> : <AddSedy color="#88B04B" />}
             />
         );
     }
 
     render() {
-        if (!user) return;
+        if (!user) return <div />;
 
         const {
             repository,
@@ -97,7 +93,7 @@ class Repository extends Component {
             </TableRow>
         );
     }
-};
+}
 
 Repository.propTypes = {
     repository: PropTypes.shape({

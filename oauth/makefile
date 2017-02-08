@@ -8,6 +8,6 @@ clean:
 	rm -rf build/*
 
 deploy: clean
-	./node_modules/.bin/webpack -p --progress --optimize-dedupe
+	./node_modules/.bin/webpack -p --progress
 	cd build && zip -r oauth.zip *
 	aws lambda update-function-code --function-name SedyOauth --zip-file fileb://build/oauth.zip

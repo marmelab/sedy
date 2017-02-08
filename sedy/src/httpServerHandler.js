@@ -2,11 +2,11 @@ import config from 'config';
 
 const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'POST',
+    'Access-Control-Allow-Methods': 'POST',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-export default (handler) => (request, response) => {
+export default handler => (request, response) => {
     let body = '';
 
     request.on('error', (err) => {
@@ -27,7 +27,7 @@ export default (handler) => (request, response) => {
             response.writeHead(400, { 'Content-Type': 'application/json', ...corsHeaders });
             response.end(JSON.stringify({ error: 'Bad Request', message: 'empty request' }));
             return;
-        };
+        }
 
         let event;
         try {

@@ -29,22 +29,27 @@ export default {
         setup: './js/setup',
     },
     output: {
-        path: 'build/',
+        publicPath: '/',
+        path: `${__dirname}/build/`,
         filename: '[name].js',
     },
     module: {
-        loaders: [
-            { test: /\.css$/, include: `${__dirname}/style.css`, loader: ExtractTextPlugin.extract('css') },
-            { test: /\.js$/, include: `${__dirname}/js`, loader: 'babel' },
-            {
-                test: /\.(svg|png)$/,
-                include: [
-                    `${__dirname}/icons`,
-                    `${__dirname}/images`,
-                ],
-                loader: 'file-loader',
-            },
-        ],
+        rules: [{
+            test: /\.css$/,
+            include: `${__dirname}/style.css`,
+            use: ExtractTextPlugin.extract({ loader: 'css-loader' }),
+        }, {
+            test: /\.js$/,
+            include: `${__dirname}/js`,
+            use: 'babel-loader',
+        }, {
+            test: /\.(svg|png)$/,
+            include: [
+                `${__dirname}/icons`,
+                `${__dirname}/images`,
+            ],
+            use: 'file-loader',
+        }],
     },
     plugins: [
         new DefinePlugin({
@@ -70,6 +75,6 @@ export default {
             chunks: ['style', 'setup'],
             hash: true,
         }),
-        new ExtractTextPlugin('style.css'),
+        new ExtractTextPlugin({ filename: 'style.css' }),
     ].concat(env === 'production' ? [new optimize.UglifyJsPlugin()] : []),
 };
