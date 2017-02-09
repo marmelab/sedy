@@ -147,7 +147,7 @@ const addHook = (accessToken, user, repository) => {
         body: JSON.stringify({
             name: 'web',
             active: true,
-            events: ['pull_request_review_comment'],
+            events: config.requestedScopes,
             config: {
                 url: WEBHOOK_URL,
                 content_type: 'json',
