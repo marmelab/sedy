@@ -1,17 +1,13 @@
 import getGitHubEventHeader from './getGitHubEventHeader';
 import parsePullRequestReviewFactory from './parsePullRequestReview';
-import parsePullRequestReviewCommentFactory from './parsePullRequestReviewComment';
 
 export default (client, logger) => {
     const parsers = {
         ping: () => null,
-        pull_request_review_comment: parsePullRequestReviewCommentFactory,
         pull_request_review: parsePullRequestReviewFactory,
     };
 
     return function* (request) {
-        let result;
-
         const event = getGitHubEventHeader(request.headers);
 
         if (!event) {
@@ -25,9 +21,9 @@ export default (client, logger) => {
         if (!parser) {
             logger.debug(`no parser found for event ${event}`);
             return [];
-        };
+        }
 
-        result = yield parser(client)(request);
+        const result = yield parser(client, logger)(request);
 
         logger.debug('result of github payload parsing', result);
         return result;

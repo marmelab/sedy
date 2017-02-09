@@ -16,7 +16,7 @@ run:
 	node --require babel-polyfill --require babel-core/register ./src/server.js
 
 deploy: clean
-	./node_modules/.bin/webpack -p --progress --optimize-dedupe
+	./node_modules/.bin/webpack -p --progress
 	cd build && zip -r sedy.zip *
 	aws lambda update-function-code --function-name Sedy --zip-file fileb://build/sedy.zip
 
