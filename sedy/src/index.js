@@ -9,6 +9,7 @@ import gitFactory from './git';
 import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
 import parseFactory from './parser';
+import safeguardFactory from './safeguard';
 
 const main = function* (event, context, logger, conf) {
     const githubClient = githubClientFactory(logger, github.client(conf.bot.oauthToken));
@@ -30,6 +31,15 @@ const main = function* (event, context, logger, conf) {
     }
 
     const answerer = answererFactory(githubClient, parsedContent);
+    const safeguard = safeguardFactory(githubClient, answerer, parsedContent);
+
+    const commenterCanCommit = yield safeguard.checkCommenterCanCommit();
+    if (!commenterCanCommit) {
+        return {
+            success: false,
+            reason: 'Commenter is not allowed to commit on the repository',
+        };
+    }
 
     const git = gitFactory(githubClient, {
         commitAuthor: {

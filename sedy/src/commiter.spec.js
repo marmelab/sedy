@@ -128,40 +128,5 @@ As requested by @username at http://perdu.com`,
                 message: ':warning: @username, an error occured.\nBe sure to check all my commits!',
             }]);
         });
-
-        it('should not allow a comment from a no-collaborator', function* () {
-            githubApi.getRepoCollaborators = sinon.spy(() => callback => callback(null, []));
-
-            const commiter = commiterFactory(logger, githubApi, git);
-            const result = yield commiter.commit(parsedContent, fixedContent);
-
-            assert.deepEqual(result, false);
-            assert.deepEqual(githubApi.replyToPullRequestReviewComment.getCall(0).args, [{
-                repoUser: 'marmelab',
-                repoName: 'sedy',
-                pullRequestNumber: 1,
-                commentId: 42,
-                message: ':x: @username, you are not allowed to commit on this repository.',
-            }]);
-        });
-
-        it('should not allow a comment from a collaborator with read only access', function* () {
-            githubApi.getRepoCollaborators = sinon.spy(() => callback => callback(null, [{
-                login: 'username',
-                permissions: { pull: true },
-            }]));
-
-            const commiter = commiterFactory(logger, githubApi, git);
-            const result = yield commiter.commit(parsedContent, fixedContent);
-
-            assert.deepEqual(result, false);
-            assert.deepEqual(githubApi.replyToPullRequestReviewComment.getCall(0).args, [{
-                repoUser: 'marmelab',
-                repoName: 'sedy',
-                pullRequestNumber: 1,
-                commentId: 42,
-                message: ':x: @username, you are not allowed to commit on this repository.',
-            }]);
-        });
     });
 });

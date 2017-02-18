@@ -1,6 +1,6 @@
-export default (githubApi, parsedContent) => {
+export default (githubClient, parsedContent) => {
     const replyToComment = function* (commentId, message) {
-        yield githubApi.replyToPullRequestReviewComment({
+        yield githubClient.replyToPullRequestReviewComment({
             repoUser: parsedContent.repository.user,
             repoName: parsedContent.repository.name,
             pullRequestNumber: parsedContent.pullRequest.number,
