@@ -14,7 +14,6 @@ export default (client, logger) => function* (request) {
     });
 
     const fixes = comments.map(comment => ({
-        // @TODO Split comment part into mutliple ones: diff, action, sender, etc
         comment: {
             body: comment.body,
             createdDate: comment.created_at,

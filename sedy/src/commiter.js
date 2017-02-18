@@ -20,13 +20,10 @@ As requested by ${parsedContent.sender} at ${fixRequest.comment.url}`;
     };
 
     const prepareFix = function* (fixRequest, fix, defaultLastCommitSha = null) {
-        let lastCommitSha = defaultLastCommitSha;
-
-        const commit = yield prepareCommit(fixRequest, fix, lastCommitSha);
-        lastCommitSha = commit.sha;
+        const commit = yield prepareCommit(fixRequest, fix, defaultLastCommitSha);
 
         logger.info('Successful commit', { commitId: commit.sha });
-        return lastCommitSha;
+        return commit.sha;
     };
 
     const push = function* (lastCommitSha) {
