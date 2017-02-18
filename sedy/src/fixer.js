@@ -3,22 +3,25 @@ export default (git, logger) => {
         // Github API send the diff with a application/vnd.github.v3.diff media type
         // See https://developer.github.com/v3/pulls/comments/#input
         const diff = hunk.split('\n');
-        let line = diff[position];
+        const line = diff[position];
 
         if (!line) {
             logger.error('debug infos', { hunk, position });
             throw new Error('Inefficient diff parser');
         }
+
         if (line.startsWith('-')) {
             return null;
         }
+
         const offset = parseInt(diff[0].match(/@@.*?\+(\d+)/)[1], 10) - 1;
         // if negative offset, then it means there is no add
         if (offset < 0) {
             return null;
         }
+
         // count nb of line till target line without the deleted line
-        const index = diff.slice(0, position).filter(line => !line.startsWith('-')).length - 1;
+        const index = diff.slice(0, position).filter(l => !l.startsWith('-')).length - 1;
         return offset + index;
     };
 
@@ -74,7 +77,7 @@ export default (git, logger) => {
                 return null;
             }
 
-            chunk = yield git[chunk.type + 's'].get(chunk.sha);
+            chunk = yield git[`${chunk.type}s`].get(chunk.sha);
         }
 
         return chunk;
@@ -87,7 +90,7 @@ export default (git, logger) => {
             return fixes;
         }
 
-        for (let match of parsedContent.matches) {
+        for (const match of parsedContent.matches) {
             const lastCommitFromReference = yield git.references.get(parsedContent.pullRequest.ref);
             const lastCommit = yield git.commits.get(lastCommitFromReference);
 
@@ -96,13 +99,13 @@ export default (git, logger) => {
 
             if (!blob) {
                 // @TODO Something went wrong, you should warn the user
-                continue;
+                continue; // eslint-disable-line no-continue
             }
 
-            const _fix = yield fixBlob(parsedContent, blob, match);
+            const fixedBlob = yield fixBlob(parsedContent, blob, match);
 
-            if (_fix) {
-                fixes.push(_fix);
+            if (fixedBlob) {
+                fixes.push(fixedBlob);
             }
         }
 

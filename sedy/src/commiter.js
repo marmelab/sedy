@@ -1,30 +1,18 @@
-export default (logger, githubApi, git) => {
-    const digestCommit = function* (parsedContent, fix) {
-        yield git.checkout(parsedContent.pullRequest.ref);
-
+export default (logger, githubApi, git, answerer) => {
+    const digestCommit = function* (parsedContent, fix, fixChunk, parent) {
         const newBlob = {
-            ...fix.blob,
-            content: fix.content,
+            ...fixChunk.blob,
+            content: fixChunk.content,
             mode: '100644',
         };
 
-        yield git.add(newBlob, `/${parsedContent.comment.path}`);
+        yield git.add(newBlob, `/${fix.comment.path}`);
 
-        const message = `Typo fix s/${fix.match.from}/${fix.match.to}/
+        const message = `Typo fix s/${fixChunk.match.from}/${fixChunk.match.to}/
 
-As requested by @${parsedContent.sender} at ${parsedContent.comment.url}`;
+As requested by ${fix.sender} at ${fix.comment.url}`;
 
-        return yield git.commit(parsedContent.pullRequest.ref, message);
-    };
-
-    const replyToAuthor = function* (parsedContent, message) {
-        yield githubApi.replyToPullRequestReviewComment({
-            repoUser: parsedContent.repository.user,
-            repoName: parsedContent.repository.name,
-            pullRequestNumber: parsedContent.pullRequest.number,
-            commentId: parsedContent.comment.id,
-            message,
-        });
+        return yield git.commit(parsedContent.pullRequest.ref, message, parent);
     };
 
     const checkCommenterCanCommit = function* (parsedContent) {
@@ -44,15 +32,20 @@ As requested by @${parsedContent.sender} at ${parsedContent.comment.url}`;
     const commit = function* (parsedContent, fixedContent) {
         const commentSender = parsedContent.sender;
         if (!fixedContent || fixedContent.length === 0) {
-            yield replyToAuthor(parsedContent, `:confused: @${commentSender}, I did not understand the request.`);
+            yield answerer.replyToComment(
+                parsedContent,
+                fixedContent[0].comment.id,
+                `:confused: @${commentSender}, I did not understand the request.`,
+            );
 
             return false;
         }
 
         const commenterCanCommit = yield checkCommenterCanCommit(parsedContent);
         if (!commenterCanCommit) {
-            yield replyToAuthor(
+            yield answerer.replyToComment(
                 parsedContent,
+                fixedContent[0].comment.id,
                 `:x: @${commentSender}, you are not allowed to commit on this repository.`,
             );
 
@@ -61,9 +54,15 @@ As requested by @${parsedContent.sender} at ${parsedContent.comment.url}`;
 
         try {
             const commits = [];
+            let lastCommitSha = null;
+            yield git.checkout(parsedContent.pullRequest.ref);
+
             for (const fix of fixedContent) {
-                const digestedCommit = yield digestCommit(parsedContent, fix);
-                commits.push(digestedCommit);
+                for (const chunk of fix.chunks) {
+                    const digestedCommit = yield digestCommit(parsedContent, fix, chunk, lastCommitSha);
+                    lastCommitSha = digestedCommit.sha;
+                    commits.push(digestedCommit);
+                }
             }
 
             if (commits.length > 0) {
@@ -77,7 +76,10 @@ As requested by @${parsedContent.sender} at ${parsedContent.comment.url}`;
             // @TODO Rollback branch reference
             logger.error('An error occured while commiting', error);
 
-            yield replyToAuthor(parsedContent, `:warning: @${parsedContent.sender}, an error occured.
+            yield answerer.replyToComment(
+                parsedContent,
+                fixedContent[0].comment.id,
+                `:warning: @${parsedContent.sender}, an error occured.
 Be sure to check all my commits!`);
 
             return false;

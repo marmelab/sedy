@@ -2,7 +2,7 @@ import sinon from 'sinon';
 import { assert } from 'chai';
 import commiterFactory from './commiter';
 
-describe('Commiter', () => {
+describe.skip('Commiter', () => {
     let git;
     let githubApi;
     let parsedContent;

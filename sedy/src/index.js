@@ -2,6 +2,7 @@
 import co from 'co';
 import github from 'octonode';
 
+import answererFactory from './answerer';
 import commiterFactory from './commiter';
 import fixerFactory from './fixer';
 import gitFactory from './git';
@@ -28,6 +29,8 @@ const main = function* (event, context, logger, conf) {
         };
     }
 
+    const answerer = answererFactory(githubClient, parsedContent);
+
     const git = gitFactory(githubClient, {
         commitAuthor: {
             name: conf.committer.name,
@@ -41,6 +44,7 @@ const main = function* (event, context, logger, conf) {
 
     const fixer = fixerFactory(git, logger);
     const fixedContents = [];
+    const trace = [];
     for (const fix of parsedContent.fixes) {
         logger.debug('Fixing', JSON.stringify(fix, null, 4));
         const contentToFix = {
@@ -50,19 +54,21 @@ const main = function* (event, context, logger, conf) {
             sender: parsedContent.sender,
         };
 
-        const fixedContent = yield fixer.fix(contentToFix);
+        const fixedContent = {
+            ...contentToFix,
+            chunks: yield fixer.fix(contentToFix),
+        };
+
+        fixedContents.push(fixedContent);
 
         logger.debug('Content fixed', JSON.stringify(fixedContent, null, 4));
-        const commiter = commiterFactory(logger, githubClient, git);
-        const success = yield commiter.commit(contentToFix, fixedContent);
-
-        fixedContents.push({
-            success,
-            matches: contentToFix.matches,
-        });
+        trace.push({ matches: contentToFix.matches });
     }
 
-    return fixedContents;
+    const commiter = commiterFactory(logger, githubClient, git, answerer);
+    const success = yield commiter.commit(parsedContent, fixedContents);
+
+    return { success, fixes: trace };
 };
 
 export const handler = function (event, context, callback, conf = config) {

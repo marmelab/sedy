@@ -13,7 +13,10 @@ build: clean
 	./node_modules/.bin/webpack --progress
 
 run:
-	node --require babel-polyfill --require babel-core/register ./src/server.js
+	./node_modules/.bin/nodemon \
+		--require babel-polyfill \
+		--require babel-core/register \
+		./src/server.js
 
 deploy: clean
 	./node_modules/.bin/webpack -p --progress
