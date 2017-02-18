@@ -1,4 +1,4 @@
-export default (git, logger) => {
+export default (git, commiter, logger, parsedContent) => {
     const getLineIndexFromDiff = (hunk, position) => {
         // Github API send the diff with a application/vnd.github.v3.diff media type
         // See https://developer.github.com/v3/pulls/comments/#input
@@ -25,11 +25,11 @@ export default (git, logger) => {
         return offset + index;
     };
 
-    const fixBlob = (parsedContent, blob, match) => {
+    const fixBlob = (fixRequest, blob, match) => {
         const buffer = new Buffer(blob.content, blob.encoding);
         const blobContent = buffer.toString('utf8');
 
-        const { diffHunk, position } = parsedContent.comment;
+        const { diffHunk, position } = fixRequest.comment;
         const index = getLineIndexFromDiff(diffHunk, position);
         if (index === null) {
             return null;
@@ -83,34 +83,38 @@ export default (git, logger) => {
         return chunk;
     };
 
-    const fix = function* (parsedContent) {
+    const processFixRequest = function* (fixRequest, defaultLastCommitSha = null) {
         const fixes = [];
 
-        if (parsedContent.matches.length === 0) {
-            return fixes;
+        let lastCommitSha = defaultLastCommitSha;
+        if (!lastCommitSha) {
+            const lastCommitFromReference = yield git.references.get(parsedContent.pullRequest.ref);
+            lastCommitSha = lastCommitFromReference;
         }
 
-        for (const match of parsedContent.matches) {
-            const lastCommitFromReference = yield git.references.get(parsedContent.pullRequest.ref);
-            const lastCommit = yield git.commits.get(lastCommitFromReference);
-
+        for (const match of fixRequest.matches) {
+            const lastCommit = yield git.commits.get(lastCommitSha);
             const tree = yield git.trees.get(lastCommit.tree.sha);
-            const blob = yield findBlob(tree, parsedContent.comment.path);
+            const blob = yield findBlob(tree, fixRequest.comment.path);
 
             if (!blob) {
                 // @TODO Something went wrong, you should warn the user
-                continue; // eslint-disable-line no-continue
+                // continue; // eslint-disable-line no-continue
+                return [];
             }
 
-            const fixedBlob = yield fixBlob(parsedContent, blob, match);
+            const fix = yield fixBlob(fixRequest, blob, match);
+            lastCommitSha = yield commiter.prepareFix(fixRequest, fix, lastCommitSha);
 
-            if (fixedBlob) {
-                fixes.push(fixedBlob);
+            if (fix) {
+                fixes.push(fix);
             }
         }
 
-        return fixes;
+        // TODO: Warn user that he didn't understood the comment
+        return { fixes, commitSha: lastCommitSha };
     };
 
-    return { fix, fixBlob, getLineIndexFromDiff };
+
+    return { fixBlob, getLineIndexFromDiff, processFixRequest };
 };

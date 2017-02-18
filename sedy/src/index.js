@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 /* global config */
 import co from 'co';
 import github from 'octonode';
@@ -52,33 +53,28 @@ const main = function* (event, context, logger, conf) {
         },
     });
 
-    const fixer = fixerFactory(git, logger);
-    const fixedContents = [];
-    const trace = [];
-    for (const fix of parsedContent.fixes) {
-        logger.debug('Fixing', JSON.stringify(fix, null, 4));
-        const contentToFix = {
-            ...fix,
-            pullRequest: parsedContent.pullRequest,
-            repository: parsedContent.repository,
-            sender: parsedContent.sender,
-        };
+    const commiter = commiterFactory(githubClient, git, logger, parsedContent);
+    const fixer = fixerFactory(git, commiter, logger, parsedContent);
+    const traces = [];
 
-        const fixedContent = {
-            ...contentToFix,
-            chunks: yield fixer.fix(contentToFix),
-        };
+    yield commiter.init();
 
-        fixedContents.push(fixedContent);
+    let lastCommitSha = null;
+    for (const fixRequest of parsedContent.fixes) {
+        logger.debug('Fixing request', JSON.stringify(fixRequest, null, 4));
+        const { fixes, commitSha } = yield fixer.processFixRequest(fixRequest, lastCommitSha);
+        lastCommitSha = commitSha;
 
-        logger.debug('Content fixed', JSON.stringify(fixedContent, null, 4));
-        trace.push({ matches: contentToFix.matches });
+        logger.debug('Fixing response', JSON.stringify(fixes, null, 4));
+        traces.push({ matches: fixRequest.matches });
     }
 
-    const commiter = commiterFactory(logger, githubClient, git, answerer);
-    const success = yield commiter.commit(parsedContent, fixedContents);
+    let success = false;
+    if (lastCommitSha) {
+        success = yield commiter.push(lastCommitSha);
+    }
 
-    return { success, fixes: trace };
+    return { success, fixes: traces };
 };
 
 export const handler = function (event, context, callback, conf = config) {

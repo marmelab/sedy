@@ -1,65 +1,44 @@
-export default (logger, githubApi, git, answerer) => {
-    const digestCommit = function* (parsedContent, fix, fixChunk, parent) {
+export default (githubClient, git, logger, parsedContent) => {
+    const prepareCommit = function* (fixRequest, fix, parent) {
         const newBlob = {
-            ...fixChunk.blob,
-            content: fixChunk.content,
+            ...fix.blob,
+            content: fix.content,
             mode: '100644',
         };
 
-        yield git.add(newBlob, `/${fix.comment.path}`);
+        yield git.add(newBlob, `/${fixRequest.comment.path}`);
 
-        const message = `Typo fix s/${fixChunk.match.from}/${fixChunk.match.to}/
+        const message = `Typo fix s/${fix.match.from}/${fix.match.to}/
 
-As requested by ${fix.sender} at ${fix.comment.url}`;
+As requested by ${parsedContent.sender} at ${fixRequest.comment.url}`;
 
         return yield git.commit(parsedContent.pullRequest.ref, message, parent);
     };
 
-    const commit = function* (parsedContent, fixedContent) {
-        const commentSender = parsedContent.sender;
-        if (!fixedContent || fixedContent.length === 0) {
-            yield answerer.replyToComment(
-                parsedContent,
-                fixedContent[0].comment.id,
-                `:confused: @${commentSender}, I did not understand the request.`,
-            );
-
-            return false;
-        }
-
-        try {
-            const commits = [];
-            let lastCommitSha = null;
-            yield git.checkout(parsedContent.pullRequest.ref);
-
-            for (const fix of fixedContent) {
-                for (const chunk of fix.chunks) {
-                    const digestedCommit = yield digestCommit(parsedContent, fix, chunk, lastCommitSha);
-                    lastCommitSha = digestedCommit.sha;
-                    commits.push(digestedCommit);
-                }
-            }
-
-            if (commits.length > 0) {
-                yield git.push(parsedContent.pullRequest.ref);
-            }
-
-            logger.info('Successful commits', { commitsIds: commits.map(c => c.sha) });
-
-            return true;
-        } catch (error) {
-            // @TODO Rollback branch reference
-            logger.error('An error occured while commiting', error);
-
-            yield answerer.replyToComment(
-                parsedContent,
-                fixedContent[0].comment.id,
-                `:warning: @${parsedContent.sender}, an error occured.
-Be sure to check all my commits!`);
-
-            return false;
-        }
+    const init = function* () {
+        yield git.checkout(parsedContent.pullRequest.ref);
     };
 
-    return { commit, digestCommit };
+    const prepareFix = function* (fixRequest, fix, defaultLastCommitSha = null) {
+        let lastCommitSha = defaultLastCommitSha;
+
+        const commit = yield prepareCommit(fixRequest, fix, lastCommitSha);
+        lastCommitSha = commit.sha;
+
+        logger.info('Successful commit', { commitId: commit.sha });
+        return lastCommitSha;
+    };
+
+    const push = function* (lastCommitSha) {
+        if (lastCommitSha) {
+            yield git.push(parsedContent.pullRequest.ref);
+            logger.info('Successful pushed the branch', { branch: parsedContent.pullRequest.ref });
+
+            return true;
+        }
+
+        return false;
+    };
+
+    return { init, prepareCommit, prepareFix, push };
 };
