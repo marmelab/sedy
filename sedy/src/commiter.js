@@ -29,7 +29,7 @@ As requested by ${parsedContent.sender} at ${fixRequest.comment.url}`;
     const push = function* (lastCommitSha) {
         if (lastCommitSha) {
             yield git.push(parsedContent.pullRequest.ref);
-            logger.info('Successful pushed the branch', { branch: parsedContent.pullRequest.ref });
+            logger.info('Successfully pushed the branch', { branch: parsedContent.pullRequest.ref });
 
             return true;
         }
