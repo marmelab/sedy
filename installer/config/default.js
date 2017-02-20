@@ -15,4 +15,5 @@ export default {
         url: 'http://localhost:3010',
         secret: 'MY-VERY-PRIVATE-OAUTH-SECRET',
     },
+    requestedScopes: ['pull_request_review'],
 };

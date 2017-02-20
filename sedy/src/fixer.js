@@ -1,32 +1,35 @@
-export default (git, logger) => {
+export default (git, commiter, logger, parsedContent) => {
     const getLineIndexFromDiff = (hunk, position) => {
         // Github API send the diff with a application/vnd.github.v3.diff media type
         // See https://developer.github.com/v3/pulls/comments/#input
         const diff = hunk.split('\n');
-        let line = diff[position];
+        const line = diff[position];
 
         if (!line) {
             logger.error('debug infos', { hunk, position });
             throw new Error('Inefficient diff parser');
         }
+
         if (line.startsWith('-')) {
             return null;
         }
+
         const offset = parseInt(diff[0].match(/@@.*?\+(\d+)/)[1], 10) - 1;
         // if negative offset, then it means there is no add
         if (offset < 0) {
             return null;
         }
+
         // count nb of line till target line without the deleted line
-        const index = diff.slice(0, position).filter(line => !line.startsWith('-')).length - 1;
+        const index = diff.slice(0, position).filter(l => !l.startsWith('-')).length - 1;
         return offset + index;
     };
 
-    const fixBlob = (parsedContent, blob, match) => {
+    const fixBlob = (fixRequest, blob, match) => {
         const buffer = new Buffer(blob.content, blob.encoding);
         const blobContent = buffer.toString('utf8');
 
-        const { diffHunk, position } = parsedContent.comment;
+        const { diffHunk, position } = fixRequest.comment;
         const index = getLineIndexFromDiff(diffHunk, position);
         if (index === null) {
             return null;
@@ -74,40 +77,44 @@ export default (git, logger) => {
                 return null;
             }
 
-            chunk = yield git[chunk.type + 's'].get(chunk.sha);
+            chunk = yield git[`${chunk.type}s`].get(chunk.sha);
         }
 
         return chunk;
     };
 
-    const fix = function* (parsedContent) {
+    const processFixRequest = function* (fixRequest, defaultLastCommitSha = null) {
         const fixes = [];
 
-        if (parsedContent.matches.length === 0) {
-            return fixes;
+        let lastCommitSha = defaultLastCommitSha;
+        if (!lastCommitSha) {
+            const lastCommitFromReference = yield git.references.get(parsedContent.pullRequest.ref);
+            lastCommitSha = lastCommitFromReference;
         }
 
-        for (let match of parsedContent.matches) {
-            const lastCommitFromReference = yield git.references.get(parsedContent.pullRequest.ref);
-            const lastCommit = yield git.commits.get(lastCommitFromReference);
-
+        for (const match of fixRequest.matches) {
+            const lastCommit = yield git.commits.get(lastCommitSha);
             const tree = yield git.trees.get(lastCommit.tree.sha);
-            const blob = yield findBlob(tree, parsedContent.comment.path);
+            const blob = yield findBlob(tree, fixRequest.comment.path);
 
             if (!blob) {
                 // @TODO Something went wrong, you should warn the user
-                continue;
+                // continue; // eslint-disable-line no-continue
+                return [];
             }
 
-            const _fix = yield fixBlob(parsedContent, blob, match);
+            const fix = yield fixBlob(fixRequest, blob, match);
+            lastCommitSha = yield commiter.prepareFix(fixRequest, fix, lastCommitSha);
 
-            if (_fix) {
-                fixes.push(_fix);
+            if (fix) {
+                fixes.push(fix);
             }
         }
 
-        return fixes;
+        // TODO: Warn user that he didn't understood the comment
+        return { fixes, commitSha: lastCommitSha };
     };
 
-    return { fix, fixBlob, getLineIndexFromDiff };
+
+    return { fixBlob, getLineIndexFromDiff, processFixRequest };
 };

@@ -1,13 +1,16 @@
+/* eslint-disable import/prefer-default-export */
 /* global config */
 import co from 'co';
 import github from 'octonode';
 
+import answererFactory from './answerer';
 import commiterFactory from './commiter';
 import fixerFactory from './fixer';
 import gitFactory from './git';
 import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
 import parseFactory from './parser';
+import safeguardFactory from './safeguard';
 
 const main = function* (event, context, logger, conf) {
     const githubClient = githubClientFactory(logger, github.client(conf.bot.oauthToken));
@@ -28,6 +31,17 @@ const main = function* (event, context, logger, conf) {
         };
     }
 
+    const answerer = answererFactory(githubClient, parsedContent);
+    const safeguard = safeguardFactory(githubClient, answerer, parsedContent);
+
+    const commenterCanCommit = yield safeguard.checkCommenterCanCommit();
+    if (!commenterCanCommit) {
+        return {
+            success: false,
+            reason: 'Commenter is not allowed to commit on the repository',
+        };
+    }
+
     const git = gitFactory(githubClient, {
         commitAuthor: {
             name: conf.committer.name,
@@ -39,30 +53,28 @@ const main = function* (event, context, logger, conf) {
         },
     });
 
-    const fixer = fixerFactory(git, logger);
-    const fixedContents = [];
-    for (const fix of parsedContent.fixes) {
-        logger.debug('Fixing', JSON.stringify(fix, null, 4));
-        const contentToFix = {
-            ...fix,
-            pullRequest: parsedContent.pullRequest,
-            repository: parsedContent.repository,
-            sender: parsedContent.sender,
-        };
+    const commiter = commiterFactory(githubClient, git, logger, parsedContent);
+    const fixer = fixerFactory(git, commiter, logger, parsedContent);
+    const traces = [];
 
-        const fixedContent = yield fixer.fix(contentToFix);
+    yield commiter.init();
 
-        logger.debug('Content fixed', JSON.stringify(fixedContent, null, 4));
-        const commiter = commiterFactory(logger, githubClient, git);
-        const success = yield commiter.commit(contentToFix, fixedContent);
+    let lastCommitSha = null;
+    for (const fixRequest of parsedContent.fixes) {
+        logger.debug('Fixing request', JSON.stringify(fixRequest, null, 4));
+        const { fixes, commitSha } = yield fixer.processFixRequest(fixRequest, lastCommitSha);
+        lastCommitSha = commitSha;
 
-        fixedContents.push({
-            success,
-            matches: contentToFix.matches,
-        });
+        logger.debug('Fixing response', JSON.stringify(fixes, null, 4));
+        traces.push({ matches: fixRequest.matches });
     }
 
-    return fixedContents;
+    let success = false;
+    if (lastCommitSha) {
+        success = yield commiter.push(lastCommitSha);
+    }
+
+    return { success, fixes: traces };
 };
 
 export const handler = function (event, context, callback, conf = config) {

@@ -1,14 +1,25 @@
+import sinon from 'sinon';
 import { assert } from 'chai';
+
 import fixerFactory from './fixer';
 import { diffHunkWithAccents, diffHunk, diffBlob } from './test/fixtures';
 
 describe('Fixer', () => {
-    const logger = console;
-    logger.debug = console.log;
+    let commiter;
+    const logger = {
+        debug: () => {},
+        info: () => {},
+    };
+
+    beforeEach(() => {
+        commiter = {
+            prepareFix: sinon.spy(() => callback => callback(null, '32a104bb009ecd4cf790de24bf5562ec7cab37e7')),
+        };
+    });
 
     describe('getLineIndexFromDiff', () => {
         it('should return the correct line', () => {
-            const fixer = fixerFactory(null, logger);
+            const fixer = fixerFactory(null, commiter, logger);
             const index = fixer.getLineIndexFromDiff(diffHunk, 5);
 
             assert.equal(index, 2);
@@ -32,9 +43,10 @@ describe('Fixer', () => {
             assert.isNull(index);
         });
     });
+
     describe('fix', () => {
         it('should handle accented characters', () => {
-            const fixer = fixerFactory(null, logger);
+            const fixer = fixerFactory(null, commiter, logger);
             const parsedContent = {
                 comment: { diffHunk: diffHunkWithAccents, position: 1 },
             };

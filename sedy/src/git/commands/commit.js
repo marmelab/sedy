@@ -1,6 +1,6 @@
 import { CommandError } from '../errors';
 
-export default (commitAuthor, references, trees, commits) => function* (ref, message) {
+export default (commitAuthor, references, trees, commits) => function* (ref, message, parentSha = null) {
     const head = yield references.get('head');
 
     let tree;
@@ -11,7 +11,10 @@ export default (commitAuthor, references, trees, commits) => function* (ref, mes
         throw new CommandError('Nothing to commit.');
     }
 
-    const parent = yield references.get(ref);
+    let parent = parentSha;
+    if (!parent) {
+        parent = yield references.get(ref);
+    }
     const commit = yield commits.create(tree, message, commitAuthor, [parent]);
 
     yield references.update('head', commit);
