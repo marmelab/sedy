@@ -8,7 +8,8 @@ export default {
         url: 'https://github.com',
         api: 'https://api.github.com',
         appId: 'xxx',
-        scopes: ['write:repo_hook', 'repo'],
+        publicScopes: ['write:repo_hook', 'public_repo'],
+        privateScopes: ['write:repo_hook', 'repo'],
         redirect_uri: 'http://localhost:8080',
     },
     oauth: {

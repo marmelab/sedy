@@ -2,12 +2,12 @@
 
 import { getWindowSearchParams } from './utils';
 
-export const authenticate = () => {
+export const authenticate = (privateRepos = false) => {
     const { github } = config;
     const params = {
         'client_id': github.appId, // eslint-disable-line quote-props
         'redirect_uri': github.redirect_uri, // eslint-disable-line quote-props
-        scope: github.scopes.join(' '),
+        scope: github[privateRepos ? 'privateScopes' : 'publicScopes'].join(' '),
     };
 
     window.location.href = `${github.url}/login/oauth/authorize?` + Object // eslint-disable-line prefer-template
