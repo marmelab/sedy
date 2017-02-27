@@ -15,8 +15,8 @@ const gaScript = config.ga ? `<script>
 </script>` : '<!-- no analytics -->';
 
 const htmlConstants = {
-    title: 'Sedy - fix typos for you',
-    description: 'A github webhook based bot to fix typos in pull requests, by @marmelab.',
+    title: 'Sedy - Brings the power of the sed Linux command to Github',
+    description: 'Sedy is a bot that brings the power of the sed Linux command to Github, by @marmelab.',
     url: 'https://marmelab.com/sedy',
     image: 'https://avatars2.githubusercontent.com/u/3116319', // Marmelab GitHub avatar
     ga: gaScript,
