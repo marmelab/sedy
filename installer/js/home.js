@@ -73,7 +73,7 @@ ReactDOM.render(
                 <div style={styles.tagline}>
                     <h1 style={styles.h1}>Sedy</h1>
                     <h2 style={styles.mainH2}>
-                        A bot listening to PR comments in GitHub to fix typos for you
+                        Brings the power of the sed Linux command to Github
                     </h2>
                 </div>
             </FullWidthSection>
