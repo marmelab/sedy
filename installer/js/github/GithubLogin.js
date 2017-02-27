@@ -15,21 +15,36 @@ const styles = {
         letterSpacing: 0,
         textAlign: 'center',
     },
+    button: {
+        display: 'inline-block',
+        margin: '0 1rem',
+    },
 };
 
 class GithubLogin extends Component {
-    onClick = () => authenticate();
+    onPublicClick = () => authenticate();
+    onPrivateClick = () => authenticate(true);
 
     render() {
         return (
             <div style={styles.p}>
                 {this.props.text}
-                <RaisedButton
-                    onClick={this.onClick}
-                    onTouchTap={this.onClick}
-                    label="Signin with GitHub"
-                    icon={<FontIcon className="github-icon" />}
-                />
+                <div style={styles.button}>
+                    <RaisedButton
+                        onClick={this.onPublicClick}
+                        onTouchTap={this.onClick}
+                        label="Authorize on Public Repositories"
+                        icon={<FontIcon className="github-icon" />}
+                    />
+                </div>
+                <div style={styles.button}>
+                    <RaisedButton
+                        onClick={this.onClick}
+                        onTouchTap={this.onPrivateClick}
+                        label="Authorize on Private & Public Repositories"
+                        icon={<FontIcon className="github-icon" />}
+                    />
+                </div>
             </div>
         );
     }

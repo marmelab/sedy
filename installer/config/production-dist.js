@@ -6,7 +6,6 @@ export default {
         url: 'https://github.com',
         api: 'https://api.github.com',
         appId: 'xxx',
-        scopes: ['write:repo_hook', 'repo'],
         redirect_uri: 'https://marmelab.com/sedy',
     },
     oauth: {
