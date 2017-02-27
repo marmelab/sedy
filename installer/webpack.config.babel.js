@@ -29,7 +29,7 @@ export default {
         setup: './js/setup',
     },
     output: {
-        publicPath: '/',
+        publicPath: '/sedy/',
         path: `${__dirname}/build/`,
         filename: '[name].js',
     },
