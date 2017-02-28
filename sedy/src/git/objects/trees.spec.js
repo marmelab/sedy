@@ -90,7 +90,7 @@ describe('Git Trees', () => {
             };
         });
 
-        it('should create a tree from its predecesor', function* () {
+        it('should create a tree from its predecessor', function* () {
             const base = {
                 sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4',
                 type: 'tree',

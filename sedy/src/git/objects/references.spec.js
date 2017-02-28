@@ -61,7 +61,7 @@ describe('Git References', () => {
     });
 
     describe('update', () => {
-        it('should update reference from given objet', function* () {
+        it('should update reference from given object', function* () {
             yield references.update('refs/heads/branch', {
                 sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4',
             });
