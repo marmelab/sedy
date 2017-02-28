@@ -14,7 +14,7 @@ After installing Sedy on your repository, just type a sed-like command (`s/[old 
 ### On your repositories
 Log into the [Sedy Installer](https://marmelab.com/sedy/) with your GitHub account and click on your repositories.
 
-[![Sedy Instaler](./.github/sedy_homepage.png)](https://marmelab.com/sedy/)
+[![Sedy Installer](./.github/sedy_homepage.png)](https://marmelab.com/sedy/)
 
 ### On your repositories (manually)
 
@@ -29,8 +29,8 @@ Log into the [Sedy Installer](https://marmelab.com/sedy/) with your GitHub accou
 
 That's it.
 
-### On all repositories of your organisation
-Sedy is not available on GitHub organisations yet.
+### On all repositories of your organization
+Sedy is not available on GitHub organizations yet.
 If you are interested to help, please contact [marmelab](https://marmelab.com) for any request.
 
 # Contributing

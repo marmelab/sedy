@@ -44,7 +44,7 @@ export default (git, commiter, logger, parsedContent) => {
             return null;
         }
 
-        // TODO: Allow to specify refex flags with sed comment
+        // TODO: Allow to specify regex flags with sed comment
         const regex = new RegExp(match.from, 'gi');
         const newLine = line.replace(regex, match.to);
         logger.debug('current new line', newLine);
@@ -54,7 +54,7 @@ export default (git, commiter, logger, parsedContent) => {
             return null;
         }
 
-        // Rebuild the file with the modifed line
+        // Rebuild the file with the modified line
         lines[index] = newLine;
 
         return {

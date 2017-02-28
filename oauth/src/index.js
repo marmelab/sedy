@@ -45,7 +45,7 @@ export const handler = function (event, context, callback, conf = config) {
     })
     .then(value => callback(null, value))
     .catch((error) => {
-        logger.error('An error occured', {
+        logger.error('An error occurred', {
             name: error.name,
             message: error.message,
             stack: error.stack,
@@ -53,7 +53,7 @@ export const handler = function (event, context, callback, conf = config) {
 
         callback(null, {
             success: false,
-            error: 'An error occured, please contact an administrator.',
+            error: 'An error occurred, please contact an administrator.',
         });
     });
 };
