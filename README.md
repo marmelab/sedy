@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/marmelab/sedy.svg?branch=master)](https://travis-ci.org/marmelab/sedy)
 
 # What's Sedy
-Sedy is a GitHub webhook which allows pull-request reviewers to fixes typos themselves by typing sed-like commands on review comments.
+Sedy is a GitHub webhook which allows pull-request reviewers to fix typos themselves by typing sed-like commands on review comments.
 
 ![commit example](./.github/sedy_commit_example.png)
 
