@@ -1,7 +1,8 @@
 {
     "bot": {
         "login": "GITHUB-ACCOUNT",
-        "oauthToken": "GITHUB-OAUTH-ACCESS-TOKEN"
+        "oauthToken": "GITHUB-OAUTH-ACCESS-TOKEN",
+        "integrationId": "GITHUB-INTEGRATION-ID"
     },
     "committer": {
         "name": "COMMITTER-NAME",

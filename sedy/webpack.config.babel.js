@@ -1,6 +1,7 @@
 import path from 'path';
 import config from 'config';
 import webpack from 'webpack';
+import githubIntegrationPrivateKey from './githubIntegrationPrivateKey';
 
 export default {
     target: 'node',
@@ -12,7 +13,10 @@ export default {
         libraryTarget: 'commonjs', // Ensure we have exports.handler
     },
     plugins: [
-        new webpack.DefinePlugin({ config: JSON.stringify(config) }),
+        new webpack.DefinePlugin({
+            GITHUB_INTEGRATION_PRIVATE_KEY: githubIntegrationPrivateKey,
+            config: JSON.stringify(config),
+        }),
     ],
     module: {
         // Fix a weird webpack bug

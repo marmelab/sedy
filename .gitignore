@@ -8,6 +8,7 @@ sedy/build/*
 sedy/config/development.json
 sedy/config/production.json
 sedy/config/test.json
+sedy/config/private-key.pem
 
 # Sedy Installer
 installer/node_modules/

@@ -16,8 +16,10 @@
     "config": "~1.20.1",
     "escape-string-regexp": "~1.0.5",
     "github": "~0.2.4",
+    "jsonwebtoken": "^7.3.0",
     "oauth": "~0.9.14",
-    "octonode": "~0.7.5"
+    "octonode": "~0.7.5",
+    "request": "^2.80.0"
   },
   "devDependencies": {
     "babel-core": "~6.7.7",
@@ -33,7 +35,6 @@
     "json-loader": "~0.5.4",
     "mocha": "~2.4.5",
     "nodemon": "~1.11.0",
-    "request": "2.76.0",
     "sinon": "~1.17.3",
     "webpack": "~2.2.1"
   }
