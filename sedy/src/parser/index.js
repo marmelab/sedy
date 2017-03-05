@@ -1,9 +1,13 @@
 import getGitHubEventHeader from './getGitHubEventHeader';
 import parsePullRequestReviewFactory from './parsePullRequestReview';
 
+const pingParser = () => () => function* () {
+    return [];
+};
+
 export default (client, logger) => {
     const parsers = {
-        ping: () => null,
+        ping: pingParser,
         pull_request_review: parsePullRequestReviewFactory,
     };
 
