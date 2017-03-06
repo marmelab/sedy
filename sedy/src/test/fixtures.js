@@ -19,3 +19,6 @@ export const diffBlob = `{
     ]
 }
 `;
+
+export const diffHunkWithQuestionMark = `@@ -0,0 +1,1 @@
+ +### Is this real life ?`;

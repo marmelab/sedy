@@ -62,4 +62,12 @@ describe('getSedyCommandsFromComment', () => {
             { from: 'replace', to: 'me' },
         ]);
     });
+
+    it('shoud match the question mark and not broke', () => {
+        const result = getSedyCommandsFromComment('s/ ?/?/');
+
+        assert.deepEqual(result, [
+            { from: ' ?', to: '?' },
+        ]);
+    });
 });
