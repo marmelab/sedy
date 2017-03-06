@@ -36,7 +36,7 @@ If you are interested to help, please contact [marmelab](https://marmelab.com) f
 # Contributing
 Whether it's for a bug or a suggestion, your feedback is precious. Feel free to [fill an issue](https://github.com/marmelab/sedy/issues/new). Be sure that it will be considered.
 
-If you want to open a PR, all you need to know is written on the [CONTRIBUTING.md](./CONTRIBUTING.md).
+If you want to open a PR, all you need to know is written on the [CONTRIBUTING.md](./.github/CONTRIBUTING.md).
 
 # License
 [sedy](https://marmelab.com/sedy/) is licensed under the [MIT License](./LICENSE), and sponsored by [marmelab](https://marmelab.com).
