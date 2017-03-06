@@ -2,7 +2,12 @@ import sinon from 'sinon';
 import { assert } from 'chai';
 
 import fixerFactory from './fixer';
-import { diffHunkWithAccents, diffHunk, diffBlob } from './test/fixtures';
+import {
+    diffHunkWithAccents,
+    diffHunk,
+    diffBlob,
+    diffHunkWithQuestionMark,
+} from './test/fixtures';
 
 describe('Fixer', () => {
     let commiter;
@@ -64,6 +69,27 @@ describe('Fixer', () => {
             const { content } = fixer.fixBlob(parsedContent, blob, match);
 
             assert.deepEqual(content, '### Conventions & cohérence');
+        });
+
+        it('should handle question mark', () => {
+            const fixer = fixerFactory(null, commiter, logger);
+            const parsedContent = {
+                comment: { diffHunk: diffHunkWithQuestionMark, position: 1 },
+            };
+
+            const blob = {
+                content: '### Is this real life ?',
+                encoding: 'utf8',
+            };
+
+            const match = {
+                from: ' ?',
+                to: '?',
+            };
+
+            const { content } = fixer.fixBlob(parsedContent, blob, match);
+
+            assert.deepEqual(content, '### Is this real life?');
         });
     });
 });

@@ -1,3 +1,6 @@
+const sanitizeRegexInput = entry => entry
+    .replace('?', '\\?');
+
 export default (git, commiter, logger, parsedContent) => {
     const getLineIndexFromDiff = (hunk, position) => {
         // Github API send the diff with a application/vnd.github.v3.diff media type
@@ -45,7 +48,7 @@ export default (git, commiter, logger, parsedContent) => {
         }
 
         // TODO: Allow to specify regex flags with sed comment
-        const regex = new RegExp(match.from, 'gi');
+        const regex = new RegExp(sanitizeRegexInput(match.from), 'gi');
         const newLine = line.replace(regex, match.to);
         logger.debug('current new line', newLine);
 
