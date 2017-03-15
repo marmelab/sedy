@@ -1,5 +1,4 @@
-const sanitizeRegexInput = entry => entry
-    .replace('?', '\\?');
+import escapeRegex from 'escape-string-regexp';
 
 export default (git, commiter, logger, parsedContent) => {
     const getLineIndexFromDiff = (hunk, position) => {
@@ -48,13 +47,13 @@ export default (git, commiter, logger, parsedContent) => {
         }
 
         // TODO: Allow to specify regex flags with sed comment
-        const regex = new RegExp(sanitizeRegexInput(match.from), 'gi');
+        const regex = new RegExp(escapeRegex(match.from), 'gi');
         const newLine = line.replace(regex, match.to);
         logger.debug('current new line', newLine);
 
         if (line === newLine) {
             // No need to commit the same file
-            return null;
+            return {};
         }
 
         // Rebuild the file with the modified line
@@ -103,7 +102,7 @@ export default (git, commiter, logger, parsedContent) => {
             if (!blob) {
                 // @TODO Something went wrong, you should warn the user
                 // continue; // eslint-disable-line no-continue
-                return [];
+                return {};
             }
 
             const fix = yield fixBlob(fixRequest, blob, match);

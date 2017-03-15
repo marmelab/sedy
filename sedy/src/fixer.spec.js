@@ -91,5 +91,34 @@ describe('Fixer', () => {
 
             assert.deepEqual(content, '### Is this real life?');
         });
+
+        it('should handle several development characters', () => {
+            const specificChars = ['^', '.', '{', '}', '\\'];
+
+            for (const char of specificChars) {
+                const fixer = fixerFactory(null, commiter, logger);
+                const parsedContent = {
+                    comment: { diffHunk: diffHunkWithQuestionMark, position: 1 },
+                };
+
+                const blob = {
+                    content: `### Is this ${char} real life?`,
+                    encoding: 'utf8',
+                };
+
+                const match = {
+                    from: ` ${char}`,
+                    to: '',
+                };
+
+                const { content } = fixer.fixBlob(parsedContent, blob, match);
+
+                assert.deepEqual(
+                    content,
+                    '### Is this real life?',
+                    `The fix of the character "${char}" doesn't match`,
+                );
+            }
+        });
     });
 });
