@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+/* global APP_BASE_URL */
+import React, { Component } from 'react';
 import Progress from 'material-ui/CircularProgress';
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow } from 'material-ui/Table';
+import { Table, TableBody, TableFooter } from 'material-ui/Table';
 
 import { getRepositories } from '../../github';
 
@@ -14,29 +15,38 @@ class RepositoryList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            page: 1,
-            hasNext: false,
             loading: true,
             repositories: [],
+            pagination: null,
         };
     }
 
-    fetchRepositories = page => getRepositories(accessToken, user, page);
 
     componentWillMount() {
         if (user) {
-            this.fetchRepositories(this.state.page)
-            .then(repositories => this.setState({ repositories, loading: false }));
+            this.fetchRepositories().then(({ repositories, pagination }) => {
+                this.setState({
+                    pagination,
+                    repositories,
+                    loading: false,
+                });
+            });
         }
     }
 
     onPageChange = page => () => {
-        this.fetchRepositories(page)
-            .then(repositories => this.setState({
-                page,
+        this.setState({ loading: true });
+
+        this.fetchRepositories(page).then(({ repositories, pagination }) => {
+            this.setState({
+                pagination,
                 repositories,
-            }));
+                loading: false,
+            });
+        });
     };
+
+    fetchRepositories = page => getRepositories(accessToken, user, page);
 
     render() {
         if (!user) {
@@ -44,7 +54,7 @@ class RepositoryList extends Component {
                 Please wait while we retrieve your GitHub informations.<br />
                 <a href={APP_BASE_URL}>Back to the home</a>
             </p>);
-        };
+        }
 
         return (
             <div>
@@ -60,16 +70,16 @@ class RepositoryList extends Component {
                             />
                         ))}
                     </TableBody>
+                    {this.state.pagination && <TableFooter>
+                        <Pagination
+                            links={this.state.pagination}
+                            onChange={this.onPageChange}
+                        />
+                    </TableFooter>}
                 </Table>
-                {/* to be implemented
-                <Pagination
-                    hasNext={true}
-                    page={2}
-                    onChange={this.onPageChange}
-                />*/}
             </div>
         );
-    };
+    }
 }
 
 export default RepositoryList;

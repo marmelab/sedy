@@ -1,5 +1,5 @@
 /* global config, SEDY_USERNAME, WEBHOOK_URL */
-
+import parseLinkHeader from 'parse-link-header';
 import { getWindowSearchParams } from './utils';
 
 export const authenticate = (privateRepos = false) => {
@@ -128,14 +128,20 @@ export const getRepositories = (accessToken, user, page = 1, perPage = 30) => {
                 return response.text().then(result => Promise.reject(new Error(result)));
             }
 
-            return response.json();
-        })
-        .then(repositories => Promise.all(repositories.map(r => isSedyInstalled(accessToken, user, r)))
-            .then(sedyInstallations => repositories.map((repository, index) => ({
-                ...repository,
-                sedy_installed: sedyInstallations[index],
-            })),
-        ));
+            return Promise.resolve(response.json()).then((repositories) => {
+                const pagination = parseLinkHeader(response.headers.get('Link'));
+
+                return Promise.all(repositories.map(r => isSedyInstalled(accessToken, user, r)))
+                    .then(sedyInstallations => repositories.map((repository, index) => ({
+                        ...repository,
+                        sedy_installed: sedyInstallations[index],
+                    })),
+                ).then(enrichedRepositories => ({
+                    repositories: enrichedRepositories,
+                    pagination,
+                }));
+            });
+        });
 };
 
 const addHook = (accessToken, user, repository) => {

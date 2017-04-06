@@ -1,52 +1,43 @@
 import React, { PropTypes } from 'react';
-
-import { blue500 } from 'material-ui/styles/colors';
+import FlatButton from 'material-ui/FlatButton';
 
 const styles = {
     pagination: {
-        display: 'flex',
-    },
-    link: {
-        flex: '1 0 0',
-        color: blue500,
-        padding: '0.5rem 1rem',
+        textAlign: 'center',
+        padding: 5,
     },
 };
 
-const Pagination = ({ hasNext, onChange, page }) => {
-    const previousStyle = {
-        ...styles.link,
-        display: page <= 1 ? 'none' : 'block',
-    };
+const Pagination = ({ links, onChange }) => {
+    if (!links) {
+        return <div />;
+    }
 
-    const nextStyle = {
-        ...styles.link,
-        textAlign: 'right',
-        display: hasNext ? 'block' : 'none',
-    };
+    const { first, prev, next, last } = links;
+    const renderButton = link => <FlatButton
+        label={link.page}
+        onClick={onChange(link.page)}
+    />;
 
     return (
         <div style={styles.pagination}>
-            <a href="#" style={previousStyle} onClick={onChange(page - 1)}>
-                &laquo; Previous
-            </a>
-            <a href="#" style={nextStyle} onClick={onChange(page + 1)}>
-                Next &raquo;
-            </a>
+            {first && renderButton(first)}
+            {prev && prev.page !== first.page && renderButton(prev)}
+            <FlatButton label="Page" disabled={true} />
+            {next && renderButton(next)}
+            {last && next.page !== last.page && renderButton(last)}
         </div>
     );
 };
 
 Pagination.propTypes = {
-    hasNext: PropTypes.bool,
+    links: PropTypes.object, // eslint-disable-line react/forbid-prop-types
     onChange: PropTypes.func,
-    page: PropTypes.number,
 };
 
 Pagination.defaultProps = {
-    hasNext: false,
+    links: null,
     onChange: () => {},
-    page: 1,
 };
 
 export default Pagination;
