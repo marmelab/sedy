@@ -19,7 +19,7 @@ const retrieveGithubToken = function* (config, eventBody) {
         iss: config.appId,
     };
 
-    const token = jwt.sign(payload, GITHUB_APP_PRIVATE_KEY, { algorithm: 'RS256' });
+    const token = jwt.sign(payload, new Buffer(GITHUB_APP_PRIVATE_KEY, 'utf-8'), { algorithm: 'RS256' });
 
     const headers = {
         Accept: INTEGRATION_HEADER,

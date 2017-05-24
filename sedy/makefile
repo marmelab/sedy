@@ -10,7 +10,7 @@ clean:
 	rm -rf build/*
 
 build: clean
-	./node_modules/.bin/webpack --progress
+	./node_modules/.bin/webpack --progress -p
 
 run:
 	./node_modules/.bin/nodemon \
