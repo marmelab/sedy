@@ -1,7 +1,0 @@
-{
-    "github": {
-        "clientId": "xxxxx",
-        "clientSecret": "yyyyyyyyyyyyyyyyyyyy",
-        "redirect_uri": "http://localhost:8080"
-    }
-}
