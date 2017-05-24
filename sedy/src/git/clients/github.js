@@ -1,12 +1,11 @@
 /* TODO: Split and clean this crappy file */
 
-const prReviewsPreviewHeader = 'application/vnd.github.black-cat-preview+json';
-const integrationPreviewHeader = 'application/vnd.github.machine-man-preview+json';
+const GITHUB_ACCEPT_HEADER = 'application/vnd.github.v3+json';
 
 export default (logger, github) => {
     github.requestDefaults.headers = {
         ...github.requestDefaults.headers,
-        Accept: `${prReviewsPreviewHeader}, ${integrationPreviewHeader}`,
+        Accept: GITHUB_ACCEPT_HEADER,
     };
 
     const callbackProxy = callback => (error, statusCode, response) => {

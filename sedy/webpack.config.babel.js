@@ -1,7 +1,7 @@
 import path from 'path';
 import config from 'config';
 import webpack from 'webpack';
-import githubIntegrationPrivateKey from './githubIntegrationPrivateKey';
+import githubAppPrivateKey from './githubAppPrivateKey';
 
 export default {
     target: 'node',
@@ -14,7 +14,7 @@ export default {
     },
     plugins: [
         new webpack.DefinePlugin({
-            GITHUB_INTEGRATION_PRIVATE_KEY: githubIntegrationPrivateKey,
+            GITHUB_APP_PRIVATE_KEY: githubAppPrivateKey,
             config: JSON.stringify(config),
         }),
     ],

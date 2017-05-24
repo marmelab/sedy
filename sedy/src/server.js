@@ -1,10 +1,10 @@
 import http from 'http';
 import httpServerHandler from './httpServerHandler';
 import { handler } from './';
-import githubIntegrationPrivateKey from '../githubIntegrationPrivateKey';
+import githubAppPrivateKey from '../githubAppPrivateKey';
 
 // Mock webpack DefinePlugin
-global.GITHUB_INTEGRATION_PRIVATE_KEY = githubIntegrationPrivateKey;
+global.GITHUB_APP_PRIVATE_KEY = githubAppPrivateKey;
 
 const port = process.env.NODE_PORT || 3000;
 http.createServer(httpServerHandler(handler)).listen(port);
