@@ -1,7 +1,8 @@
 {
     "bot": {
         "login": "sedy-bot",
-        "oauthToken": ""
+        "oauthToken": "",
+        "appId": 0
     },
     "committer": {
         "name": "sedy-bot",

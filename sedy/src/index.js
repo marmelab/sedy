@@ -11,9 +11,11 @@ import githubClientFactory from './git/clients/github';
 import loggerFactory from './lib/logger';
 import parseFactory from './parser';
 import safeguardFactory from './safeguard';
+import retrieveGithubToken from './retrieveGithubToken';
 
 const main = function* (event, context, logger, conf) {
-    const githubClient = githubClientFactory(logger, github.client(conf.bot.oauthToken));
+    const githubToken = yield retrieveGithubToken(conf.bot, event.body);
+    const githubClient = githubClientFactory(logger, github.client(githubToken));
     const parse = parseFactory(githubClient, logger);
     const parsedContent = yield parse(event);
 

@@ -1,9 +1,11 @@
 /* TODO: Split and clean this crappy file */
 
+const GITHUB_ACCEPT_HEADER = 'application/vnd.github.v3+json';
+
 export default (logger, github) => {
     github.requestDefaults.headers = {
         ...github.requestDefaults.headers,
-        Accept: 'application/vnd.github.black-cat-preview+json',
+        Accept: GITHUB_ACCEPT_HEADER,
     };
 
     const callbackProxy = callback => (error, statusCode, response) => {
