@@ -2,7 +2,7 @@ import { ValidationError } from '../errors';
 import { validate as validateObject } from '../validation';
 
 export default (client, repo, store) => {
-    const validate = commit => {
+    const validate = (commit) => {
         validateObject(commit);
 
         if (commit.type !== 'commit') {
@@ -12,7 +12,7 @@ export default (client, repo, store) => {
         return true;
     };
 
-    const standardize = commit => {
+    const standardize = (commit) => {
         validateObject(commit);
 
         return {
