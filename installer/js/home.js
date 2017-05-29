@@ -94,7 +94,7 @@ ReactDOM.render(
                 <Card style={styles.card}>
                     <CardTitle title="It's just a webhook" />
                     <CardText>
-                        <p>Installing Sedy on your repository is identical to install a webhook with the event <i>Pull Request review</i>.</p>
+                        <p>Installing Sedy on your repository is identical to installing a webhook with the event <i>Pull Request review</i>.</p>
                     </CardText>
                 </Card>
                 <Card style={styles.card}>

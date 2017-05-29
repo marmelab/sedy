@@ -11,7 +11,7 @@ After installing Sedy on your repository, just type a sed-like command (`s/[old 
 
 # Installation
 
-Goo to [https://github.com/apps/sedy](https://github.com/apps/sedy) and follow the instructions.
+Go to [https://github.com/apps/sedy](https://github.com/apps/sedy) and follow the instructions.
 
 That's it.
 
