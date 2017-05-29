@@ -8,20 +8,9 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { Card, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import typography from 'material-ui/styles/typography';
 import { darkWhite } from 'material-ui/styles/colors';
-import GithubLogin from './github/GithubLogin';
+
+import Install from './Install';
 import FullWidthSection from './FullWidthSection';
-
-import { digestGithubRedirection, getUserInfo } from './github';
-
-digestGithubRedirection().then((token) => {
-    if (token) {
-        window.localStorage.setItem('accessToken', token);
-        getUserInfo(token).then((user) => {
-            window.localStorage.setItem('user', JSON.stringify(user));
-            window.location.href = config.setup;
-        });
-    }
-});
 
 const isMobile = window.innerWidth <= 640;
 const images = {
@@ -78,7 +67,7 @@ ReactDOM.render(
                 </div>
             </FullWidthSection>
 
-            <GithubLogin />
+            <Install />
 
             <div className="wrapper">
                 <h2 style={styles.h2}>What does it look like?</h2>
@@ -100,19 +89,12 @@ ReactDOM.render(
                         <img alt="Relax" src={images.diff} />
                     </CardMedia>
                 </Card>
-                <GithubLogin />
+                <Install />
                 <h2 style={styles.h2}>How does it work?</h2>
                 <Card style={styles.card}>
                     <CardTitle title="It's just a webhook" />
                     <CardText>
-                        <p>You simply need to register the sedy webhook for the following events:</p>
-                        <ul>
-                            <li>Pull request review comment</li>
-                            <li>Pull request review</li>
-                        </ul>
-
-                        <p>This website will make the webhook registration process a bliss!</p>
-                        <p><strong>The GitHub user <a href="https://github.com/sedy-bot">Sedy Bot</a> will receive permission to commit on your repository.</strong></p>
+                        <p>Installing Sedy on your repository is identical to installing a webhook with the event <i>Pull Request review</i>.</p>
                     </CardText>
                 </Card>
                 <Card style={styles.card}>
@@ -120,7 +102,7 @@ ReactDOM.render(
                     <CardText>
                         <p>
                             Whenever a new single comment is added, or a new review is submitted,
-                            sedy will check the comments for sed substitution syntax:
+                            <strong>Sedy</strong> will check the comments for sed substitution syntax:
                         </p>
                         <code>
                             s/[TEXT TO FIND]/[REPLACEMENT]/

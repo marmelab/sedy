@@ -11,27 +11,9 @@ After installing Sedy on your repository, just type a sed-like command (`s/[old 
 
 # Installation
 
-### On your repositories
-Log into the [Sedy Installer](https://marmelab.com/sedy/) with your GitHub account and click on your repositories.
-
-[![Sedy Installer](./.github/sedy_homepage.png)](https://marmelab.com/sedy/)
-
-### On your repositories (manually)
-
-- Add a webhook to your repository with these informations:
-
-| Input     | Value                          |
-|-----------|--------------------------------|
-|Payload URL| https://sedy.marmelab.com      |
-|Scopes     | `Pull request review comment`  |
-
-- Invite [sedy-bot](https://github.com/sedy-bot) user as a collaborator.
+Go to [https://github.com/apps/sedy](https://github.com/apps/sedy) and follow the instructions.
 
 That's it.
-
-### On all repositories of your organization
-Sedy is not available on GitHub organizations yet.
-If you are interested to help, please contact [marmelab](https://marmelab.com) for any request.
 
 # Contributing
 Whether it's for a bug or a suggestion, your feedback is precious. Feel free to [fill an issue](https://github.com/marmelab/sedy/issues/new). Be sure that it will be considered.

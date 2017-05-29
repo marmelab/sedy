@@ -32,7 +32,5 @@
     "webpack": "~2.2.1",
     "webpack-dev-server": "~2.3.0"
   },
-  "dependencies": {
-    "parse-link-header": "~0.4.1"
-  }
+  "dependencies": {}
 }

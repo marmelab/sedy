@@ -26,7 +26,6 @@ export default {
     entry: {
         style: './style.css',
         home: './js/home',
-        setup: './js/setup',
     },
     output: {
         publicPath: '/sedy/',
@@ -54,25 +53,12 @@ export default {
     plugins: [
         new DefinePlugin({
             config: JSON.stringify(config),
-            APP_BASE_URL: JSON.stringify(config.appBaseUrl),
-            WEBHOOK_URL: JSON.stringify(config.webhookUrl),
-            SEDY_USERNAME: JSON.stringify(config.sedyUsername),
-            'process.env': {
-                NODE_ENV: JSON.stringify(env),
-            },
         }),
         new HtmlWebpackPlugin({
             ...htmlConstants,
             template: './index.html',
             filename: 'index.html',
             chunks: ['style', 'home'],
-            hash: true,
-        }),
-        new HtmlWebpackPlugin({
-            ...htmlConstants,
-            template: './setup.html',
-            filename: 'setup/index.html',
-            chunks: ['style', 'setup'],
             hash: true,
         }),
         new ExtractTextPlugin({ filename: 'style.css' }),
