@@ -3,6 +3,8 @@
 # What's Sedy
 Sedy is a GitHub webhook which allows pull-request reviewers to fix typos themselves by typing sed-like commands on review comments.
 
+Test
+
 ![commit example](./.github/sedy_commit_example.png)
 
 ### How it works
