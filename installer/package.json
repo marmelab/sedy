@@ -1,7 +1,7 @@
 {
   "name": "sedy-website",
-  "version": "0.1.0",
   "description": "sedy website",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
