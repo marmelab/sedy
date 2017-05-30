@@ -12,24 +12,7 @@
 
 **Actual behavior:** [What actually happened]
 
-**Additional informations**
+**Link to the comment (if applicable):**
 
-You can find the webhook payload on https://github.com/USER/REPOSITORY/settings/hooks > `https://sedy.marmelab.com` > Recent Deliveries
+**Date of the comment (if applicable):**
 
-<details>
-<summary>Webhook payload</summary>
-
-`````` json
-[Paste the github webhook payload here]
-``````
-
-</details>
-
-<details>
-<summary>Webhook response</summary>
-
-`````` json
-[Paste the github webhook response here]
-``````
-
-</details>
