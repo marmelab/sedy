@@ -20,7 +20,7 @@ export default (client, logger) => function* (request) {
             diffHunk: comment.diff_hunk,
             id: comment.id,
             path: comment.path,
-            position: comment.position || comment.original_position,
+            position: comment.position,
             url: comment.html_url,
         },
         commit: {
