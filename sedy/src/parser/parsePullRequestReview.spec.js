@@ -83,10 +83,7 @@ describe('review parsing', () => {
             }]),
         };
 
-        const { fixes: [
-            { comment: comment1 },
-            { comment: comment2 },
-        ] } = yield parsePullRequestReviewFactory(client)(request);
+        const { fixes: [{ comment: comment1 }, { comment: comment2 }] } = yield parsePullRequestReviewFactory(client)(request);
 
         assert.deepEqual(comment1, {
             body: 'comment body',
@@ -107,27 +104,5 @@ describe('review parsing', () => {
             position: 'diff position',
             url: 'comment url',
         });
-    });
-
-    it('should return the `original position` if the `positon` is missing', function* () {
-        const client = {
-            getCommentsFromReviewId: () => Promise.resolve([{
-                body: 'comment body',
-                commit_id: 'commit_id',
-                created_at: 'comment date',
-                diff_hunk: 'diff hunk',
-                html_url: 'comment url',
-                id: 'comment id',
-                path: 'comment path',
-                position: null,
-                original_position: 'original position',
-                user: {
-                    login: 'Someone',
-                },
-            }]),
-        };
-
-        const { fixes: [{ comment }] } = yield parsePullRequestReviewFactory(client)(request);
-        assert.equal(comment.position, 'original position');
     });
 });
