@@ -63,6 +63,18 @@ const main = function* (event, context, logger, conf) {
 
     let lastCommitSha = null;
     for (const fixRequest of parsedContent.fixes) {
+        if (!fixRequest.comment.position && fixRequest.comment.position !== 0) {
+            logger.warn('Unusual comment position', JSON.stringify(fixRequest, null, 4));
+
+            yield answerer.replyToComment(
+                fixRequest.comment.id,
+                `:x: @${parsedContent.sender}, please write your comment in a Pull Request Review. ` +
+                `[Add a review now](${parsedContent.pullRequest.url}/files)`,
+            );
+
+            continue;  // eslint-disable-line no-continue
+        }
+
         logger.debug('Fixing request', JSON.stringify(fixRequest, null, 4));
         const { fixes, commitSha } = yield fixer.processFixRequest(fixRequest, lastCommitSha);
         lastCommitSha = commitSha;
