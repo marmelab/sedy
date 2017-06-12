@@ -9,7 +9,11 @@ describe('review parsing', () => {
             action: 'submitted',
             diff_hunk: 'diff hunk', // @TODO Use fixture
             position: 'diff position',
-            pull_request: { number: 42, head: { ref: 'master' } },
+            pull_request: {
+                number: 42,
+                head: { ref: 'master' },
+                html_url: 'http://pullrequest.url',
+            },
             repository: { name: 'Sedy', owner: { login: 'Marmelab' } },
             review: {
                 id: 'review id',
@@ -44,6 +48,7 @@ describe('review parsing', () => {
         assert.deepEqual(pullRequest, {
             number: request.body.pull_request.number,
             ref: `refs/heads/${request.body.pull_request.head.ref}`,
+            url: request.body.pull_request.html_url,
         });
 
         assert.deepEqual(repository, {
