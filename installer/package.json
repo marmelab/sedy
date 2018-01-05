@@ -21,16 +21,16 @@
     "babel-preset-react": "~6.16.0",
     "babel-preset-stage-1": "~6.16.0",
     "config": "~1.21.0",
-    "css-loader": "~0.25.0",
-    "extract-text-webpack-plugin": "~2.0.0-rc.3",
-    "file-loader": "~0.10.0",
-    "html-webpack-plugin": "~2.24.0",
+    "css-loader": "~0.28.8",
+    "extract-text-webpack-plugin": "~2.1.2",
+    "file-loader": "~1.1.6",
+    "html-webpack-plugin": "~2.30.1",
     "material-ui": "~0.16.1",
     "react": "~15.3.2",
     "react-dom": "~15.3.2",
     "react-tap-event-plugin": "~1.0.0",
-    "webpack": "~2.2.1",
-    "webpack-dev-server": "~2.3.0"
+    "webpack": "~3.10.0",
+    "webpack-dev-server": "~2.9.7"
   },
   "dependencies": {}
 }
