@@ -34,7 +34,7 @@ test-unit:
 
 test-e2e:
 	./node_modules/.bin/mocha \
-		--compilers js:babel-core/register \
+		--require babel-core/register \
 		--require babel-polyfill \
 		--require co-mocha \
 		--recursive \

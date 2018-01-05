@@ -81,7 +81,10 @@ describe('Git Commits', () => {
 
         beforeEach(() => {
             currentDate = new Date();
-            clock = sinon.useFakeTimers(currentDate.getTime(), 'Date');
+            clock = sinon.useFakeTimers({
+                now: currentDate.getTime(),
+                toFake: ['Date'],
+            });
             client = {
                 createCommit: sinon.spy(() => cb => cb(null, { sha: 'd670460b4b4aece5915caf5c68d12f560a9fe3e4' })),
             };
