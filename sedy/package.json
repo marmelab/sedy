@@ -13,7 +13,7 @@
   "dependencies": {
     "babel-regenerator-runtime": "~6.5.0",
     "co": "~4.6.0",
-    "config": "~1.20.1",
+    "config": "~1.29.0",
     "escape-string-regexp": "~1.0.5",
     "github": "~0.2.4",
     "jsonwebtoken": "~7.3.0",
