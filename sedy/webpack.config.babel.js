@@ -7,7 +7,7 @@ export default {
     target: 'node',
     entry: ['babel-polyfill', path.join(__dirname, 'src/index.js')],
     output: {
-        path: './build/',
+        path: path.join(__dirname, './build/'),
         publicPath: '/',
         filename: 'index.js',
         libraryTarget: 'commonjs', // Ensure we have exports.handler
