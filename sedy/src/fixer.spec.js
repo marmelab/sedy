@@ -31,6 +31,7 @@ describe('Fixer', () => {
 
             assert.equal(diffBlob.split('\n')[index], diffHunk.split('\n')[5].slice(1));
         });
+
         it('should return the correct line even if several line are identical', () => {
             const fixer = fixerFactory();
             let index = fixer.getLineIndexFromDiff(diffHunk, 7);
@@ -41,11 +42,12 @@ describe('Fixer', () => {
             assert.equal(index, 3);
             assert.equal(diffBlob.split('\n')[index], diffHunk.split('\n')[6].slice(1));
         });
-        it('should return null if position point on a deleted line', () => {
+
+        it('should return the correct line even if the position point on a deleted line', () => {
             const fixer = fixerFactory();
             const index = fixer.getLineIndexFromDiff(diffHunk, 3);
 
-            assert.isNull(index);
+            assert.equal(index, 1);
         });
     });
 

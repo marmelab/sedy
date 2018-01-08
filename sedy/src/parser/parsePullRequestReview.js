@@ -34,6 +34,7 @@ export default (client, logger) => function* (request) {
         pullRequest: {
             number: request.body.pull_request.number,
             ref: `refs/heads/${request.body.pull_request.head.ref}`,
+            url: request.body.pull_request.html_url,
         },
         repository: {
             name: request.body.repository.name,

@@ -12,10 +12,6 @@ export default (git, commiter, logger, parsedContent) => {
             throw new Error('Inefficient diff parser');
         }
 
-        if (line.startsWith('-')) {
-            return null;
-        }
-
         const offset = parseInt(diff[0].match(/@@.*?\+(\d+)/)[1], 10) - 1;
         // if negative offset, then it means there is no add
         if (offset < 0) {
@@ -105,7 +101,7 @@ export default (git, commiter, logger, parsedContent) => {
                 return {};
             }
 
-            const fix = yield fixBlob(fixRequest, blob, match);
+            const fix = fixBlob(fixRequest, blob, match);
             lastCommitSha = yield commiter.prepareFix(fixRequest, fix, lastCommitSha);
 
             if (fix) {
