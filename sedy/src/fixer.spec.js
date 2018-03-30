@@ -92,6 +92,33 @@ describe('Fixer', () => {
             assert.deepEqual(content, '### Is this real life?');
         });
 
+        it('should handle quotes and starts', () => {
+            const fixer = fixerFactory(null, commiter, logger);
+            const parsedContent = {
+                comment: {
+                    diffHunk: [
+                        '@@ -0,0 +1,1 @@',
+                        '+### Neon Daemon"',
+                    ].join('\n'),
+                    position: 1,
+                },
+            };
+
+            const blob = {
+                content: '### Neon Daemon"',
+                encoding: 'utf8',
+            };
+
+            const match = {
+                from: ' Daemon"',
+                to: ' Daemon*',
+            };
+
+            const { content } = fixer.fixBlob(parsedContent, blob, match);
+
+            assert.deepEqual(content, '### Neon Daemon*');
+        });
+
         it('should handle several development characters', () => {
             const specificChars = ['^', '.', '{', '}', '\\'];
 
