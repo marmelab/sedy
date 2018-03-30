@@ -1,6 +1,6 @@
 # Sedy Installer
 
-## Install npm dependencies
+## Install dependencies
 
 ```bash
 make install

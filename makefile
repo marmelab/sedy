@@ -3,13 +3,13 @@
 NODE_ENV ?= development
 
 install-sedy:
-	cd sedy && make install
+	make -C sedy install
 
 install-installer:
-	cd installer && make install
+	make -C installer install
 
 install: install-sedy install-installer
-	npm install
+	yarn install
 
 run-sedy:
 	cd sedy && make run
