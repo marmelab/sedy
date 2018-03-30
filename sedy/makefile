@@ -4,7 +4,7 @@ copy-conf: ## Initialize the configuration files by copying the *''-dist" versio
 	-cp -n ./config/production-dist.json ./config/production.json
 
 install: copy-conf
-	npm install
+	yarn install
 
 clean:
 	rm -rf build/*
@@ -25,7 +25,7 @@ deploy: clean
 
 test-unit:
 	./node_modules/.bin/mocha \
-		--compilers js:babel-core/register \
+		--require babel-core/register \
 		--require babel-polyfill \
 		--require co-mocha \
 		--recursive \

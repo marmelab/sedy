@@ -25,7 +25,6 @@ export default {
         noParse: /node_modules\/octonode\/node_modules\/request\/node_modules\/http-signature\/node_modules\/jsprim\/node_modules\/json-schema\/lib\/validate\.js/,
         rules: [{
             test: /\.js$/,
-            exclude: path.resolve(__dirname, 'node_modules'),
             use: 'babel-loader',
         }, {
             test: /\.json$/,
