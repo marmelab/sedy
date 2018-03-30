@@ -8,6 +8,7 @@
         "name": "COMMITTER-NAME",
         "email": "an@example.mail"
     },
+    "maxCommitDurationBeforePush": 40000,
     "logs": {
         "debug": false
     }

@@ -37,5 +37,10 @@ As requested by ${parsedContent.sender} at ${fixRequest.comment.url}`;
         return false;
     };
 
-    return { init, prepareCommit, prepareFix, push };
+    return {
+        init,
+        prepareCommit,
+        prepareFix,
+        push,
+    };
 };

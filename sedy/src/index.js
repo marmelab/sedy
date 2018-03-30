@@ -14,6 +14,11 @@ import safeguardFactory from './safeguard';
 import retrieveGithubToken from './retrieveGithubToken';
 
 const main = function* (event, context, logger, conf) {
+    let commitIntervalClosed = false;
+    const commitIntervalTimeout = setTimeout(() => {
+        commitIntervalClosed = true;
+    }, conf.maxCommitDurationBeforePush);
+
     const githubToken = yield retrieveGithubToken(conf.bot, event.body);
     const githubClient = githubClientFactory(logger, github.client(githubToken));
     const parse = parseFactory(githubClient, logger);
@@ -27,6 +32,8 @@ const main = function* (event, context, logger, conf) {
         parsedContent.fixes.every(fix => fix.matches.length === 0);
 
     if (hasNoFix) {
+        clearTimeout(commitIntervalTimeout);
+
         return {
             success: false,
             reason: 'No fix found',
@@ -38,6 +45,8 @@ const main = function* (event, context, logger, conf) {
 
     const commenterCanCommit = yield safeguard.checkCommenterCanCommit();
     if (!commenterCanCommit) {
+        clearTimeout(commitIntervalTimeout);
+
         return {
             success: false,
             reason: 'Commenter is not allowed to commit on the repository',
@@ -62,14 +71,24 @@ const main = function* (event, context, logger, conf) {
     yield commiter.init();
 
     let lastCommitSha = null;
+    let commitNumber = 0;
     for (const fixRequest of parsedContent.fixes) {
+        if (commitIntervalClosed) {
+            const ignoredFixes = parsedContent.fixes - commitNumber;
+            logger.warn(`Commit interval before push closed. Ignoring ${ignoredFixes} fixes.`);
+            break;
+        }
+
         logger.debug('Fixing request', JSON.stringify(fixRequest, null, 4));
         const { fixes, commitSha } = yield fixer.processFixRequest(fixRequest, lastCommitSha);
         lastCommitSha = commitSha;
+        commitNumber += 1;
 
         logger.debug('Fixing response', JSON.stringify(fixes, null, 4));
         traces.push({ matches: fixRequest.matches });
     }
+
+    clearTimeout(commitIntervalTimeout);
 
     let success = false;
     if (lastCommitSha) {
@@ -86,17 +105,17 @@ export const handler = function (event, context, callback, conf = config) {
         logger.debug('Handler initialized', { event, context });
         return yield main(event, context, logger, conf);
     })
-    .then(value => callback(null, value))
-    .catch((error) => {
-        logger.error('An error occurred', {
-            name: error.name,
-            message: error.message,
-            stack: error.stack,
-        });
+        .then(value => callback(null, value))
+        .catch((error) => {
+            logger.error('An error occurred', {
+                name: error.name,
+                message: error.message,
+                stack: error.stack,
+            });
 
-        callback(null, {
-            success: false,
-            error: 'An error occurred, please contact an administrator.',
+            callback(null, {
+                success: false,
+                error: 'An error occurred, please contact an administrator.',
+            });
         });
-    });
 };
