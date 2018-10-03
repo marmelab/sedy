@@ -111,7 +111,7 @@ export default (git, commiter, logger, parsedContent) => {
                 return {};
             }
 
-            const fix = yield fixBlob(fixRequest, blob, match);
+            const fix = fixBlob(fixRequest, blob, match);
 
             if (fix) {
                 lastCommitSha = yield commiter.prepareFix(fixRequest, fix, lastCommitSha);
