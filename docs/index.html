@@ -78,32 +78,34 @@
             <h2>What does it look like?</h2>
 
             <section>
-                <div style="padding-bottom: 0px;">
-                    <div style="padding: 16px; position: relative;"><span style="font-size: 24px; color: rgba(0, 0, 0, 0.87); display: block; line-height: 36px;">1.
-                            Comment a pull request with a sed command</span><span style="font-size: 14px; color: rgba(0, 0, 0, 0.54); display: block;"></span></div>
-                    <div style="position: relative;">
-                        <div><img alt="Comment a PR" src="images/pr_sed_comment.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;"></div>
+                <div>
+                    <div class="instruction">
+                        <span>1. Comment a pull request with a sed command</span>
+                    </div>
+                    <div>
+                        <img alt="Comment a PR" src="images/pr_sed_comment.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;">
                     </div>
                 </div>
             </section>
 
             <section>
-                <div style="padding-bottom: 0px;">
-                    <div style="padding: 16px; position: relative;"><span style="font-size: 24px; color: rgba(0, 0, 0, 0.87); display: block; line-height: 36px;">2.
-                            Watch sedy do its job</span><span style="font-size: 14px; color: rgba(0, 0, 0, 0.54); display: block;"></span></div>
-                    <div style="position: relative;">
-                        <div><img alt="Watch Sedy" src="images/pr_sed_commit.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;"></div>
-
+                <div>
+                    <div class="instruction">
+                        <span>2. Watch sedy do its job</span>
+                    </div>
+                    <div>
+                        <img alt="Watch Sedy" src="images/pr_sed_commit.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;">
                     </div>
                 </div>
             </section>
 
             <section>
-                <div style="padding-bottom: 0px;">
-                    <div style="padding: 16px; position: relative;"><span style="font-size: 24px; color: rgba(0, 0, 0, 0.87); display: block; line-height: 36px;">3.
-                            Relax :)</span><span style="font-size: 14px; color: rgba(0, 0, 0, 0.54); display: block;"></span></div>
-                    <div style="position: relative;">
-                        <div><img alt="Relax" src="images/pr_sed_diff.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;"></div><!-- react-text: 44 -->
+                <div>
+                    <div class="instruction">
+                        <span>3. Relax :)</span>
+                    </div>
+                    <div>
+                        <img alt="Relax" src="images/pr_sed_diff.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;">
                     </div>
                 </div>
             </section>
@@ -113,9 +115,10 @@
             <h2>How does it work?</h2>
 
             <section>
-                <div style="padding-bottom: 8px;">
-                    <div style="padding: 16px; position: relative;"><span style="font-size: 24px; color: rgba(0, 0, 0, 0.87); display: block; line-height: 36px;">It's
-                            just a webhook</span><span style="font-size: 14px; color: rgba(0, 0, 0, 0.54); display: block;"></span></div>
+                <div>
+                    <div class="instruction">
+                        <span>It's just a webhook</span>
+                    </div>
                     <div style="padding: 16px; font-size: 14px; color: rgba(0, 0, 0, 0.87);">
                         <p>
                             Installing Sedy on your repository is identical to installing a
@@ -125,27 +128,33 @@
                     </div>
                 </div>
             </section>
+
             <section>
-                <div style="padding-bottom: 8px;">
-                    <div style="padding: 16px; position: relative;"><span style="font-size: 24px; color: rgba(0, 0, 0, 0.87); display: block; line-height: 36px;">It
-                            checks comments for sed substitution commands</span><span style="font-size: 14px; color: rgba(0, 0, 0, 0.54); display: block;"></span></div>
+                <div>
+                    <div class="instruction">
+                        <span>It checks comments for sed substitution commands</span>
+                    </div>
                     <div style="padding: 16px; font-size: 14px; color: rgba(0, 0, 0, 0.87);">
                         <p>
                             Whenever a new single comment is added, or a new review is submitted,
-                            <strong>Sedy</strong>will check the
+                            <strong>Sedy</strong> will check the
                             comments for sed substitution syntax:
-                        </p><code>s/[TEXT TO FIND]/[REPLACEMENT]/</code>
-                        <p>When it finds one, it will checkout the pull request branch, perform the sed
-                            substitution and commit the result.</p>
+                        </p>
+                        <code>s/[TEXT TO FIND]/[REPLACEMENT]/</code>
+                        <p>
+                            When it finds one, it will checkout the pull request branch, perform the sed
+                            substitution and commit the result.
+                        </p>
                     </div>
                 </div>
             </section>
             <section>
-                <div style="padding-bottom: 8px;">
-                    <div style="padding: 16px; position: relative;"><span style="font-size: 24px; color: rgba(0, 0, 0, 0.87); display: block; line-height: 36px;">Limitations</span><span
-                            style="font-size: 14px; color: rgba(0, 0, 0, 0.54); display: block;"></span></div>
+                <div>
+                    <div class="instruction">
+                        <span>Limitations</span>
+                    </div>
                     <div style="padding: 16px; font-size: 14px; color: rgba(0, 0, 0, 0.87);">
-                        <p><b>sed</b>does far more than simple substitution, however, we
+                        <p><b>sed</b> does far more than simple substitution, however, we
                             currently only support the most simple one.
                         </p>
                         <p>In time, we will add support for regular expressions, global flags, and so on.</p>

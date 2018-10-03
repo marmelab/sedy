@@ -91,6 +91,18 @@ article.present {
     text-align: center;
 }
 
+.instruction {
+    padding: 16px;
+    position: relative;
+}
+
+.instruction > span {
+    font-size: 24px;
+    color: rgba(0, 0, 0, 0.87);
+    display: block;
+    line-height: 36px;
+}
+
 .github-button {
     border: 10px;
     box-sizing: border-box;
