@@ -14,8 +14,8 @@ build: clean
 
 run:
 	./node_modules/.bin/nodemon \
-		--require @babel/polyfill \
 		--require @babel/register \
+		--require @babel/polyfill \
 		./src/server.js
 
 deploy: clean
@@ -25,8 +25,8 @@ deploy: clean
 
 test-unit:
 	./node_modules/.bin/mocha \
-		--require @babel/polyfill \
 		--require @babel/register \
+		--require @babel/polyfill \
 		--require co-mocha \
 		--recursive \
 			./src/*.spec.js \
