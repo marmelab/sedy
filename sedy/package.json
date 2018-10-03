@@ -11,7 +11,7 @@
         "test": "make --silent test"
     },
     "engines": {
-        "node": ">=8"
+        "node": ">=8 <10"
     },
     "dependencies": {
         "co": "~4.6.0",
