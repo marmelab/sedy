@@ -57,8 +57,7 @@ header > h2 {
 article {
     font-size: 20px;
     line-height: 28px;
-    padding-top: 19px;
-    margin-bottom: 13px;
+    margin: 19px 0 13px 0;
     letter-spacing: 0px;
 }
 
@@ -77,8 +76,8 @@ section {
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 6px, rgba(0, 0, 0, 0.12) 0px 1px 4px;
     border-radius: 2px;
-    z-index: 1;
     margin-bottom: 1rem;
+    padding: 10px 20px;
 }
 
 article.present {
@@ -91,7 +90,7 @@ article.present {
 }
 
 .instruction {
-    padding: 16px;
+    padding: 10px 20px;
     position: relative;
 }
 
@@ -102,7 +101,7 @@ article.present {
 }
 
 .details {
-    padding: 16px;
+    padding: 10px 20px;
     font-size: 14px;
 }
 
@@ -116,7 +115,7 @@ article.present {
     font-size: inherit;
     font-weight: inherit;
     margin: 0px;
-    padding: 5px 10px;
+    padding: 5px 15px;
     line-height: 36px;
     outline: none;
     transform: translate(0px, 0px);
@@ -135,5 +134,4 @@ article.present {
     background-size: 75% 75%;
     width: 2rem;
     height: 2rem;
-    margin: 5px;
 }
