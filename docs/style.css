@@ -111,6 +111,7 @@ article.present {
     align-items: center;
     display: flex;
     cursor: pointer;
+    color: rgba(0, 0, 0, 0.87);
     text-decoration: none;
     font-size: inherit;
     font-weight: inherit;
@@ -123,10 +124,13 @@ article.present {
     background-color: rgb(255, 255, 255);
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+    text-decoration: none;
 }
 
 .github-button:hover {
     background-color: rgb(255, 255, 255, 0.75);
+    color: rgba(0, 0, 0, 0.87);
+    text-decoration: none;
 }
 
 .github-icon {
