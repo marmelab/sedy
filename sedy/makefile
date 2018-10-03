@@ -14,8 +14,8 @@ build: clean
 
 run:
 	./node_modules/.bin/nodemon \
-		--require babel-polyfill \
-		--require babel-core/register \
+		--require @babel/polyfill \
+		--require @babel/register \
 		./src/server.js
 
 deploy: clean
@@ -25,8 +25,8 @@ deploy: clean
 
 test-unit:
 	./node_modules/.bin/mocha \
-		--require babel-core/register \
-		--require babel-polyfill \
+		--require @babel/polyfill \
+		--require @babel/register \
 		--require co-mocha \
 		--recursive \
 			./src/*.spec.js \
@@ -34,8 +34,8 @@ test-unit:
 
 test-e2e:
 	./node_modules/.bin/mocha \
-		--require babel-core/register \
-		--require babel-polyfill \
+		--require @babel/polyfill \
+		--require @babel/register \
 		--require co-mocha \
 		--recursive \
 			./e2e/*.spec.js \
