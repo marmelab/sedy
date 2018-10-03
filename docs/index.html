@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
     <title>Sedy - Brings the power of the sed Linux command to Github</title>
+
     <meta name="Description" content="Sedy is a bot that brings the power of the sed Linux command to Github, by @marmelab." />
     <meta name="Keywords" content="github, pull-requests, typos" />
+
+    <link rel='shortcut icon' type='image/x-icon' href='images/favicon.ico' />
 
     <!-- Schema.org markup for Google+ -->
     <meta itemprop="name" content="Sedy - Brings the power of the sed Linux command to Github">
     <meta itemprop="description" content="Sedy is a bot that brings the power of the sed Linux command to Github, by @marmelab.">
+
     <!-- TODO: Replace with a real image -->
     <meta itemprop="image" content="https://avatars2.githubusercontent.com/u/3116319">
 
@@ -21,29 +28,165 @@
     <meta name="twitter:title" content="Sedy - Brings the power of the sed Linux command to Github">
     <meta name="twitter:description" content="Sedy is a bot that brings the power of the sed Linux command to Github, by @marmelab.">
     <meta name="twitter:creator" content="@marmelab">
+
     <!-- TODO: Replace with a real image -->
     <meta name="twitter:image" content="https://avatars2.githubusercontent.com/u/3116319">
 
     <!-- Open Graph data -->
     <meta property="og:title" content="Sedy - Brings the power of the sed Linux command to Github" />
     <meta property="og:type" content="article" />
+
     <!-- TODO: Replace with a real address -->
     <meta property="og:url" content="https://marmelab.com/sedy" />
+
     <!-- TODO: Replace with a real image -->
     <meta property="og:image" content="https://avatars2.githubusercontent.com/u/3116319" />
     <meta property="og:description" content="Sedy is a bot that brings the power of the sed Linux command to Github, by @marmelab." />
 
     <!-- Google Analytics -->
+    <script async src="https://www.google-analytics.com/analytics.js"></script>
     <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-46201426-1', 'marmelab.com')
-    ga('send', 'pageview')
-</script>
-<link href="/sedy/style.css?70f1502e6d003b3188b9" rel="stylesheet"></head>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+        ga('create', 'UA-46201426-1', 'marmelab.com')
+        ga('send', 'pageview')
+    </script>
+
+    <link href="style.css" rel="stylesheet">
+</head>
+
 <body>
-    <div id="login"></div>
-<script type="text/javascript" src="/sedy/home.js?70f1502e6d003b3188b9"></script><script type="text/javascript" src="/sedy/style.js?70f1502e6d003b3188b9"></script></body>
+    <header>
+        <h1>Sedy</h1>
+        <h2>Brings the power of the sed Linux command to Github</h2>
+    </header>
+
+    <main>
+        <article class="present">
+            <p>
+                <span><strong>Sedy</strong> is a <a href="https//github.com/marketplace">GitHub App</a>, just install
+                    it on your repository and you can use it!</span>
+            </p>
+            <a class="github-button" href="https://github.com/apps/sedy">
+                <span class="github-icon"></span>
+                <span>Install Sedy</span>
+            </a>
+        </article>
+
+        <article>
+            <h2>What does it look like?</h2>
+
+            <section>
+                <div>
+                    <div class="instruction">
+                        <span>1. Comment a pull request with a sed command</span>
+                    </div>
+                    <div>
+                        <img alt="Comment a PR" src="images/pr_sed_comment.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div>
+                    <div class="instruction">
+                        <span>2. Watch sedy do its job</span>
+                    </div>
+                    <div>
+                        <img alt="Watch Sedy" src="images/pr_sed_commit.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div>
+                    <div class="instruction">
+                        <span>3. Relax :)</span>
+                    </div>
+                    <div>
+                        <img alt="Relax" src="images/pr_sed_diff.png" style="vertical-align: top; max-width: 100%; min-width: 100%; width: 100%;">
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <article>
+            <h2>How does it work?</h2>
+
+            <section>
+                <div>
+                    <div class="instruction">
+                        <span>It's just a webhook</span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            Installing Sedy on your repository is identical to installing a
+                            webhook with the event
+                            <i>Pull Request review</i>.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div>
+                    <div class="instruction">
+                        <span>It checks comments for sed substitution commands</span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            Whenever a new single comment is added, or a new review is submitted,
+                            <strong>Sedy</strong> will check the
+                            comments for sed substitution syntax:
+                        </p>
+                        <code>s/[TEXT TO FIND]/[REPLACEMENT]/</code>
+                        <p>
+                            When it finds one, it will checkout the pull request branch, perform the sed
+                            substitution and commit the result.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <section>
+                <div>
+                    <div class="instruction">
+                        <span>Limitations</span>
+                    </div>
+                    <div class="details">
+                        <p>
+                            <b>sed</b> does far more than simple substitution, however, we currently only support the
+                            most simple one.
+                        </p>
+                        <p>
+                            In time, we will add support for regular expressions, global flags, and so on.
+                        </p>
+                        <p>
+                            Feel free to <a href="https://github.com/marmelab/sedy/issues">open an issue</a> with your
+                            suggestions!
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </article>
+
+        <article>
+            <h2>It's Open Source!</h2>
+            <section>
+                <div class="details">
+                    <p>
+                        The project is open-source and available
+                        <a href="https://github.com/marmelab/sedy">here on github</a>,
+                        courtesy of
+                        <a href="https://marmelab.com/">Marmelab</a>.
+                    </p>
+                </div>
+            </section>
+        </article>
+    </main>
+</body>
+
 </html>

@@ -9,9 +9,3 @@ sedy/config/development.json
 sedy/config/production.json
 sedy/config/test.json
 sedy/config/privateKeys/*.pem
-
-# Sedy Installer
-installer/node_modules/
-installer/config/development.js
-installer/config/production.js
-installer/build/
