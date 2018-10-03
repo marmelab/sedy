@@ -10,6 +10,9 @@
     "scripts": {
         "test": "make --silent test"
     },
+    "engines": {
+        "node": ">=8"
+    },
     "dependencies": {
         "co": "~4.6.0",
         "config": "1.30.0",
