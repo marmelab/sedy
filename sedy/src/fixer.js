@@ -42,7 +42,13 @@ export default (git, commiter, logger, parsedContent) => {
         const line = lines[index];
 
         if (!line) {
-            logger.debug('debug infos', { parsedContent, lines, index, diffHunk, position });
+            logger.debug('debug infos', {
+                parsedContent,
+                lines,
+                index,
+                diffHunk,
+                position,
+            });
             return null;
         }
 
@@ -105,18 +111,19 @@ export default (git, commiter, logger, parsedContent) => {
                 return {};
             }
 
-            const fix = yield fixBlob(fixRequest, blob, match);
-            lastCommitSha = yield commiter.prepareFix(fixRequest, fix, lastCommitSha);
+            const fix = fixBlob(fixRequest, blob, match);
 
             if (fix) {
+                lastCommitSha = yield commiter.prepareFix(fixRequest, fix, lastCommitSha);
                 fixes.push(fix);
+            } else {
+                logger.error('Unable to fix blob', JSON.stringify({ fixRequest, blob, match }));
             }
         }
 
         // TODO: Warn user that he didn't understood the comment
         return { fixes, commitSha: lastCommitSha };
     };
-
 
     return { fixBlob, getLineIndexFromDiff, processFixRequest };
 };
