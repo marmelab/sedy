@@ -31,6 +31,7 @@ describe('Fixer', () => {
 
             assert.equal(diffBlob.split('\n')[index], diffHunk.split('\n')[5].slice(1));
         });
+
         it('should return the correct line even if several line are identical', () => {
             const fixer = fixerFactory();
             let index = fixer.getLineIndexFromDiff(diffHunk, 7);
@@ -41,6 +42,7 @@ describe('Fixer', () => {
             assert.equal(index, 3);
             assert.equal(diffBlob.split('\n')[index], diffHunk.split('\n')[6].slice(1));
         });
+
         it('should return null if position point on a deleted line', () => {
             const fixer = fixerFactory();
             const index = fixer.getLineIndexFromDiff(diffHunk, 3);
@@ -49,7 +51,7 @@ describe('Fixer', () => {
         });
     });
 
-    describe('fix', () => {
+    describe('fixBlob', () => {
         it('should handle accented characters', () => {
             const fixer = fixerFactory(null, commiter, logger);
             const parsedContent = {
@@ -146,6 +148,49 @@ describe('Fixer', () => {
                     `The fix of the character "${char}" doesn't match`,
                 );
             }
+        });
+    });
+
+    describe('processFixRequest', () => {
+        it('should pass a fix that it is unable to do', () => {
+            const git = {
+                commits: {
+                    get: () => 'commit',
+                },
+                trees: {
+                    get: () => ({
+                        type: 'blob',
+                        sha: 'blob sha',
+                    }),
+                },
+                blobs: {
+                    get: () => ({
+                        content: '### Neon Daemon"',
+                        encoding: 'utf8',
+                    }),
+                },
+            };
+
+            const fixer = fixerFactory(git, commiter, logger);
+
+            const fixRequest = {
+                matches: [{
+                    from: ' Daemon"',
+                    to: ' Daemon*',
+                }],
+                comment: {
+                    path: 'file.js',
+                    diffHunk: [
+                        '@@ -0,0 +1,1 @@',
+                        '+### Neon Daemon"',
+                    ].join('\n'),
+                    position: 5, // Totally wrong position
+                },
+            };
+
+            const { fixes } = fixer.processFixRequest(fixRequest, 'lastCommitSha');
+            assert.equal(commiter.prepareFix.called, false);
+            assert.equal(fixes, undefined);
         });
     });
 });
