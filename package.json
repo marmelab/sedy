@@ -2,6 +2,10 @@
     "name": "sedy",
     "version": "1.0.0",
     "author": "Kmaschta <kevin@marmelab.com>",
+    "contributors": [
+        "djhi (https://github.com/djhi)",
+        "Luwangel (https://github.com/Luwangel)"
+    ],
     "private": true,
     "repository": {
         "type": "git",
