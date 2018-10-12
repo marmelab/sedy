@@ -4,6 +4,7 @@ import webpack from 'webpack';
 import githubAppPrivateKey from './githubAppPrivateKey';
 
 export default {
+    mode: 'production',
     target: 'node',
     entry: ['babel-polyfill', path.join(__dirname, 'src/index.js')],
     output: {
@@ -23,12 +24,11 @@ export default {
         // https://github.com/request/request/issues/1920
         // @TODO Remove octonode for request
         noParse: /node_modules\/octonode\/node_modules\/request\/node_modules\/http-signature\/node_modules\/jsprim\/node_modules\/json-schema\/lib\/validate\.js/,
-        rules: [{
-            test: /\.js$/,
-            use: 'babel-loader',
-        }, {
-            test: /\.json$/,
-            use: 'json-loader',
-        }],
+        rules: [
+            {
+                test: /\.js$/,
+                use: 'babel-loader',
+            },
+        ],
     },
 };

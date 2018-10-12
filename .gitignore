@@ -1,6 +1,7 @@
 # Global
 .pm2/
 node_modules/
+yarn-error.log
 
 # Sedy
 sedy/node_modules/*

@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-    - "6.10" # version used by AWS Lambda
-    - "6"
-    - "8"
+    - '8.10'
+    - 'lts/*'
+    - '9'
 
 install:
     - make install-sedy
@@ -10,9 +10,8 @@ install:
 script: make test
 
 cache:
-    directories:
-        sedy/node_modules
+    directories: sedy/node_modules
 
 branches:
-  only:
-    - master
+    only:
+        - master
