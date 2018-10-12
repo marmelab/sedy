@@ -4,6 +4,7 @@ import webpack from 'webpack';
 import githubAppPrivateKey from './githubAppPrivateKey';
 
 export default {
+    mode: 'production',
     target: 'node',
     entry: ['babel-polyfill', path.join(__dirname, 'src/index.js')],
     output: {
@@ -27,10 +28,6 @@ export default {
             {
                 test: /\.js$/,
                 use: 'babel-loader',
-            },
-            {
-                test: /\.json$/,
-                use: 'json-loader',
             },
         ],
     },
