@@ -1,5 +1,8 @@
 import escapeRegex from 'escape-string-regexp';
 
+const isDeletedLine = line => line.startsWith('-');
+const isNoNewlineAtEOFWarning = line => line === '\\ No newline at end of file';
+
 export default (git, commiter, logger, parsedContent) => {
     const getLineIndexFromDiff = (hunk, position) => {
         // Github API send the diff with a application/vnd.github.v3.diff media type
@@ -17,13 +20,19 @@ export default (git, commiter, logger, parsedContent) => {
         }
 
         const offset = parseInt(diff[0].match(/@@.*?\+(\d+)/)[1], 10) - 1;
-        // if negative offset, then it means there is no add
+
+        // If negative offset, it means that the comment is targeting a deleted line
+        // Since Sedy can't change a deleted line, we stop the fix here
+        // @TODO Send an error comment to the commenter
         if (offset < 0) {
             return null;
         }
 
-        // count nb of line till target line without the deleted line
-        const index = diff.slice(0, position).filter(l => !l.startsWith('-')).length - 1;
+        // Count nb of line until the target line without the deleted and empty lines
+        const index = diff
+            .slice(0, position)
+            .filter(l => !isDeletedLine(l) && !isNoNewlineAtEOFWarning(l))
+            .length - 1;
         return offset + index;
     };
 
@@ -38,6 +47,7 @@ export default (git, commiter, logger, parsedContent) => {
         }
 
         const lines = blobContent.split('\n');
+
         logger.debug(`found ${lines.length} lines`);
         const line = lines[index];
 
