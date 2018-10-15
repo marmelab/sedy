@@ -7,6 +7,7 @@ import {
     diffHunk,
     diffBlob,
     diffHunkWithQuestionMark,
+    diffHunkWithNoNewline,
 } from './test/fixtures';
 
 describe('Fixer', () => {
@@ -48,6 +49,13 @@ describe('Fixer', () => {
             const index = fixer.getLineIndexFromDiff(diffHunk, 3);
 
             assert.isNull(index);
+        });
+
+        it('should return the correct index even if there is a no newline at the end of file warning', () => {
+            const fixer = fixerFactory(null, commiter, logger);
+            const index = fixer.getLineIndexFromDiff(diffHunkWithNoNewline, 5);
+
+            assert.equal(index, 2);
         });
     });
 
